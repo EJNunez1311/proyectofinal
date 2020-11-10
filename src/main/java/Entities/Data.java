@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Data {
     public static ArrayList<FormValue> tablas = new ArrayList<>();
+    public static ArrayList<FormValue> tablasGeneradas = new ArrayList<>();
 
     public static void fillList(){
 

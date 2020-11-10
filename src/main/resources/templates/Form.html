@@ -120,8 +120,12 @@
             </div>
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
-        <a id="createapp" class="btn btn-primary float-right">Create APP</a>
-        <a id="enviardatos" class="btn btn-primary float-right">Create Another Table</a>
+<!--        <a id="createapp" class="btn btn-primary float-right">Create APP</a>-->
+<!--        <a id="enviardatos" class="btn btn-primary float-right">Create Another Table</a>-->
+
+
+        <a id="creados" class="btn btn-info float-right" href="/api/form/ver">Ver Creados</a>
+        <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
     </div>
 </body>
 </html>
@@ -251,6 +255,12 @@
                 var row = $(this);
 
                 if (index !== 0) {
+                    var tabla = '';
+                    var relacion = '';
+                    if (row.find("#fkoption").val() !== '0') {
+                        tabla =row.find("#fkoption").val();
+                        relacion = row.find("#fkRelacion").val();
+                    }
                     var obj = {
                         nombre:  row.find("#nombre").val(),
                         tipoAtributo: row.find("#tipoatributo").val(),
@@ -258,8 +268,8 @@
                         notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
                         CheckBoxUnique:  row.find("#uniquecheckbox").is(':checked') ,
                         // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
-                        fkTablaRelacionada:  row.find("#fkoption").val(),
-                        fkRelacion:  row.find("#fkRelacion").val(),
+                        fkTablaRelacionada:  tabla,
+                        fkRelacion:  relacion,
                     }
                     arr.push(obj);
                 }
@@ -289,50 +299,50 @@
             });
         });
 
-        $('#createapp').click(function () {
-            alert("Entrando el boton")
-            var arr = [];
-            var tname = $("#tname").val();
-            $('#tab_logic').find('tr').each(function (index) {
-                var row = $(this);
-
-                if (index !== 0) {
-                    var obj = {
-                        nombre:  row.find("#nombre").val(),
-                        tipoAtributo: row.find("#tipoatributo").val(),
-                        pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
-                        notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
-                        // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
-                        fkTablaRelacionada:  row.find("#fkoption").val(),
-                        fkRelacion:  row.find("#fkRelacion").val(),
-                    }
-                    arr.push(obj);
-                }
-            });
-
-            const data = {
-                nombreTabla : tname,
-                filas : arr
-            }
-
-            const jsonData = JSON.stringify(data);
-
-            $.ajax({
-                type: "POST",
-                url: '/api/createapp',
-                contentType: 'application/json',
-                data: jsonData,
-                dataType: 'json'
-            }).done(function(data) {
-                console.log("Data sent successfully");
-                console.log(data);
-                window.location.href="/api";
-            }).error(function (jqXhr, textStatus, errorMessage) {
-                console.log("Error sending data");
-                console.log(jqXhr);
-                console.log(errorMessage);
-                console.log(textStatus);
-            });
-        });
+        // $('#createapp').click(function () {
+        //     alert("Entrando el boton")
+        //     var arr = [];
+        //     var tname = $("#tname").val();
+        //     $('#tab_logic').find('tr').each(function (index) {
+        //         var row = $(this);
+        //
+        //         if (index !== 0) {
+        //             var obj = {
+        //                 nombre:  row.find("#nombre").val(),
+        //                 tipoAtributo: row.find("#tipoatributo").val(),
+        //                 pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
+        //                 notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
+        //                 // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
+        //                 fkTablaRelacionada:  row.find("#fkoption").val(),
+        //                 fkRelacion:  row.find("#fkRelacion").val(),
+        //             }
+        //             arr.push(obj);
+        //         }
+        //     });
+        //
+        //     const data = {
+        //         nombreTabla : tname,
+        //         filas : arr
+        //     }
+        //
+        //     const jsonData = JSON.stringify(data);
+        //
+        //     $.ajax({
+        //         type: "POST",
+        //         url: '/api/createapp',
+        //         contentType: 'application/json',
+        //         data: jsonData,
+        //         dataType: 'json'
+        //     }).done(function(data) {
+        //         console.log("Data sent successfully");
+        //         console.log(data);
+        //         window.location.href="/api";
+        //     }).error(function (jqXhr, textStatus, errorMessage) {
+        //         console.log("Error sending data");
+        //         console.log(jqXhr);
+        //         console.log(errorMessage);
+        //         console.log(textStatus);
+        //     });
+        // });
     });
 </script>
