@@ -69,6 +69,15 @@
         return "";
     }
     var optionCookie = getCookie("OptionCookie");
+    var url;
+    if (optionCookie == 'EmptyServer') {
+        url = "/api/form";
+    } else if (optionCookie == 'ServerAuth') {
+        url = "Good day";
+    } else if (optionCookie =='Database'){
+        url = "/api/db";
+    }
+
 
     function Prueba(){
         // deleteCookie()
@@ -88,7 +97,7 @@
             success: function(data)
             {
                 alert(data); // show response from the php script.
-                window.location.href="/api/db";
+                window.location.href=url;
             }
         });
     });
