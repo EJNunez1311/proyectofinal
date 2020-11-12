@@ -93,8 +93,8 @@ public class homepage {
         nombre = name;
         System.out.println(nombre);
 
-//        Runnable r = new Create(nombre);
-//        new Thread(r).start();
+        Runnable r = new Create(nombre);
+        new Thread(r).start();
 
         return Response.ok().build();
 
