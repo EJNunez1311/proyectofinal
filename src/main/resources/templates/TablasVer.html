@@ -53,12 +53,12 @@
 <body>
 {#include menu}
 {/include}
-<h2>Lista de Tablas Por Crear</h2>
+<h2>Tables Created</h2>
 
 <table id="myTable">
     <tr class="header">
-        <th style="width:40%;">Nombre</th>
-        <th style="width:30%;">Opciones</th>
+        <th style="width:40%;">Name</th>
+        <th style="width:30%;">Options</th>
     </tr>
     {#if tablasGeneradas}
         {#for tabla in tablasGeneradas}
@@ -152,7 +152,7 @@
     {#if tablasGeneradas}
         <a id="createapp" class="btn btn-primary float-right" href="/api/createapp">Create APP</a>
     {/if}
-    <a id="volver" class="btn btn-success float-right mr-2" href="/api/form">Agregar Nueva Tabla</a>
+    <a id="volver" class="btn btn-success float-right mr-2" href="/api/form">Add Table</a>
 </div>
 
 <script>
