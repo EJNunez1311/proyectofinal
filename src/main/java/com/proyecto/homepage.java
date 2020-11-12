@@ -56,6 +56,8 @@ public class homepage {
     Template Tablesname;
     @Inject
     Template TablasVer;
+    @Inject
+    Template FormPregeneradaUpdate;
 
     private static final Logger LOGGER = Logger.getLogger("ListenerBean");
 
@@ -91,8 +93,8 @@ public class homepage {
         nombre = name;
         System.out.println(nombre);
 
-        Runnable r = new Create(nombre);
-        new Thread(r).start();
+//        Runnable r = new Create(nombre);
+//        new Thread(r).start();
 
         return Response.ok().build();
 
@@ -183,23 +185,60 @@ public class homepage {
     @GET
     @Path("/form")
     public TemplateInstance TableCreation() {
-        ArrayList<String> tablacreadas = new ArrayList<>();
-        String path = System.getProperty("user.dir");
-        File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
-        if (theDir.exists()) {
-            File[] listOfFiles = theDir.listFiles();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
-                    int lastPeriodPos = listOfFiles[i].getName().lastIndexOf('.');
-                    tablacreadas.add(listOfFiles[i].getName().substring(0, lastPeriodPos));
-                }
-            }
-        }
+//        ArrayList<String> tablacreadas = new ArrayList<>();
+//        String path = System.getProperty("user.dir");
+//        File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
+//        if (theDir.exists()) {
+//            File[] listOfFiles = theDir.listFiles();
+//            for (int i = 0; i < listOfFiles.length; i++) {
+//                if (listOfFiles[i].isFile()) {
+//                    int lastPeriodPos = listOfFiles[i].getName().lastIndexOf('.');
+//                    tablacreadas.add(listOfFiles[i].getName().substring(0, lastPeriodPos));
+//                }
+//            }
+//        }
 
         return Form.data("title", "Table Creation")
                 .data("tipoAtributos", Data.obtenerAtributos())
-                .data("tablasCreadas", tablacreadas);
+                .data("tablasCreadas", Data.tablasGeneradas)
+                .data("relaciones", Data.obtenerRelaciones());
 //                .data("tablasCreadas", Data.TablasCreadas());
+    }
+
+    @GET
+    @Path("/form/actualizar/{index}")
+    public TemplateInstance TableUpdate(@PathParam("index") int index) {
+        FormValue formValue = new FormValue();
+        if (index <= Data.tablasGeneradas.size()) {
+            formValue = Data.tablasGeneradas.get(index - 1);
+        }
+
+        return FormPregeneradaUpdate.data("title", "Table Update")
+                .data("tablaDetalle", formValue)
+                .data("index", index)
+                .data("tipoAtributos", Data.obtenerAtributos())
+                .data("tablasCreadas", Data.tablasGeneradas)
+                .data("relaciones", Data.obtenerRelaciones());
+    }
+
+    @POST
+    @Path("/form/actualizar/{index}")
+    public boolean ActualizarTable(@PathParam("index") int index, FormValue formValue) {
+        for (Form form : formValue.getFilas()) {
+            System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: " + form.getFkTablaRelacionada() + " Tipo de relacion: "
+                    + form.getFkRelacion());
+//            + form.isFkCheckbox()
+        }
+        if (index <= Data.tablasGeneradas.size()) {
+            FormValue formValueActual = Data.tablasGeneradas.get(index - 1);
+            if (formValueActual != null) {
+                formValueActual.nombreTabla = formValue.nombreTabla;
+                formValueActual.creado = formValue.creado;
+                formValueActual.filas = formValue.filas;
+            }
+        }
+        return true;
     }
 
 
