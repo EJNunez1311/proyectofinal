@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:>
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,11 +20,8 @@
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
             integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
             crossorigin="anonymous"></script>
-<style>
-    #relationhidden{
-        display: none;
-    }
-</style>
+
+
     {#include menu}
     {/include}
 </head>
@@ -34,8 +31,13 @@
             <div class="col-md-12 table-responsive">
                 <form>
                     <label for="tname">Table Name:</label><br>
-                    <input type="text" id="tname" name="tname"><br>
+                    <input type="text" id="tname" name="tname" value="{tablaDetalle.nombreTabla}"><br>
                 </form>
+                <div>
+                    <div class="input-group">
+                        <a href="/api/db/table">Back to others tables</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -49,11 +51,9 @@
                             Name
                         </th>
                         <th class="text-center">
-                            Data type
+                            Data Type
                         </th>
-
                         <th class="text-center">
-                            <p id="text" style="color: red;font-size:50%">Primary Key will auto generated</p>
                             Primary Key
                         </th>
                         <th class="text-center">
@@ -70,69 +70,100 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!--action="/action_page.php" method="post"-->
                     <form>
-                    <tr id='addr0' data-id="0" class="hidden">
-                        <td data-name="nombre">
-                            <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control"/>
-                        </td>
-                        <td data-name="tipoatributo">
-                            <select name="tipoatributo" id="tipoatributo">
-                                {#for tipo in tipoAtributos}
-                                    <option value="{tipo}">{tipo}</option>
-                                {/for}
-                            </select>
-                        </td>
-                        <td data-name="pkcheckbox">
-<!--                            <input type="checkbox" id="pkcheckbox" name="pkcheckbox" value="1" onclick="myFunction()">-->
-                            <input type="checkbox" id="pkcheckbox" name="pkcheckbox" value="1" onclick="QuitarTexto()">
-                        </td>
-                        <td data-name="notnullcheckbox">
-                            <input type="checkbox" id="notnullcheckbox" name="notnullcheckbox" value="1">
-                        </td>
-                        <td data-name="uniquecheckbox">
-                            <input type="checkbox" id="uniquecheckbox" name="uniquecheckbox" value="1">
-                        </td>
+                        <input type="hidden" id="index" value="{index}">
+                        {#for item in tablaDetalle.filas}
+                            <tr>
+                                <td data-name="nombre">
+                                    <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{item.nombre}" class="form-control"/>
+                                </td>
+                                <td data-name="tipoatributo">
+                                    <select name="tipoatributo" id="tipoatributo">
+                                        <option value="">Select Option</option>
+                                        {#for tipo in tipoAtributos}
+                                            {#if item.tipoAtributo == tipo}
+                                                <option value="{tipo}" selected>{tipo}</option>
+                                            {#else}
+                                                <option value="{tipo}">{tipo}</option>
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
 
-                        <td data-name="fkoption">
-                            <select name="fkoption" id="fkoption" onchange="showDiv($(this).closest('tr').index())">
-                                <option value="0">None</option>
-                                {#for tabla in tablasCreadas}
-                                    <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
-                                {/for}
-                            </select>
-                        </td>
-                        <td data-name="relationoption" >
-                            <select id="fkRelacion" style="display: none">
-                                <option value="0">None</option>
-                                {#for relacion in relaciones}
-                                    <option value="{relacion.valor}" >{relacion.nombre}</option>
-                                {/for}
-                            </select>
-                        </td>
+                                <td data-name="pkcheckbox">
+                                    <input type="checkbox" id="pkcheckbox"  name="pkcheckbox" value="{item.pkCheckcbox == true ?: 1 }" onclick="QuitarTexto()">
+                                    {!#if item.pkCheckcbox == true!}
+<!--                                        <input type="checkbox" id="pkcheckbox{count - 1}" name="pkcheckbox" checked value="{item.pkCheckcbox == true ?: 1 }" onclick="QuitarTexto()">-->
+                                    {!#else!}
+<!--                                        <input type="checkbox" id="pkcheckbox{count - 1}{count - 1}" name="pkcheckbox" onclick="QuitarTexto()">-->
+                                    {!/if!}
+                                    {!item.pkCheckcbox == true or 'checked'!}
+                                </td>
+
+                                <td data-name="notnullcheckbox">
+                                     <input type="checkbox" id="notnullcheckbox"  name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">
+                                    {!#if item.notNullCheckbox == true!}
+<!--                                        <input type="checkbox" id="notnullcheckbox{count - 1}" checked="{item.notNullCheckbox == true ?: checked }" name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">-->
+                                    {!#else!}
+<!--                                        <input type="checkbox" id="notnullcheckbox{count - 1}{count - 1}"  name="notnullcheckbox">-->
+                                    {!/if!}
+                                </td>
+
+                                <td data-name="uniquecheckbox">
+                                        <input type="checkbox" id="uniquecheckbox" name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">
+                                    {!#if item.CheckBoxUnique == true!}
+<!--                                        <input type="checkbox" id="uniquecheckbox{count - 1}" checked="{item.CheckBoxUnique == true ?: checked }"  name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">-->
+                                    {!#else!}
+<!--                                        <input type="checkbox" id="uniquecheckbox{count - 1}{count - 1}" name="uniquecheckbox">-->
+                                    {!/if!}
+                                </td>
+                                <td data-name="fkoption">
+                                    <select name="fkoption" id="fkoption" onchange="showDiv($(this).closest('tr').index())">
+                                        <option value="0">None</option>
+                                        {#for tabla in tablasCreadas}
+                                            {#if tabla.nombreTabla == item.fkTablaRelacionada}
+                                                <option value="{tabla.nombreTabla}" selected>{tabla.nombreTabla}</option>
+                                            {#else}
+                                                <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
+
+                                <td data-name="relationoption" >
+                                    <select id="fkRelacion">
+                                        <option value="0">None</option>
+                                        {#for relacion in relaciones}
+                                            {#if relacion.valor == item.fkRelacion}
+                                                <option value="{relacion.valor}" selected>{relacion.nombre}</option>
+                                            {#else}
+                                                <option value="{relacion.valor}">{relacion.nombre}</option>
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
+
+                                <td data-name="del">
+                                    <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
+                                            aria-hidden="true">×</span></button>
+                                </td>
+                            </tr>
+
+                        {/for}
                     </form>
-                        <td data-name="del">
-                            <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
-                                    aria-hidden="true">×</span></button>
-                        </td>
-                    </tr>
 
                     </tbody>
                 </table>
             </div>
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
-<!--        <a id="createapp" class="btn btn-primary float-right">Create APP</a>-->
-<!--        <a id="enviardatos" class="btn btn-primary float-right">Create Another Table</a>-->
-
-
         <a id="creados" class="btn btn-info float-right" href="/api/form/ver">Ver Creados</a>
-        <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
+        <a id="enviardatos" class="btn btn-primary float-right mr-2">Actualizar Tabla</a>
     </div>
 </body>
 </html>
 <script>
-
+    console.log("there")
     function showDiv(rowIndex)
     {
         $('#tab_logic').find('tr').each(function (index) {
@@ -251,12 +282,11 @@
         // $("#add_row").trigger("click");
 
         $('#enviardatos').click(function () {
-            var puedeGuardar  = true;
             var arr = [];
             var tname = $("#tname").val();
+            var index = $("#index").val();
             if (tname === undefined || tname == null || tname === '') {
                 window.alert('Debe especifiar el nombre de la tabla');
-                puedeGuardar = false;
                 return false
             }
             $('#tab_logic').find('tr').each(function (index) {
@@ -275,44 +305,43 @@
                         pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
                         notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
                         CheckBoxUnique:  row.find("#uniquecheckbox").is(':checked') ,
-                        // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
+                        // pkCheckcbox: row.find("#pkcheckbox"+index)? row.find("#pkcheckbox"+index).is(':checked') : row.find("#pkcheckbox"+index+""+index).is(':checked'),
+                        // notNullCheckbox: row.find("#notnullcheckbox"+index)? row.find("#notnullcheckbox"+index).is(':checked') : row.find("#notnullcheckbox"+index+""+index).is(':checked'),
+                        // CheckBoxUnique: row.find("#uniquecheckbox"+index)? row.find("#uniquecheckbox"+index).is(':checked') : row.find("#uniquecheckbox"+index+""+index).is(':checked'),
                         fkTablaRelacionada:  tabla,
                         fkRelacion:  relacion,
                     }
 
                     if (obj.nombre === undefined || obj.nombre == null || obj.nombre === '') {
                         window.alert('El nombre de la columna en la posición ('+ index +') no esta especificada');
-                        puedeGuardar = false;
-                        return false;
+                        return false
                     }
                     arr.push(obj);
                 }
             });
 
-            if (puedeGuardar) {
-                const data = {
-                    nombreTabla : tname,
-                    filas : arr
-                }
-                const jsonData = JSON.stringify(data);
-
-                $.ajax({
-                    type: "POST",
-                    url: '/api/form',
-                    contentType: 'application/json',
-                    data: jsonData,
-                    dataType: 'json'
-                }).done(function(data) {
-                    console.log("Data sent successfully");
-                    console.log(data);
-                    window.location.reload();
-                }).error(function (jqXhr, textStatus, errorMessage) {
-                    console.log("Error sending data");
-                    console.log(jqXhr);
-                    console.log(errorMessage);
-                    console.log(textStatus);
-                });
+            const data = {
+                nombreTabla : tname,
+                filas : arr
             }
+            const jsonData = JSON.stringify(data);
+
+            $.ajax({
+                type: "POST",
+                url: '/api/form/actualizar/'+index,
+                contentType: 'application/json',
+                data: jsonData,
+                dataType: 'json'
+            }).done(function(data) {
+                console.log("Data sent successfully");
+                console.log(data);
+                window.location.href = "/api/form/ver";
+            }).error(function (jqXhr, textStatus, errorMessage) {
+                console.log("Error sending data");
+                console.log(jqXhr);
+                console.log(errorMessage);
+                console.log(textStatus);
+            });
         });
     });
 </script>

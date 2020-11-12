@@ -40,6 +40,15 @@ public class Data {
         return tipoAtributos;
     }
 
+    public static ArrayList<Relacion> obtenerRelaciones() {
+        ArrayList<Relacion> relaciones = new ArrayList<>();
+        relaciones.add(new Relacion("One to One", "OnetoOne"));
+        relaciones.add(new Relacion("One to Many", "OnetoMany"));
+        relaciones.add(new Relacion("Many to One", "ManyToOne"));
+        relaciones.add(new Relacion("Many to Many", "ManyToMany"));
+        return relaciones;
+    }
+
     public static ArrayList<String> TablasCreadas() {
         ArrayList<String> TablasCreadas = new ArrayList<>();
         TablasCreadas.add("Primer Tabla");
