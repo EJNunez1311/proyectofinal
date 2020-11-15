@@ -1,5 +1,7 @@
 package com.proyecto;
 
+import Entities.FormValue;
+
 import java.io.*;
 
 public class Create implements Runnable {
@@ -7,6 +9,11 @@ public class Create implements Runnable {
     String nombre;
     public Create(String name){
         nombre = name;
+    }
+
+    public void CrearClase (FormValue clase){
+        clase.getFilas();
+
     }
 
     @Override
