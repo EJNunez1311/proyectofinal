@@ -727,8 +727,10 @@ public class homepage {
     @Path("/form")
     public boolean CrearTable(FormValue formValue) {
 
-        if(!containsName(formValuesList, formValue.nombreTabla) )
+        if(!containsName(formValuesList, formValue.nombreTabla) ) {
             formValuesList.add(formValue);
+            System.out.println("Tabla agregada a lista");
+        }
 
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
