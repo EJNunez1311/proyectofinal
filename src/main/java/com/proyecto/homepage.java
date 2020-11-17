@@ -908,6 +908,7 @@ public class homepage {
                             "@Path(\"/api/" + nomb + "\")\n" +
                             "@Produces(MediaType.APPLICATION_JSON)\n" +
                             "@Consumes(MediaType.APPLICATION_JSON)\n" +
+                            "@Tag(name = \""+ clase +"\" ,description = \"Here is all the information about "+ clase + ". \")"+
                             "public class " + clase + "Api {\n" +
                             "\n" +
                             "    @Inject\n" +
