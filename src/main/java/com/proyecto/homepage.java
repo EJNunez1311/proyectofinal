@@ -582,10 +582,12 @@ public class homepage {
                                 "import javax.ws.rs.*;\n" +
                                 "import javax.ws.rs.core.MediaType;\n" +
                                 "import java.util.List;\n" +
+                                "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n"+
                                 "\n" +
                                 "@Path(\"/api/" + nomb + "\")\n" +
                                 "@Produces(MediaType.APPLICATION_JSON)\n" +
                                 "@Consumes(MediaType.APPLICATION_JSON)\n" +
+                                "@Tag(name = \""+ clase +"\" ,description = \"Here is all the information about "+ clase + ". \")"+
                                 "public class " + clase + "Api {\n" +
                                 "\n" +
                                 "    @Inject\n" +
@@ -904,6 +906,7 @@ public class homepage {
                             "import javax.ws.rs.*;\n" +
                             "import javax.ws.rs.core.MediaType;\n" +
                             "import java.util.List;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n"+
                             "\n" +
                             "@Path(\"/api/" + nomb + "\")\n" +
                             "@Produces(MediaType.APPLICATION_JSON)\n" +
