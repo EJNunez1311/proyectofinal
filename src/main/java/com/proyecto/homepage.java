@@ -33,6 +33,8 @@ import org.jboss.logging.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 
@@ -69,6 +71,7 @@ public class homepage {
     String nombre = "";
     String databasename_g = "prueba";
     int importado = 0;
+    List<FormValue> formValuesList = new ArrayList<FormValue>();
 
     @GET
     public TemplateInstance Homepage() {
@@ -708,9 +711,27 @@ public class homepage {
         return true;
     }
 
+    public void ImplimirCLases(FormValue formValue){
+        System.out.println("Nombre de la tabla: " + formValue.nombreTabla + "creada: " + formValue.creado);
+        for (Form form : formValue.getFilas()) {
+            System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "+form.getFkTablaRelacionada()+" Tipo de relacion: "+form.getFkRelacion());
+//            + form.isFkCheckbox()
+        }
+        System.out.println("\n\n--------------- Nueva tabla ----------------\n\n");
+    }
+
+    public boolean containsName(final List<FormValue> list, final String name){
+        return list.stream().anyMatch(o -> o.getNombreTabla().equals(name));
+    }
+
     @POST
     @Path("/form")
     public boolean CrearTable(FormValue formValue) {
+
+        if(!containsName(formValuesList, formValue.nombreTabla) )
+            formValuesList.add(formValue);
+
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
                     + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "+form.getFkTablaRelacionada()+" Tipo de relacion: "+form.getFkRelacion());
@@ -966,6 +987,10 @@ public class homepage {
     @Path("/createapp")
     public boolean CreateAPP(FormValue formValue) throws IOException {
         creartodo();
+        ListIterator<FormValue> listItr = formValuesList.listIterator();
+        while(listItr.hasNext()){
+            ImplimirCLases(listItr.next());
+        }
         return true;
 
     }
