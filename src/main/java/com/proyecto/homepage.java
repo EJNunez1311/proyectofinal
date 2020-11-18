@@ -33,6 +33,8 @@ import org.jboss.logging.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 @ApplicationScoped
@@ -98,9 +100,9 @@ public class homepage {
 
         nombre = name;
 
-//        System.out.println("Nombre -> "+ name);
-//        System.out.println("Microservicio -> "+ microserviceCheckbox);
-//        System.out.println("Security -> " + securityCheckbox);
+        System.out.println("Nombre -> "+ name);
+        System.out.println("Microservicio -> "+ microserviceCheckbox);
+        System.out.println("Security -> " + securityCheckbox);
 //TODO: Usar campo de security y microservice
 
 //        Runnable r = new Create(nombre);
@@ -120,7 +122,7 @@ public class homepage {
         System.out.println(dbName.name);
         System.out.println(dbName.username);
         System.out.println(dbName.password);
-        return true;
+        return false;
     }
 
     @GET
