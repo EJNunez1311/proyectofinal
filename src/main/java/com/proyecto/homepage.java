@@ -582,12 +582,12 @@ public class homepage {
                                 "import javax.ws.rs.*;\n" +
                                 "import javax.ws.rs.core.MediaType;\n" +
                                 "import java.util.List;\n" +
-                                "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n"+
+                                "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
                                 "\n" +
                                 "@Path(\"/api/" + nomb + "\")\n" +
                                 "@Produces(MediaType.APPLICATION_JSON)\n" +
                                 "@Consumes(MediaType.APPLICATION_JSON)\n" +
-                                "@Tag(name = \""+ clase +"\" ,description = \"Here is all the information about "+ clase + ". \")\n"+
+                                "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n" +
                                 "public class " + clase + "Api {\n" +
                                 "\n" +
                                 "    @Inject\n" +
@@ -711,17 +711,17 @@ public class homepage {
         return true;
     }
 
-    public void ImplimirCLases(FormValue formValue){
+    public void ImprimirClases(FormValue formValue) {
         System.out.println("Nombre de la tabla: " + formValue.nombreTabla + "creada: " + formValue.creado);
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
-                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "+form.getFkTablaRelacionada()+" Tipo de relacion: "+form.getFkRelacion());
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: " + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
 //            + form.isFkCheckbox()
         }
         System.out.println("\n\n--------------- Nueva tabla ----------------\n\n");
     }
 
-    public boolean containsName(final List<FormValue> list, final String name){
+    public boolean containsName(final List<FormValue> list, final String name) {
         return list.stream().anyMatch(o -> o.getNombreTabla().equals(name));
     }
 
@@ -729,9 +729,9 @@ public class homepage {
     @Path("/form")
     public boolean CrearTable(FormValue formValue) {
 
-        if(!containsName(formValuesList, formValue.nombreTabla) ) {
+        if (!containsName(formValuesList, formValue.nombreTabla)) {
             formValuesList.add(formValue);
-            System.out.println("Tabla agregada a lista");
+            System.out.println("Tabla agregada a lista " + formValue.nombreTabla);
         }
 
         for (Form form : formValue.getFilas()) {
@@ -742,6 +742,12 @@ public class homepage {
 
         Data.tablasGeneradas.add(formValue);
 
+        return true;
+
+    }
+
+    public void crearClase(FormValue formValue) {
+
         String nomb;
         String clase;
         String atributo;
@@ -749,7 +755,6 @@ public class homepage {
         String modelos = "";
         String getset = "";
         String entidad = "";
-        String modelaje;
         String tipopk = "long";
         int haypk = 0;
 
@@ -759,6 +764,7 @@ public class homepage {
 
         File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
         if (!theDir.exists()) theDir.mkdirs();
+
 
         if (formValue != null) {
             //Entity Name
@@ -906,12 +912,12 @@ public class homepage {
                             "import javax.ws.rs.*;\n" +
                             "import javax.ws.rs.core.MediaType;\n" +
                             "import java.util.List;\n" +
-                            "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n"+
+                            "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
                             "\n" +
                             "@Path(\"/api/" + nomb + "\")\n" +
                             "@Produces(MediaType.APPLICATION_JSON)\n" +
                             "@Consumes(MediaType.APPLICATION_JSON)\n" +
-                            "@Tag(name = \""+ clase +"\" ,description = \"Here is all the information about "+ clase + ". \")\n"+
+                            "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n" +
                             "public class " + clase + "Api {\n" +
                             "\n" +
                             "    @Inject\n" +
@@ -981,8 +987,6 @@ public class homepage {
             }
 
         }
-        return true;
-
     }
 
 //    @GET
@@ -1018,11 +1022,11 @@ public class homepage {
     public boolean CreateAPP(FormValue formValue) throws IOException {
         creartodo();
         ListIterator<FormValue> listItr = formValuesList.listIterator();
-        while(listItr.hasNext()){
-            ImplimirCLases(listItr.next());
+        while (listItr.hasNext()) {
+            ImprimirClases(listItr.next());
+            crearClase(listItr.next());
         }
         return true;
-
     }
 
     public void creartodo() throws IOException {
