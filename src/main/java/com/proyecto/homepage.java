@@ -1016,17 +1016,16 @@ public class homepage {
 //
 //    }
 
-
-    @POST
+    @GET
     @Path("/createapp")
-    public boolean CreateAPP(FormValue formValue) throws IOException {
-        creartodo();
+    public TemplateInstance CreateAPP() throws IOException {
         ListIterator<FormValue> listItr = formValuesList.listIterator();
         while (listItr.hasNext()) {
             ImprimirClases(listItr.next());
             crearClase(listItr.next());
         }
-        return true;
+        creartodo();
+        return Homepage();
     }
 
     public void creartodo() throws IOException {
