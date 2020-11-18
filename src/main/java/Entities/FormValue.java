@@ -5,15 +5,26 @@ import java.util.ArrayList;
 public class FormValue {
     public String nombreTabla;
     public boolean creado;
+    public boolean tieneRelacionFk;
     public ArrayList<Form> filas;
 
     public String getNombreTabla() {
         return nombreTabla;
     }
 
-    public FormValue(String nombreTabla, boolean creado, ArrayList<Form> filas) {
+
+    public boolean isTieneRelacionFk() {
+        return tieneRelacionFk;
+    }
+
+    public void setTieneRelacionFk(boolean tieneRelacionFk) {
+        this.tieneRelacionFk = tieneRelacionFk;
+    }
+
+    public FormValue(String nombreTabla, boolean creado, boolean tieneRelacionFk, ArrayList<Form> filas) {
         this.nombreTabla = nombreTabla;
         this.creado = creado;
+        this.tieneRelacionFk = tieneRelacionFk;
         this.filas = filas;
     }
 

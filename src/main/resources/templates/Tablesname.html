@@ -60,16 +60,22 @@
 <table id="myTable">
     <tr class="header">
         <th style="width:40%;">Name</th>
-        <th style="width:30%;">Details</th>
-        <th style="width:20%;">Generado</th>
+        <th class="text-center" style="width:20%;">Details</th>
+        <th class="text-center" style="width:10%;">Relation(Fk)</th>
+        <th style="width:20%;">Generated</th>
         <th style="width:10%;">Generate API</th>
     </tr>
     {#if tablas}
         {#for tabla in tablas}
             <tr>
                 <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
-<!--                <td>{tabla}</td>-->
-                <td><a href="/api/form/update/{tabla.nombreTabla}">Ver</a></td>
+                <td class="text-center"><a href="/api/form/update/{tabla.nombreTabla}">Ver</a></td>
+                <td class="text-center">
+                    {#if tabla.tieneRelacionFk == true}
+                        <a href="/api/fk/{tabla.nombreTabla}}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
+                    {/if}
+                </td>
+
                 {#if tabla.creado == true}
                     <td class="mt-2 badge badge-success" title="Esta tabla ya está generada">
                         Table generated<input type="hidden" id="generado" value="1">

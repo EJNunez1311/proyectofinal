@@ -119,7 +119,7 @@ public class homepage {
     //Funcion para verificar la conexion a la base de datos!
     public boolean Connect(DbName dbName) {
         //TODO: validar username y password
-        System.out.println(dbName.name);
+//        System.out.println(dbName.name);
         System.out.println(dbName.username);
         System.out.println(dbName.password);
         return false;
@@ -159,15 +159,15 @@ public class homepage {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     //Funcion para leer el nombre de la base de datos!
-    public boolean GetDataBaseName(@FormParam("name") String databasename, @FormParam("username") String username, @FormParam("password") String password) throws IOException {
+    public boolean GetDataBaseName(@FormParam("username") String username, @FormParam("password") String password) throws IOException {
         //Solo para tomar o leer el nombre de la base de datos.
         //TODO: validar username y password
-        databasename_g = databasename;
+//        databasename_g = databasename;
 
         importado = 1;
 
         //Cambia el nombre de la DB en Application Properties.
-        return true;
+        return false;
     }
 
 
@@ -370,7 +370,7 @@ public class homepage {
                 }
                 detalles.add(fila);
             }
-            detalle = new FormValue(name, false, detalles);
+            detalle = new FormValue(name, false, false, detalles);
 
         } catch (Exception e) {
             e.printStackTrace();
