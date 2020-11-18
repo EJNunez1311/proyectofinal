@@ -1,8 +1,6 @@
 package com.proyecto;
 
-import Entities.Data;
-import Entities.Form;
-import Entities.FormValue;
+import Entities.*;
 //import com.sun.corba.se.impl.protocol.giopmsgheaders.FragmentMessage;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
@@ -17,6 +15,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.management.Query;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -34,7 +33,6 @@ import org.jboss.logging.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Optional;
 
 
 @ApplicationScoped
@@ -58,6 +56,10 @@ public class homepage {
     @Inject
     Template TablasVer;
     @Inject
+    Template DbAcceso;
+    @Inject
+    Template DbFk;
+    @Inject
     Template FormPregeneradaUpdate;
 
     private static final Logger LOGGER = Logger.getLogger("ListenerBean");
@@ -76,7 +78,6 @@ public class homepage {
         return homepage.data("title", "API Creation");
     }
 
-
     @GET
     @Path("/create")
     // Vista para el input del nombre de la app
@@ -89,16 +90,57 @@ public class homepage {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     //Metodo para recibir el nombre de la app y generar los primero parametros de la app!
-    public Response GetAppName(@FormParam("name") String name) throws IOException {
+    public Response GetAppName(@FormParam("name") String name,
+                               @FormParam("microserviceCheckbox") String microserviceCheckbox,
+                               @FormParam("securityCheckbox") String securityCheckbox ) throws IOException {
+//    public Response GetAppName(AppName appName) throws IOException {
 
         nombre = name;
-//        System.out.println(nombre);
 
-        Runnable r = new Create(nombre);
-        new Thread(r).start();
+//        System.out.println("Nombre -> "+ name);
+//        System.out.println("Microservicio -> "+ microserviceCheckbox);
+//        System.out.println("Security -> " + securityCheckbox);
+//TODO: Usar campo de security y microservice
+
+//        Runnable r = new Create(nombre);
+//        new Thread(r).start();
 
         return Response.ok().build();
 
+    }
+
+    @POST
+    @Path("/conectar")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    //Funcion para verificar la conexion a la base de datos!
+    public boolean Connect(DbName dbName) {
+        //TODO: validar username y password
+        System.out.println(dbName.name);
+        System.out.println(dbName.username);
+        System.out.println(dbName.password);
+        return true;
+    }
+
+    @GET
+    @Path("/fk/{table}")
+    public TemplateInstance DbFk(@PathParam("table") String table) {
+        //TODO: Cargar lista de relaciones
+
+        return DbFk
+                .data("title", "Listado de Fk")
+                .data("listafk", Data.obtenerFk());
+    }
+
+
+    @GET
+    @Path("/db/acceso")
+    public TemplateInstance DbAcceso() {
+        //TODO: Cargar lista de bases de datos
+
+        return DbAcceso
+                .data("title", "Database Name")
+                .data("basesDeDatos", Data.obtenerBasesDeDatos());
     }
 
     @GET
@@ -114,72 +156,78 @@ public class homepage {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     //Funcion para leer el nombre de la base de datos!
-    public boolean GetDataBaseName(@FormParam("name") String databasename) throws IOException {
+    public boolean GetDataBaseName(@FormParam("name") String databasename, @FormParam("username") String username, @FormParam("password") String password) throws IOException {
         //Solo para tomar o leer el nombre de la base de datos.
+        //TODO: validar username y password
         databasename_g = databasename;
+
         importado = 1;
 
         //Cambia el nombre de la DB en Application Properties.
         return true;
     }
 
+
     @GET
     @Path("/db/table")
     //Aqui muestro todas las tablas para mandarla a la vista.
-    public TemplateInstance ShowallTables() {
+    public TemplateInstance ShowallTables(@CookieParam("nombre") Cookie nombre, @CookieParam("usuario") Cookie usuario, @CookieParam("contrasena") Cookie contrasena ) {
+        System.out.println(nombre);
+        System.out.println(usuario);
+        System.out.println(contrasena);
 
 //      Databasename_g; Variable Global para guardar el nombre de la base de datos!!
-        ArrayList<FormValue> nombres = new ArrayList<>();
-        try {
-//            Get Connection to DB
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
-
-            //Create a Statement
-            Statement dictoStatement = myconnection.createStatement();
-            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
-            String queryalltables = "SELECT table_name\n" +
-                    "FROM information_schema.tables\n" +
-                    "WHERE table_schema ='" + databasename_g + "'" +
-                    "\nORDER BY table_name;";
-
-
-            //Execute SQL query
-//        System.out.println(queryalltables);
-            ResultSet myRs = dictoStatement.executeQuery(queryalltables);
-//             nombres = myRs.getArray("table_name").;
-//            ArrayList<String> nombres = new ArrayList<>();
-            //Process the result set
-            while (myRs.next()) {
-                String path = System.getProperty("user.dir");
-                String formValue = myRs.getString("table_name");
-                String clase = formValue.substring(0, 1).toUpperCase() + formValue.substring(1).toLowerCase();
-                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-                boolean creado = false;
-                if (myObj.exists()) {
-                    creado = true;
-                }
-
-                nombres.add(new FormValue(myRs.getString("table_name"), creado, null));
-                System.out.println(myRs.getString("table_name"));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        String path = System.getProperty("user.dir");
-
-//        for (FormValue formValue : Data.tablas) {
-//            String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
-//            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-//            if (myObj.exists()){
-//                formValue.creado = true;
+//        ArrayList<FormValue> nombres = new ArrayList<>();
+//        try {
+////            Get Connection to DB
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
+//
+//            //Create a Statement
+//            Statement dictoStatement = myconnection.createStatement();
+//            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
+//            String queryalltables = "SELECT table_name\n" +
+//                    "FROM information_schema.tables\n" +
+//                    "WHERE table_schema ='" + databasename_g + "'" +
+//                    "\nORDER BY table_name;";
+//
+//
+//            //Execute SQL query
+////        System.out.println(queryalltables);
+//            ResultSet myRs = dictoStatement.executeQuery(queryalltables);
+////             nombres = myRs.getArray("table_name").;
+////            ArrayList<String> nombres = new ArrayList<>();
+//            //Process the result set
+//            while (myRs.next()) {
+//                String path = System.getProperty("user.dir");
+//                String formValue = myRs.getString("table_name");
+//                String clase = formValue.substring(0, 1).toUpperCase() + formValue.substring(1).toLowerCase();
+//                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+//                boolean creado = false;
+//                if (myObj.exists()) {
+//                    creado = true;
+//                }
+//
+//                nombres.add(new FormValue(myRs.getString("table_name"), creado, null));
+//                System.out.println(myRs.getString("table_name"));
 //            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //        }
+//
+////        String path = System.getProperty("user.dir");
+//
+////        for (FormValue formValue : Data.tablas) {
+////            String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
+////            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+////            if (myObj.exists()){
+////                formValue.creado = true;
+////            }
+////        }
 
-//        return Tablesname.data("tablas", Data.tablas);
-        return Tablesname.data("tablas", nombres);
+        return Tablesname.data("tablas", Data.tablas);
+//        return Tablesname.data("tablas", nombres);
 //        return Tablesname.data("title", "table list");
     }
 

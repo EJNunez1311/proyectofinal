@@ -59,6 +59,7 @@
     <tr class="header">
         <th style="width:40%;">Name</th>
         <th style="width:30%;">Options</th>
+        <th style="width:30%;">Relaciones</th>
     </tr>
     {#if tablasGeneradas}
         {#for tabla in tablasGeneradas}
@@ -142,6 +143,9 @@
                             </div>
                         </div>
                     </div>
+                </td>
+                <td>
+                    <a class="btn btn-info" href="/api/fk/{tabla.nombreTabla}}" title="Ver Relaciones (FK)">Fk</a>
                 </td>
             </tr>
         {/for}
