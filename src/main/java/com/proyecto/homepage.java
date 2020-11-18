@@ -1021,7 +1021,7 @@ public class homepage {
     public TemplateInstance CreateAPP() throws IOException {
         ListIterator<FormValue> listItr = formValuesList.listIterator();
         while (listItr.hasNext()) {
-            ImprimirClases(listItr.next());
+//            ImprimirClases(listItr.next());
             crearClase(listItr.next());
         }
         creartodo();
