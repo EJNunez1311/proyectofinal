@@ -1113,16 +1113,16 @@ public class homepage {
                     System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     auxiliar = form.getFkRelacion().split("To");
                     fkAlrevez = auxiliar[2]+ "To"+ auxiliar[0];
-
+                    System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
 
                     RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
 
 
-                    cad = formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1";
-                    test = cad.split(" ");
-                    for(int i = 0 ; i < test.length ; i++)
-                        System.out.println(test[i]);
+//                    cad = formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1";
+//                    test = cad.split(" ");
+//                    for(int i = 0 ; i < test.length ; i++)
+//                        System.out.println(test[i]);
 
 
                 }
