@@ -1012,6 +1012,10 @@ public class homepage {
                         "@Entity\n" +
                         "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
 
+                        fk
+
+                        +
+
                         modelos
 
                         +
