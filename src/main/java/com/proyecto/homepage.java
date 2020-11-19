@@ -1030,6 +1030,10 @@ public class homepage {
                         "@Entity\n" +
                         "public class " + clase + " extends PanacheEntity {\n" +
 
+                        fk
+
+                        +
+
                         modelos
 
                         +
