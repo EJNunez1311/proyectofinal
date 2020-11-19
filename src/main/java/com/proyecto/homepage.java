@@ -77,7 +77,7 @@ public class homepage {
     //Credenciales Admin para la DB (MYSQL)
     String dbUserAdmin, dbUserPassword;
     //Credenciales !=Admin para la DB (MySQL)
-    String dbNamelist, dbUserlist, dbUserPwList;
+    String dbNamelist;
     List<FormValue> formValuesList = new ArrayList<FormValue>();
 
     List<String> RelacionFK = new ArrayList<String>();
@@ -123,16 +123,16 @@ public class homepage {
     public boolean Connect(DbName dbName) {
         //TODO: validar username y password
         System.out.println(dbName.name);
-        System.out.println(dbName.username);
-        System.out.println(dbName.password);
+//        System.out.println(dbName.username);
+//        System.out.println(dbName.password);
         try {
 //          Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName.name, dbName.username, dbName.password);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName.name, dbUserAdmin, dbUserPassword);
             if (!myconnection.isClosed() || myconnection != null) {
                 dbNamelist = dbName.name;
-                dbUserlist = dbName.username;
-                dbUserPassword = dbName.password;
+//                dbUserlist = dbName.username;
+//                dbUserPassword = dbName.password;
                 importado = 1;
                 return true;
             }
@@ -176,11 +176,13 @@ public class homepage {
             //Create a Statement
             Statement dictoStatement = myconnection.createStatement();
             System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
-            String dbquery = "SHOW DATABASES\n";
+            String dbquery = "SELECT `schema_name` \n" +
+                    "from INFORMATION_SCHEMA.SCHEMATA \n" +
+                    "WHERE `schema_name` NOT IN('information_schema', 'mysql', 'performance_schema');\n";
 
             ResultSet myRs = dictoStatement.executeQuery(dbquery);
             while (myRs.next()) {
-                alldatabase.add(myRs.getString("Database"));
+                alldatabase.add(myRs.getString("schema_name"));
 
             }
 
@@ -238,7 +240,7 @@ public class homepage {
         try {
 //            Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserlist, dbUserPassword);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserAdmin, dbUserPassword);
 
             //Create a Statement
             Statement dictoStatement = myconnection.createStatement();
@@ -289,7 +291,7 @@ public class homepage {
 //        }
 
 //        return Tablesname.data("tablas", Data.tablas);
-        return Tablesname.data("tablas", nombres);
+        return Tablesname.data("tablas", nombres).data("title",dbNamelist+" "+ "Tables");
 //        return Tablesname.data("title", "table list");
     }
 
@@ -379,7 +381,7 @@ public class homepage {
         try {
             //Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserAdmin, dbUserPassword);
 
             //Create a Statement
             Statement dictoStatement = myconnection.createStatement();
@@ -397,7 +399,7 @@ public class homepage {
                             "`INFORMATION_SCHEMA`.`COLUMNS` as tb\n" +
                             "WHERE\n" +
                             "TABLE_NAME = '" + name + "'" +
-                            "AND table_schema ='" + databasename_g + "'";
+                            "AND table_schema ='" + dbNamelist + "'";
 //            System.out.println(QueryDic);
 
             //Execute SQL query
@@ -1229,7 +1231,7 @@ public class homepage {
         try {
 //            Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserlist, dbUserPassword);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserAdmin, dbUserPassword);
 
             //Create a Statement
             Statement dictoStatement = myconnection.createStatement();

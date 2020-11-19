@@ -69,7 +69,7 @@
         {#for tabla in tablas}
             <tr>
                 <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
-                <td class="text-center"><a href="/api/form/update/{tabla.nombreTabla}">Ver</a></td>
+                <td class="text-center"><a href="/api/form/update/{tabla.nombreTabla}">View</a></td>
                 <td class="text-center">
                     {#if tabla.tieneRelacionFk == true}
                         <a href="/api/fk/{tabla.nombreTabla}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
