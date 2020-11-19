@@ -1100,20 +1100,25 @@ public class homepage {
         }
     }
 
-    @GET
-    @Path("/createapp")
-    public TemplateInstance CreateAPP() throws IOException {
-        ListIterator<FormValue> listItr = Data.tablasGeneradas.listIterator();
-
+    public void llenarFK(){
         String[] test;
-        String cad;
-        List<String> FKsecundaria = new ArrayList<String>();
+        String[] auxiliar;
+        String cad = "";
+        String fkAlrevez = "";
+
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
                 if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
                     test = cad.split(" ");
                     System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    auxiliar = form.getFkRelacion().split("To");
+                    fkAlrevez = auxiliar[2]+ "To"+ auxiliar[0];
+
+
                     RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
+
+
                     cad = formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1";
                     test = cad.split(" ");
                     for(int i = 0 ; i < test.length ; i++)
@@ -1123,6 +1128,13 @@ public class homepage {
                 }
             }
         }
+    }
+
+    @GET
+    @Path("/createapp")
+    public TemplateInstance CreateAPP() throws IOException {
+        ListIterator<FormValue> listItr = Data.tablasGeneradas.listIterator();
+        llenarFK();
         while (listItr.hasNext()) {
 //            ImprimirClases(listItr.next());
             crearClase(listItr.next());
