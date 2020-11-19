@@ -80,6 +80,8 @@ public class homepage {
     String dbNamelist;
     List<FormValue> formValuesList = new ArrayList<FormValue>();
 
+    List<String> RelacionFK = new ArrayList<String>();
+
     @GET
     public TemplateInstance Homepage() {
         return homepage.data("title", "API Creation");
@@ -843,8 +845,15 @@ public class homepage {
 
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
-                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: " + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "
+                    + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
 //            + form.isFkCheckbox()
+            if(form.getFkTablaRelacionada() != null && form.getFkRelacion() != null){
+                System.out.println("Viene de : " + formValue.nombreTabla + " El atributo: " + form.getNombre() +
+                        " A la tabla: " + form.getFkTablaRelacionada() + " Con el tipo de relacion: " + form.getFkRelacion());
+                RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion());
+
+            }
         }
 
         Data.tablasGeneradas.add(formValue);
