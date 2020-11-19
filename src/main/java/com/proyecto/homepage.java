@@ -1112,7 +1112,7 @@ public class homepage {
                     test = cad.split(" ");
                     System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     auxiliar = form.getFkRelacion().split("To");
-                    fkAlrevez = (new StringBuilder()).append(auxiliar[2]).append("To").append(auxiliar[0]).toString(); 
+                    fkAlrevez = (new StringBuilder()).append(auxiliar[2]).append("To").append(auxiliar[0]).toString();
 //                            (auxiliar[2]+ "To" +auxiliar[0] );
                     System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
 
