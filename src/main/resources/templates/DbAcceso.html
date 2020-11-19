@@ -185,7 +185,11 @@
                         }).done(function(data) {
                             console.log("Data sent successfully");
                             console.log(data);
-                            guardarConexion(true);
+                            if (data===true) {
+                                guardarConexion(true);
+                            } else {
+                                guardarConexion(false);
+                            }
                         }).error(function (jqXhr, textStatus, errorMessage) {
                             console.log("Error sending data");
                             console.log(jqXhr);

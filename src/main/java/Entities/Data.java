@@ -51,11 +51,11 @@ public class Data {
 
     public static ArrayList<TableFk> obtenerFk() {
         ArrayList<TableFk> listaFk = new ArrayList<>();
-        listaFk.add(new TableFk("employees", "dept_emp", "emp_no", "employees", "emp_no"));
-        listaFk.add(new TableFk("employees", "dept_emp", "dept_no", "departments", "dept_no"));
-        listaFk.add(new TableFk("employees", "dept_manager", "emp_no", "employees", "emp_no"));
-        listaFk.add(new TableFk("employees", "dept_manager", "dept_no", "departments", "dept_no"));
-        listaFk.add(new TableFk("employees", "titles", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_emp", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_emp", "dept_no", "departments", "dept_no"));
+//        listaFk.add(new TableFk("employees", "dept_manager", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_manager", "dept_no", "departments", "dept_no"));
+//        listaFk.add(new TableFk("employees", "titles", "emp_no", "employees", "emp_no"));
         return  listaFk;
     }
 

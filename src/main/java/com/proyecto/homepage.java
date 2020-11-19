@@ -74,6 +74,10 @@ public class homepage {
     String nombre = "";
     String databasename_g = "prueba";
     int importado = 0;
+    //Credenciales Admin para la DB (MYSQL)
+    String dbUserAdmin, dbUserPassword;
+    //Credenciales !=Admin para la DB (MySQL)
+    String dbNamelist, dbUserlist, dbUserPwList;
     List<FormValue> formValuesList = new ArrayList<FormValue>();
 
     @GET
@@ -95,18 +99,15 @@ public class homepage {
     //Metodo para recibir el nombre de la app y generar los primero parametros de la app!
     public Response GetAppName(@FormParam("name") String name,
                                @FormParam("microserviceCheckbox") String microserviceCheckbox,
-                               @FormParam("securityCheckbox") String securityCheckbox ) throws IOException {
-//    public Response GetAppName(AppName appName) throws IOException {
-
+                               @FormParam("securityCheckbox") String securityCheckbox) throws IOException {
         nombre = name;
-
-        System.out.println("Nombre -> "+ name);
-        System.out.println("Microservicio -> "+ microserviceCheckbox);
+        System.out.println("Nombre -> " + name);
+        System.out.println("Microservicio -> " + microserviceCheckbox);
         System.out.println("Security -> " + securityCheckbox);
 //TODO: Usar campo de security y microservice
 
-//        Runnable r = new Create(nombre);
-//        new Thread(r).start();
+        Runnable r = new Create(nombre);
+        new Thread(r).start();
 
         return Response.ok().build();
 
@@ -119,9 +120,23 @@ public class homepage {
     //Funcion para verificar la conexion a la base de datos!
     public boolean Connect(DbName dbName) {
         //TODO: validar username y password
-//        System.out.println(dbName.name);
+        System.out.println(dbName.name);
         System.out.println(dbName.username);
         System.out.println(dbName.password);
+        try {
+//          Get Connection to DB
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName.name, dbName.username, dbName.password);
+            if (!myconnection.isClosed() || myconnection != null) {
+                dbNamelist = dbName.name;
+                dbUserlist = dbName.username;
+                dbUserPassword = dbName.password;
+                importado = 1;
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
         return false;
     }
 
@@ -129,10 +144,20 @@ public class homepage {
     @Path("/fk/{table}")
     public TemplateInstance DbFk(@PathParam("table") String table) {
         //TODO: Cargar lista de relaciones
+        ArrayList<TableFk> listafk = new ArrayList<>();
+        try {
+            ResultSet myRs = chequearFK(table);
+            while (myRs.next()) {
+                listafk.add((new TableFk(myRs.getString("COLUMN_NAME"), myRs.getString("REFERENCED_TABLE_NAME"), myRs.getString("REFERENCED_COLUMN_NAME"))));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return DbFk
                 .data("title", "Listado de Fk")
-                .data("listafk", Data.obtenerFk());
+                .data("listafk", listafk)
+                .data("NombreTabla", table);
     }
 
 
@@ -140,10 +165,32 @@ public class homepage {
     @Path("/db/acceso")
     public TemplateInstance DbAcceso() {
         //TODO: Cargar lista de bases de datos
+        ArrayList<String> alldatabase = new ArrayList<>();
+        try {
+//            Get Connection to DB
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/information_schema", dbUserAdmin, dbUserPassword);
+
+            //Create a Statement
+            Statement dictoStatement = myconnection.createStatement();
+            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
+            String dbquery = "SHOW DATABASES\n";
+
+            ResultSet myRs = dictoStatement.executeQuery(dbquery);
+            while (myRs.next()) {
+                alldatabase.add(myRs.getString("Database"));
+
+            }
+
+
+        } catch (
+                Exception e) {
+            e.printStackTrace();
+        }
 
         return DbAcceso
                 .data("title", "Database Name")
-                .data("basesDeDatos", Data.obtenerBasesDeDatos());
+                .data("basesDeDatos", alldatabase);
     }
 
     @GET
@@ -162,9 +209,19 @@ public class homepage {
     public boolean GetDataBaseName(@FormParam("username") String username, @FormParam("password") String password) throws IOException {
         //Solo para tomar o leer el nombre de la base de datos.
         //TODO: validar username y password
-//        databasename_g = databasename;
 
-        importado = 1;
+        try {
+//          Get Connection to DB
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/information_schema", username, password);
+            if (!myconnection.isClosed() || myconnection != null) {
+                dbUserAdmin = username;
+                dbUserPassword = password;
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
 
         //Cambia el nombre de la DB en Application Properties.
         return false;
@@ -174,63 +231,63 @@ public class homepage {
     @GET
     @Path("/db/table")
     //Aqui muestro todas las tablas para mandarla a la vista.
-    public TemplateInstance ShowallTables(@CookieParam("nombre") Cookie nombre, @CookieParam("usuario") Cookie usuario, @CookieParam("contrasena") Cookie contrasena ) {
-        System.out.println(nombre);
-        System.out.println(usuario);
-        System.out.println(contrasena);
+    public TemplateInstance ShowallTables() {
+        ArrayList<FormValue> nombres = new ArrayList<>();
+        try {
+//            Get Connection to DB
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserlist, dbUserPassword);
 
-//      Databasename_g; Variable Global para guardar el nombre de la base de datos!!
-//        ArrayList<FormValue> nombres = new ArrayList<>();
-//        try {
-////            Get Connection to DB
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
-//
-//            //Create a Statement
-//            Statement dictoStatement = myconnection.createStatement();
-//            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
-//            String queryalltables = "SELECT table_name\n" +
-//                    "FROM information_schema.tables\n" +
-//                    "WHERE table_schema ='" + databasename_g + "'" +
-//                    "\nORDER BY table_name;";
-//
-//
-//            //Execute SQL query
-////        System.out.println(queryalltables);
-//            ResultSet myRs = dictoStatement.executeQuery(queryalltables);
-////             nombres = myRs.getArray("table_name").;
-////            ArrayList<String> nombres = new ArrayList<>();
-//            //Process the result set
-//            while (myRs.next()) {
-//                String path = System.getProperty("user.dir");
-//                String formValue = myRs.getString("table_name");
-//                String clase = formValue.substring(0, 1).toUpperCase() + formValue.substring(1).toLowerCase();
-//                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-//                boolean creado = false;
-//                if (myObj.exists()) {
-//                    creado = true;
-//                }
-//
-//                nombres.add(new FormValue(myRs.getString("table_name"), creado, null));
-//                System.out.println(myRs.getString("table_name"));
+            //Create a Statement
+            Statement dictoStatement = myconnection.createStatement();
+            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
+            String queryalltables = "SELECT table_name\n" +
+                    "FROM information_schema.tables\n" +
+                    "WHERE table_schema ='" + dbNamelist + "'" +
+                    "\nORDER BY table_name;";
+
+
+            //Execute SQL query
+//        System.out.println(queryalltables);
+            ResultSet myRs = dictoStatement.executeQuery(queryalltables);
+//             nombres = myRs.getArray("table_name").;
+//            ArrayList<String> nombres = new ArrayList<>();
+            //Process the result set
+            while (myRs.next()) {
+                String path = System.getProperty("user.dir");
+                String formValue = myRs.getString("table_name");
+                String clase = formValue.substring(0, 1).toUpperCase() + formValue.substring(1).toLowerCase();
+                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+                boolean creado = false;
+                if (myObj.exists()) {
+                    creado = true;
+                }
+                ResultSet myRsFk = chequearFK(myRs.getString("table_name"));
+                boolean tieneFk = true;
+                if (!myRsFk.next()) {
+                    tieneFk = false;
+                }
+//                System.out.println(myRsFk.getString("REFERENCED_COLUMN_NAME"));
+                nombres.add(new FormValue(myRs.getString("table_name"), creado, tieneFk, null));
+                System.out.println(myRs.getString("table_name"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        String path = System.getProperty("user.dir");
+
+//        for (FormValue formValue : Data.tablas) {
+//            String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
+//            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+//            if (myObj.exists()){
+//                formValue.creado = true;
 //            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
 //        }
-//
-////        String path = System.getProperty("user.dir");
-//
-////        for (FormValue formValue : Data.tablas) {
-////            String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
-////            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-////            if (myObj.exists()){
-////                formValue.creado = true;
-////            }
-////        }
 
-        return Tablesname.data("tablas", Data.tablas);
-//        return Tablesname.data("tablas", nombres);
+//        return Tablesname.data("tablas", Data.tablas);
+        return Tablesname.data("tablas", nombres);
 //        return Tablesname.data("title", "table list");
     }
 
@@ -1037,33 +1094,6 @@ public class homepage {
         }
     }
 
-//    @GET
-//    @Path("/dbconnect")
-//    public void GetAllDb() {
-//
-//        try {
-////            Get Connection to DB
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
-//
-//            //Create a Statement
-//            Statement dictoStatement = myconnection.createStatement();
-//            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
-//            String querydb = "SELECT table_name\n" +
-//                    "FROM information_schema.tables\n" +
-//                    "WHERE table_schema ='" + databasename_g + "'" +
-//                    "\nORDER BY table_name;";
-//
-//            ResultSet myRs = dictoStatement.executeQuery(querydb);
-//
-//
-//        } catch (
-//                Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
     @GET
     @Path("/createapp")
     public TemplateInstance CreateAPP() throws IOException {
@@ -1170,11 +1200,11 @@ public class homepage {
         path2 = Paths.get(userHome + "/Downloads/" + nombre + "/src/main/resources/application.properties");
         charset = StandardCharsets.UTF_8;
 
-        content = new String(Files.readAllBytes(path2), charset);
-        content = content.replaceAll("prueba", databasename_g);
-        Files.write(path2, content.getBytes(charset));
-
         if (importado == 1) {
+            content = new String(Files.readAllBytes(path2), charset);
+            content = content.replaceAll("prueba", dbNamelist);
+            Files.write(path2, content.getBytes(charset));
+
             path2 = Paths.get(userHome + "/Downloads/" + nombre + "/src/main/resources/application.properties");
             charset = StandardCharsets.UTF_8;
 
@@ -1182,5 +1212,33 @@ public class homepage {
             content = content.replaceAll("drop-and-create", "update");
             Files.write(path2, content.getBytes(charset));
         }
+    }
+
+    public ResultSet chequearFK(String table) {
+        try {
+//            Get Connection to DB
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserlist, dbUserPassword);
+
+            //Create a Statement
+            Statement dictoStatement = myconnection.createStatement();
+            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
+            String queryfk = "SELECT TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME\n" +
+                    "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE\n" +
+                    "WHERE REFERENCED_TABLE_SCHEMA IS NOT NULL \n" +
+                    "AND REFERENCED_TABLE_NAME IS NOT NULL \n" +
+                    "AND REFERENCED_COLUMN_NAME IS NOT NULL\n" +
+                    "AND REFERENCED_TABLE_SCHEMA = '" + dbNamelist + "'\n" +
+                    "AND TABLE_NAME = '" + table + "';";
+
+
+            //Execute SQL query
+//        System.out.println(queryfk);
+            return dictoStatement.executeQuery(queryfk);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
