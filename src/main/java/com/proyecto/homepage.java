@@ -985,7 +985,7 @@ public class homepage {
                                     "    @JoinColumn(name = \"" + test[1] + "\")\n" +
                                     "    public " + test[2] + " " + test[2].toLowerCase() + ";";
                         } else if (test[3].equals("ManyToMany")) {
-                            fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + test[1] + "\")\n" +
+                            fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
                                     "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
                         }
                     }
