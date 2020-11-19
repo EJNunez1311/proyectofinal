@@ -1105,11 +1105,21 @@ public class homepage {
     public TemplateInstance CreateAPP() throws IOException {
         ListIterator<FormValue> listItr = Data.tablasGeneradas.listIterator();
 
+        String[] test;
+        String cad;
+        List<String> FKsecundaria = new ArrayList<String>();
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
                 if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
+                    test = cad.split(" ");
                     System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    cad = formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1";
+                    test = cad.split(" ");
+                    for(int i = 0 ; i < test.length ; i++)
+                        System.out.println(test[i]);
+
+
                 }
             }
         }
