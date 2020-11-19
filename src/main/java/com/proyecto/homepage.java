@@ -775,45 +775,7 @@ public class homepage {
             //        return Response.ok().build();
 
         }
-        //      Databasename_g; Variable Global para guardar el nombre de la base de datos!!
-//        ArrayList<String> nombres = new ArrayList<>();
-//        try {
-////            Get Connection to DB
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
-//
-//            //Create a Statement
-//            Statement dictoStatement = myconnection.createStatement();
-//            System.out.println("Conectado correctamente a la Base de Datos antes de show all tables");
-//            String queryalltables = "SELECT table_name\n" +
-//                            "FROM information_schema.tables\n" +
-//                            "WHERE table_schema ='" + databasename_g +"'"+
-//                            "\nORDER BY table_name;";
-//
-//
-//            //Execute SQL query
-////        System.out.println(queryalltables);
-//            ResultSet myRs = dictoStatement.executeQuery(queryalltables);
-////             nombres = myRs.getArray("table_name").;
-////            ArrayList<String> nombres = new ArrayList<>();
-//            //Process the result set
-//            while (myRs.next()) {
-//                nombres.add(myRs.getString("table_name"));
-//                System.out.println(myRs.getString("table_name"));
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
-//        String path = System.getProperty("user.dir");
-//        for (FormValue formValue : Data.tablas) {
-//            String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
-//            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-//            if (myObj.exists()){
-//                formValue.creado = true;
-//            }
-//        }
         try {
             creartodo();
         } catch (IOException e) {
