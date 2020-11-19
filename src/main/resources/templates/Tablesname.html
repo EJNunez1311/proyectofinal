@@ -138,19 +138,19 @@
                     }
                 }
             });
-            // console.log(arr);
-            // const data = {
-            //     nombreTabla : tname,
-            //     filas : arr
-            // }
+            console.log(arr);
+            const data = {
+                nombreTabla : tname,
+                filas : arr
+            }
             const jsonData = JSON.stringify(arr);
 
             $.ajax({
                 type: "POST",
                 url: '/api/create/group',
-                // contentType: 'application/json',
-                // data: jsonData,
-                // dataType: 'json'
+                contentType: 'application/json',
+                data: jsonData,
+                dataType: 'json'
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);

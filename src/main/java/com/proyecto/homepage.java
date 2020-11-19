@@ -497,7 +497,7 @@ public class homepage {
                                 "`INFORMATION_SCHEMA`.`COLUMNS` as tb\n" +
                                 "WHERE\n" +
                                 "TABLE_NAME = '" + nomb + "'" +
-                                "AND table_schema ='" + databasename_g + "'";
+                                "AND table_schema ='" + dbNamelist + "'";
 
 
                 String NewQuery = "Show COLUMNS from " + nomb;
@@ -594,6 +594,8 @@ public class homepage {
                         tipo = "boolean";
                     else if (myRs.getString("Data_Type").toLowerCase().startsWith("char".toLowerCase()))
                         tipo = "String";
+                    else if (myRs.getString("Data_Type").toLowerCase().startsWith("bigint".toLowerCase()))
+                        tipo = "Long";
                     else tipo = "/*ERROR AL TOMAR TIPO DESDE LA BD*/";
 
                     atributo = atributo.toLowerCase();
@@ -842,6 +844,8 @@ public class homepage {
 //            formValuesList.add(formValue);
 //            System.out.println("Tabla agregada a lista " + formValue.nombreTabla);
 //        }
+
+        crearClase(formValue);
 
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
@@ -1164,10 +1168,10 @@ public class homepage {
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
                 if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
-                    //System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+//                    System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     auxiliar = form.getFkRelacion().split("To");
                     fkAlrevez = (auxiliar[1] + "To" + auxiliar[0]);
-                    //System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
+//                    System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
 
                     RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                     RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez + " 2");
@@ -1184,9 +1188,9 @@ public class homepage {
         llenarFK();
         while (listItr.hasNext()) {
 //            ImprimirClases(listItr.next());
-//            crearClase(listItr.next());
+            crearClase(listItr.next());
         }
-//        creartodo();
+        creartodo();
         return Homepage();
     }
 
