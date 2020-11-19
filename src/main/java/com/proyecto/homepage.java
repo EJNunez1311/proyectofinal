@@ -957,7 +957,7 @@ public class homepage {
                 test = cad.split(" ");
                 //Employees emp_no Dept_manager ManyToOne 1
                 if (test[0].equals(clase)) {
-                    if (test[4].equals("1")) {
+                    if (test[4].equals("2")) {
                         if (test[3].equals("OneToOne")) {
                             fk = fk + "    @OneToOne(mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
                                     "    @PrimaryKeyJoinColumn\n" +
@@ -968,13 +968,13 @@ public class homepage {
 
                         } else if (test[3].equals("ManyToOne")) {
                             fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
-                                    "    @JoinColumn(name = \"" + test[1] + "\")\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
                                     "    public " + test[2] + " " + test[2].toLowerCase() + ";";
                         } else if (test[3].equals("ManyToMany")) {
                             fk = fk + "    @ManyToMany\n" +
                                     "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
                         }
-                    } else if (test[4].equals("2")) {
+                    } else if (test[4].equals("1")) {
                         if (test[3].equals("OneToOne")) {
                             fk = fk + "    @OneToOne\n" +
                                     "    @MapsId\n" +
@@ -986,7 +986,7 @@ public class homepage {
 
                         } else if (test[3].equals("ManyToOne")) {
                             fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
-                                    "    @JoinColumn(name = \"" + test[1] + "\")\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
                                     "    public " + test[2] + " " + test[2].toLowerCase() + ";";
                         } else if (test[3].equals("ManyToMany")) {
                             fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
