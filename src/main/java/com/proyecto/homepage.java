@@ -1108,9 +1108,8 @@ public class homepage {
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
                 if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
-                    System.out.println("Viene de : " + formValue.nombreTabla + " El atributo: " + form.getNombre() +
-                            " A la tabla: " + form.getFkTablaRelacionada() + " Con el tipo de relacion: " + form.getFkRelacion());
-                    RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion());
+                    System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
                 }
             }
         }
