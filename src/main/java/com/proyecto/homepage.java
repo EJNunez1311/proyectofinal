@@ -863,11 +863,11 @@ public class homepage {
         String clase;
         String atributo;
         String tipo;
-        String modelos = "";
-        String getset = "";
-        String entidad = "";
+        String modelos = "\n";
+        String getset = "\n";
+        String entidad = "\n";
         String tipopk = "long";
-        String fk = "";
+        String fk = "\n";
         int haypk = 0;
 
 
@@ -998,10 +998,7 @@ public class homepage {
             String archivojava = "package org.proyecto.Entity;\n" +
                     "import io.quarkus.hibernate.orm.panache.PanacheEntity;\n" +
                     "import io.quarkus.hibernate.orm.panache.PanacheEntityBase;\n" +
-                    "import javax.persistence.Column;\n" +
-                    "import javax.persistence.Entity;\n" +
-                    "import javax.persistence.GeneratedValue;\n" +
-                    "import javax.persistence.Id;\n" +
+                    "import javax.persistence.*;\n" +
                     "import java.sql.Date;\n" +
                     "import java.io.Serializable;\n" +
                     "import java.util.Set;\n";
