@@ -479,7 +479,7 @@ public class homepage {
             try {
                 //Get Connection to DB
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + databasename_g, "root", "12345678");
+                Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbNamelist, dbUserAdmin, dbUserPassword);
 
                 //Create a Statement
                 Statement dictoStatement = myconnection.createStatement();
