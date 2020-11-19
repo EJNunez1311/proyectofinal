@@ -291,7 +291,7 @@ public class homepage {
 //        }
 
 //        return Tablesname.data("tablas", Data.tablas);
-        return Tablesname.data("tablas", nombres).data("title",dbNamelist+" "+ "Tables");
+        return Tablesname.data("tablas", nombres).data("title", dbNamelist + " " + "Tables");
 //        return Tablesname.data("title", "table list");
     }
 
@@ -848,13 +848,8 @@ public class homepage {
                     + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "
                     + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
 //            + form.isFkCheckbox()
-            if(!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")){
-                System.out.println("Viene de : " + formValue.nombreTabla + " El atributo: " + form.getNombre() +
-                        " A la tabla: " + form.getFkTablaRelacionada() + " Con el tipo de relacion: " + form.getFkRelacion());
-                RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion());
-
-            }
         }
+
 
         Data.tablasGeneradas.add(formValue);
 
@@ -1109,6 +1104,16 @@ public class homepage {
     @Path("/createapp")
     public TemplateInstance CreateAPP() throws IOException {
         ListIterator<FormValue> listItr = Data.tablasGeneradas.listIterator();
+
+        for (FormValue formValue : Data.tablasGeneradas) {
+            for (Form form : formValue.filas) {
+                if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
+                    System.out.println("Viene de : " + formValue.nombreTabla + " El atributo: " + form.getNombre() +
+                            " A la tabla: " + form.getFkTablaRelacionada() + " Con el tipo de relacion: " + form.getFkRelacion());
+                    RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion());
+                }
+            }
+        }
         while (listItr.hasNext()) {
 //            ImprimirClases(listItr.next());
             crearClase(listItr.next());
@@ -1116,6 +1121,7 @@ public class homepage {
         creartodo();
         return Homepage();
     }
+
 
     public void creartodo() throws IOException {
 
