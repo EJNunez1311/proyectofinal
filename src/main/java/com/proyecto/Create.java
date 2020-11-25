@@ -6,8 +6,13 @@ import java.io.*;
 public class Create implements Runnable {
 
     String nombre;
-    public Create(String name){
+    int seguridad = 0;
+    int microservicio = 0;
+
+    public Create(String name,int seg, int serv){
         nombre = name;
+        seguridad = seg;
+        microservicio = serv;
     }
 
     public void CrearClase (FormValue clase){
@@ -49,6 +54,9 @@ public class Create implements Runnable {
                 "\n" +
                 "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-resteasy-jsonb\"";
 
+        if(seguridad == 1){
+            archivo_comando = archivo_comando + "call mvn quarkus:add-extension -Dextensions=\"oidc,keycloak-authorization\"\n";
+        }
         //System.out.println(comandos);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
@@ -158,21 +166,32 @@ public class Create implements Runnable {
         try {
 
             FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/resources/application.properties");
-            myWriter.write(
-                    "#Datasource Config\n" +
-                            "quarkus.datasource.db-kind=mysql\n" +
-                            "quarkus.datasource.driver=com.mysql.cj.jdbc.Driver\n" +
-                            "quarkus.datasource.username=root\n" +
-                            "quarkus.datasource.password=12345678\n" +
-                            "quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/prueba\n" +
-                            "quarkus.hibernate-orm.log.sql=true\n" +
-                            "# drop and create the database at startup (use `update` to only update the schema)\n" +
-                            "quarkus.hibernate-orm.database.generation=update\n" +
-                            "quarkus.smallrye-openapi.path=/swagger\n" +
-                            "quarkus.swagger-ui.always-include=true\n" +
-                            "quarkus.swagger-ui.path=/explorer\n" +
-                            "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD"
-            );
+            String apppropert = "#Datasource Config\n" +
+                    "quarkus.datasource.db-kind=mysql\n" +
+                    "quarkus.datasource.driver=com.mysql.cj.jdbc.Driver\n" +
+                    "quarkus.datasource.username=root\n" +
+                    "quarkus.datasource.password=12345678\n" +
+                    "quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/prueba\n" +
+                    "quarkus.hibernate-orm.log.sql=true\n" +
+                    "# drop and create the database at startup (use `update` to only update the schema)\n" +
+                    "quarkus.hibernate-orm.database.generation=update\n" +
+                    "quarkus.smallrye-openapi.path=/swagger\n" +
+                    "quarkus.swagger-ui.always-include=true\n" +
+                    "quarkus.swagger-ui.path=/explorer\n" +
+                    "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n";
+
+            if(seguridad == 1){
+                apppropert = apppropert + "# Keycloak with 100 offset\n" +
+                        "keycloak.url=http://localhost:8180\n" +
+                        "\n" +
+                        "quarkus.oidc.enabled=true\n" +
+                        "quarkus.oidc.auth-server-url=${keycloak.url}/auth/realms/quarkus-realm\n" +
+                        "quarkus.oidc.client-id=quarkus-client\n" +
+                        "quarkus.oidc.credentials.secret=mysecret\n" +
+                        "quarkus.http.cors=true\n" +
+                        "quarkus.oidc.tls.verification=none\n";
+            }
+            myWriter.write(apppropert);
             myWriter.close();
             //  System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {

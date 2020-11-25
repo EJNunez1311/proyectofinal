@@ -2,6 +2,7 @@ package com.proyecto;
 
 import Entities.*;
 //import com.sun.corba.se.impl.protocol.giopmsgheaders.FragmentMessage;
+import io.quarkus.arc.processor.InterceptorGenerator;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.api.ResourcePath;
@@ -72,6 +73,8 @@ public class homepage {
     }
 
     String nombre = "";
+    int seguridad = 0;
+    int microservicio = 0;
     String databasename_g = "prueba";
     int importado = 0;
     //Credenciales Admin para la DB (MYSQL)
@@ -106,9 +109,11 @@ public class homepage {
         System.out.println("Nombre -> " + name);
         System.out.println("Microservicio -> " + microserviceCheckbox);
         System.out.println("Security -> " + securityCheckbox);
+        microservicio = Integer.parseInt(microserviceCheckbox);
+        seguridad = Integer.parseInt(securityCheckbox);
 //TODO: Usar campo de security y microservice
 
-        Runnable r = new Create(nombre);
+        Runnable r = new Create(nombre, microservicio, seguridad);
         new Thread(r).start();
 
         return Response.ok().build();
@@ -694,53 +699,69 @@ public class homepage {
                                 "import javax.ws.rs.core.MediaType;\n" +
                                 "import java.util.List;\n" +
                                 "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
+                                "import io.quarkus.security.Authenticated;\n" +
+                                "import io.quarkus.security.identity.SecurityIdentity;\n" +
+                                "import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;\n" +
+                                "import javax.annotation.security.RolesAllowed;" +
                                 "\n" +
                                 "@Path(\"/api/" + nomb + "\")\n" +
                                 "@Produces(MediaType.APPLICATION_JSON)\n" +
                                 "@Consumes(MediaType.APPLICATION_JSON)\n" +
-                                "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n" +
-                                "public class " + clase + "Api {\n" +
-                                "\n" +
-                                "    @Inject\n" +
-                                "    EntityManager entityManager;\n" +
-                                "\n" +
-                                "\n" +
-                                "    @POST\n" +
-                                "    @Transactional\n" +
-                                "    public void add(" + clase + " " + claseminus + ") {\n" +
-                                "        " + clase + ".persist(" + claseminus + ");\n" +
-                                "    }\n" +
-                                "\n" +
-                                "    @GET\n" +
-                                "    public List<" + clase + "> get" + clase + "(){\n" +
-                                "        return " + clase + ".listAll();\n" +
-                                "    }\n" +
-                                "\n" +
-                                "    @PUT\n" +
-                                "    @Transactional\n" +
-                                "    @Path(\"/{id}\")\n" +
-                                "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
-                                "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
-                                "        }\n" +
-                                "\n" +
-                                "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
-                                "\n" +
-                                "        if (entity == null) {\n" +
-                                "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
-                                "        }\n" +
-                                "\n" +
-                                "\n" +
-                                entidad +
-                                "        return entity;\n" +
-                                "    }\n" +
-                                "\n" +
-                                "    @DELETE\n" +
-                                "    @Transactional\n" +
-                                "    @Path(\"/{id}\")\n" +
-                                "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
-                                "        " + clase + ".deleteById(id);\n" +
-                                "    }\n" +
-                                "}";
+                                "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n";
+                if (seguridad == 1) {
+                    archivoapi = archivoapi + "@Authenticated\n" +
+                            "@SecurityRequirement(name = \"apiKey\")\n";
+                }
+                archivoapi = archivoapi +
+                        "public class " + clase + "Api {\n" +
+                        "\n" +
+                        "    @Inject\n" +
+                        "    EntityManager entityManager;\n" +
+                        "\n" +
+                        "\n" +
+                        "    @POST\n" +
+                        "    @Transactional\n" +
+                        "    public void add(" + clase + " " + claseminus + ") {\n" +
+                        "        " + clase + ".persist(" + claseminus + ");\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    @GET\n" +
+                        "    public List<" + clase + "> get" + clase + "(){\n" +
+                        "        return " + clase + ".listAll();\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    @PUT\n" +
+                        "    @Transactional\n" +
+                        "    @Path(\"/{id}\")\n" +
+                        "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
+                        "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
+                        "        }\n" +
+                        "\n" +
+                        "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
+                        "\n" +
+                        "        if (entity == null) {\n" +
+                        "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
+                        "        }\n" +
+                        "\n" +
+                        "\n" +
+                        entidad +
+                        "        return entity;\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    @DELETE\n" +
+                        "    @Transactional\n" +
+                        "    @Path(\"/{id}\")\n" +
+                        "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
+                        "        " + clase + ".deleteById(id);\n" +
+                        "    }\n" +
+                        "}";
+                if (seguridad == 1) {
+                    archivoapi = archivoapi.replaceAll("@POST", "@POST\n@RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@GET", "@GET\n@RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n@RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n@RolesAllowed(\"user\")");
+
+                }
 
 
                 try {
@@ -1031,7 +1052,6 @@ public class homepage {
                 e.printStackTrace();
             }
 
-
             String archivoapi =
                     "package org.proyecto;\n" +
                             "\n" +
@@ -1043,53 +1063,69 @@ public class homepage {
                             "import javax.ws.rs.core.MediaType;\n" +
                             "import java.util.List;\n" +
                             "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
+                            "import io.quarkus.security.Authenticated;\n" +
+                            "import io.quarkus.security.identity.SecurityIdentity;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;\n" +
+                            "import javax.annotation.security.RolesAllowed;" +
                             "\n" +
                             "@Path(\"/api/" + nomb + "\")\n" +
                             "@Produces(MediaType.APPLICATION_JSON)\n" +
                             "@Consumes(MediaType.APPLICATION_JSON)\n" +
-                            "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n" +
-                            "public class " + clase + "Api {\n" +
-                            "\n" +
-                            "    @Inject\n" +
-                            "    EntityManager entityManager;\n" +
-                            "\n" +
-                            "\n" +
-                            "    @POST\n" +
-                            "    @Transactional\n" +
-                            "    public void add(" + clase + " " + claseminus + ") {\n" +
-                            "        " + clase + ".persist(" + claseminus + ");\n" +
-                            "    }\n" +
-                            "\n" +
-                            "    @GET\n" +
-                            "    public List<" + clase + "> get" + clase + "(){\n" +
-                            "        return " + clase + ".listAll();\n" +
-                            "    }\n" +
-                            "\n" +
-                            "    @PUT\n" +
-                            "    @Transactional\n" +
-                            "    @Path(\"/{id}\")\n" +
-                            "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
-                            "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
-                            "        }\n" +
-                            "\n" +
-                            "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
-                            "\n" +
-                            "        if (entity == null) {\n" +
-                            "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
-                            "        }\n" +
-                            "\n" +
-                            "\n" +
-                            entidad +
-                            "        return entity;\n" +
-                            "    }\n" +
-                            "\n" +
-                            "    @DELETE\n" +
-                            "    @Transactional\n" +
-                            "    @Path(\"/{id}\")\n" +
-                            "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
-                            "        " + clase + ".deleteById(id);\n" +
-                            "    }\n" +
-                            "}";
+                            "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n";
+            if (seguridad == 1) {
+                archivoapi = archivoapi + "@Authenticated\n" +
+                        "@SecurityRequirement(name = \"apiKey\")\n";
+            }
+            archivoapi = archivoapi +
+                    "public class " + clase + "Api {\n" +
+                    "\n" +
+                    "    @Inject\n" +
+                    "    EntityManager entityManager;\n" +
+                    "\n" +
+                    "\n" +
+                    "    @POST\n" +
+                    "    @Transactional\n" +
+                    "    public void add(" + clase + " " + claseminus + ") {\n" +
+                    "        " + clase + ".persist(" + claseminus + ");\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @GET\n" +
+                    "    public List<" + clase + "> get" + clase + "(){\n" +
+                    "        return " + clase + ".listAll();\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @PUT\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
+                    "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
+                    "\n" +
+                    "        if (entity == null) {\n" +
+                    "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "\n" +
+                    entidad +
+                    "        return entity;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @DELETE\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
+                    "        " + clase + ".deleteById(id);\n" +
+                    "    }\n" +
+                    "}";
+            if (seguridad == 1) {
+                archivoapi = archivoapi.replaceAll("@POST", "@POST\n@RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@GET", "@GET\n@RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n@RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n@RolesAllowed(\"user\")");
+
+            }
 
 
             try {
