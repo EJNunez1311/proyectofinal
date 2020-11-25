@@ -2,7 +2,6 @@ package com.proyecto;
 
 import Entities.*;
 //import com.sun.corba.se.impl.protocol.giopmsgheaders.FragmentMessage;
-import io.quarkus.arc.processor.InterceptorGenerator;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.qute.api.ResourcePath;
