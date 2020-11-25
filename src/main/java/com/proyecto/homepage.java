@@ -109,8 +109,10 @@ public class homepage {
         System.out.println("Nombre -> " + name);
         System.out.println("Microservicio -> " + microserviceCheckbox);
         System.out.println("Security -> " + securityCheckbox);
-        microservicio = Integer.parseInt(microserviceCheckbox);
-        seguridad = Integer.parseInt(securityCheckbox);
+
+        microservicio =  ((microserviceCheckbox != null) ? Integer.parseInt(microserviceCheckbox) : 0);
+        seguridad = ((securityCheckbox != null) ? Integer.parseInt(securityCheckbox) : 0);
+
 //TODO: Usar campo de security y microservice
 
         Runnable r = new Create(nombre, microservicio, seguridad);
@@ -756,10 +758,10 @@ public class homepage {
                         "    }\n" +
                         "}";
                 if (seguridad == 1) {
-                    archivoapi = archivoapi.replaceAll("@POST", "@POST\n@RolesAllowed(\"user\")");
-                    archivoapi = archivoapi.replaceAll("@GET", "@GET\n@RolesAllowed(\"user\")");
-                    archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n@RolesAllowed(\"user\")");
-                    archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n@RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@POST", "@POST\n    @RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@GET", "@GET\n    @RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n    @RolesAllowed(\"user\")");
+                    archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n    @RolesAllowed(\"user\")");
 
                 }
 
@@ -1120,10 +1122,10 @@ public class homepage {
                     "    }\n" +
                     "}";
             if (seguridad == 1) {
-                archivoapi = archivoapi.replaceAll("@POST", "@POST\n@RolesAllowed(\"user\")");
-                archivoapi = archivoapi.replaceAll("@GET", "@GET\n@RolesAllowed(\"user\")");
-                archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n@RolesAllowed(\"user\")");
-                archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n@RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@POST", "@POST\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@GET", "@GET\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n    @RolesAllowed(\"user\")");
 
             }
 
@@ -1214,6 +1216,9 @@ public class homepage {
                         "import org.eclipse.microprofile.openapi.annotations.info.Contact;\n" +
                         "import org.eclipse.microprofile.openapi.annotations.info.Info;\n" +
                         "import org.eclipse.microprofile.openapi.annotations.info.License;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;" +
                         "\n" +
                         "import javax.ws.rs.core.Application;\n" +
                         "\n" +
