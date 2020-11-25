@@ -116,7 +116,11 @@ public class homepage {
 
 //TODO: Usar campo de security y microservice
 
+<<<<<<< Updated upstream
         Runnable r = new Create(nombre, seguridad,microservicio);
+=======
+        Runnable r = new Create(nombre, seguridad, microservicio);
+>>>>>>> Stashed changes
         new Thread(r).start();
 
         return Response.ok().build();

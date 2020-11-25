@@ -52,7 +52,7 @@ public class Create implements Runnable {
                 "\n" +
                 "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-smallrye-openapi\"\n" +
                 "\n" +
-                "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-resteasy-jsonb\"";
+                "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-resteasy-jsonb\"\n";
 
         if(seguridad != 0){
             archivo_comando = archivo_comando + "call mvn quarkus:add-extension -Dextensions=\"oidc,keycloak-authorization\"\n";
