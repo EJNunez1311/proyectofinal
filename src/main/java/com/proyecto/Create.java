@@ -54,7 +54,7 @@ public class Create implements Runnable {
                 "\n" +
                 "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-resteasy-jsonb\"";
 
-        if(seguridad == 1){
+        if(seguridad != 0){
             archivo_comando = archivo_comando + "call mvn quarkus:add-extension -Dextensions=\"oidc,keycloak-authorization\"\n";
         }
         //System.out.println(comandos);
@@ -178,9 +178,9 @@ public class Create implements Runnable {
                     "quarkus.smallrye-openapi.path=/swagger\n" +
                     "quarkus.swagger-ui.always-include=true\n" +
                     "quarkus.swagger-ui.path=/explorer\n" +
-                    "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n";
+                    "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n";
 
-            if(seguridad == 1){
+            if(seguridad != 0){
                 apppropert = apppropert + "# Keycloak with 100 offset\n" +
                         "keycloak.url=http://localhost:8180\n" +
                         "\n" +
