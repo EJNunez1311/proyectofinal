@@ -179,7 +179,7 @@ public class Create implements Runnable {
                     "quarkus.swagger-ui.always-include=true\n" +
                     "quarkus.swagger-ui.path=/explorer\n" +
                     "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n";
-
+            System.out.println(seguridad);
             if(seguridad != 0){
                 apppropert = apppropert + "# Keycloak with 100 offset\n" +
                         "keycloak.url=http://localhost:8180\n" +

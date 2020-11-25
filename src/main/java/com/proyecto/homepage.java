@@ -109,8 +109,8 @@ public class homepage {
         System.out.println("Microservicio -> " + microserviceCheckbox);
         System.out.println("Security -> " + securityCheckbox);
 
-        microservicio =  ((microserviceCheckbox != null) ? Integer.parseInt(microserviceCheckbox) : 0);
-        seguridad = ((securityCheckbox != null) ? Integer.parseInt(securityCheckbox) : 0);
+        microservicio =  ((microserviceCheckbox != null) ? 1 : 0);
+        seguridad = ((securityCheckbox != null) ? 1 : 0);
 
 //TODO: Usar campo de security y microservice
 
