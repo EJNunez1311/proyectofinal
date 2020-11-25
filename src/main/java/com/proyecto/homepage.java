@@ -1193,6 +1193,11 @@ public class homepage {
                         "                license = @License(\n" +
                         "                        name = \"Proyecto Final 1.0\",\n" +
                         "                        url = \"http://www.apache.org/licenses/LICENSE-2.0.html\")))\n" +
+                        "@SecuritySchemes(value = {\n" +
+                        "        @SecurityScheme(securitySchemeName = \"apiKey\",\n" +
+                        "                type = SecuritySchemeType.HTTP,\n" +
+                        "                scheme = \"Bearer\")}\n" +
+                        ")" +
                         "public class CustomApplication extends Application {\n" +
                         "}";
 
