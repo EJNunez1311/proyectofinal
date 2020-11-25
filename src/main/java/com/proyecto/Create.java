@@ -167,7 +167,7 @@ public class Create implements Runnable {
                             "quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/prueba\n" +
                             "quarkus.hibernate-orm.log.sql=true\n" +
                             "# drop and create the database at startup (use `update` to only update the schema)\n" +
-                            "quarkus.hibernate-orm.database.generation=drop-and-create\n" +
+                            "quarkus.hibernate-orm.database.generation=update\n" +
                             "quarkus.smallrye-openapi.path=/swagger\n" +
                             "quarkus.swagger-ui.always-include=true\n" +
                             "quarkus.swagger-ui.path=/explorer\n" +

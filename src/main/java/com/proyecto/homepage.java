@@ -473,7 +473,7 @@ public class homepage {
             if (!theDir.exists()) theDir.mkdirs();
 
             /////////////////////////
-            clase = nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
+            clase = nomb.toLowerCase();//nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
             String claseminus = nomb.toLowerCase();
             /////////////////////////
             try {
