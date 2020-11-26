@@ -36,14 +36,15 @@ public class Data {
         tipoAtributos.add("Double");
         tipoAtributos.add("Date");
         tipoAtributos.add("Enum");
+        tipoAtributos.add("Long");
 
         return tipoAtributos;
     }
 
     public static ArrayList<Relacion> obtenerRelaciones() {
         ArrayList<Relacion> relaciones = new ArrayList<>();
-        relaciones.add(new Relacion("One to One", "OnetoOne"));
-        relaciones.add(new Relacion("One to Many", "OnetoMany"));
+        relaciones.add(new Relacion("One to One", "OneToOne"));
+        relaciones.add(new Relacion("One to Many", "OneToMany"));
         relaciones.add(new Relacion("Many to One", "ManyToOne"));
         relaciones.add(new Relacion("Many to Many", "ManyToMany"));
         return relaciones;
@@ -51,11 +52,11 @@ public class Data {
 
     public static ArrayList<TableFk> obtenerFk() {
         ArrayList<TableFk> listaFk = new ArrayList<>();
-        listaFk.add(new TableFk("employees", "dept_emp", "emp_no", "employees", "emp_no"));
-        listaFk.add(new TableFk("employees", "dept_emp", "dept_no", "departments", "dept_no"));
-        listaFk.add(new TableFk("employees", "dept_manager", "emp_no", "employees", "emp_no"));
-        listaFk.add(new TableFk("employees", "dept_manager", "dept_no", "departments", "dept_no"));
-        listaFk.add(new TableFk("employees", "titles", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_emp", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_emp", "dept_no", "departments", "dept_no"));
+//        listaFk.add(new TableFk("employees", "dept_manager", "emp_no", "employees", "emp_no"));
+//        listaFk.add(new TableFk("employees", "dept_manager", "dept_no", "departments", "dept_no"));
+//        listaFk.add(new TableFk("employees", "titles", "emp_no", "employees", "emp_no"));
         return  listaFk;
     }
 

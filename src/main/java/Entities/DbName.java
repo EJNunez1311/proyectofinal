@@ -4,9 +4,9 @@ package Entities;
 public class DbName {
 
     public String name;
-    public String username;
-    public String password;
-//
+//    public String username;
+//    public String password;
+
     public String getName() {
         return name;
     }
@@ -15,19 +15,19 @@ public class DbName {
         this.name = name;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 }

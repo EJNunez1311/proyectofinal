@@ -2,35 +2,14 @@ package Entities;
 
 
 public class TableFk {
-    public String schema;
-    public String tableName;
     public String columnName;
     public String referenceTable;
     public String referenceColumnName;
 
-
-    public TableFk(String schema, String tableName, String columnName, String referenceTable, String referenceColumnName) {
-        this.schema = schema;
-        this.tableName = tableName;
+    public TableFk(String columnName, String referenceTable, String referenceColumnName) {
         this.columnName = columnName;
         this.referenceTable = referenceTable;
         this.referenceColumnName = referenceColumnName;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 
     public String getColumnName() {
