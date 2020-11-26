@@ -46,32 +46,33 @@
             <div class="col-md-12 table-responsive">
                 <table class="table table-bordered table-hover table-sortable" id="tab_logic">
                     <thead>
-                    <tr>
-                        <th class="text-center">
-                            Name
-                        </th>
-                        <th class="text-center">
-                            Data Type
-                        </th>
-                        <th class="text-center">
-                            Primary Key
-                        </th>
-                        <th class="text-center">
-                            NOT NULL
-                        </th>
-                        <th class="text-center">
-                            UNIQUE
-                        </th>
-                        <th class="text-center">
-                            Foreign Key
-                        </th>
-                        <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
-                        </th>
-                    </tr>
+                        <tr>
+                            <th class="text-center">
+                                Name
+                            </th>
+                            <th class="text-center">
+                                Data Type
+                            </th>
+                            <th class="text-center">
+                                <p id="text" style="color: red;font-size:50%">Primary Key will auto generated</p>
+                                Primary Key
+                            </th>
+                            <th class="text-center">
+                                NOT NULL
+                            </th>
+                            <th class="text-center">
+                                UNIQUE
+                            </th>
+                            <th class="text-center">
+                                Foreign Key
+                            </th>
+                            <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                     <form>
-                        <input type="hidden" id="index" value="{index}">
+                        <input type="hidden" id="index" value="{index}"/>
                         {#for item in tablaDetalle.filas}
                             <tr>
                                 <td data-name="nombre">
@@ -91,40 +92,26 @@
                                 </td>
 
                                 <td data-name="pkcheckbox">
-                                    <input type="checkbox" id="pkcheckbox"  name="pkcheckbox" value="{item.pkCheckcbox == true ?: 1 }" onclick="QuitarTexto()">
-                                    {!#if item.pkCheckcbox == true!}
-<!--                                        <input type="checkbox" id="pkcheckbox{count - 1}" name="pkcheckbox" checked value="{item.pkCheckcbox == true ?: 1 }" onclick="QuitarTexto()">-->
-                                    {!#else!}
-<!--                                        <input type="checkbox" id="pkcheckbox{count - 1}{count - 1}" name="pkcheckbox" onclick="QuitarTexto()">-->
-                                    {!/if!}
-                                    {!item.pkCheckcbox == true or 'checked'!}
+                                    <input type="checkbox" id="pkcheckbox" onclick="QuitarTexto()" name="pkcheckbox" {#if item.pkCheckcbox == true} checked="checked" {/if} onclick="QuitarTexto()">
                                 </td>
 
                                 <td data-name="notnullcheckbox">
-                                     <input type="checkbox" id="notnullcheckbox"  name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">
-                                    {!#if item.notNullCheckbox == true!}
-<!--                                        <input type="checkbox" id="notnullcheckbox{count - 1}" checked="{item.notNullCheckbox == true ?: checked }" name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">-->
-                                    {!#else!}
-<!--                                        <input type="checkbox" id="notnullcheckbox{count - 1}{count - 1}"  name="notnullcheckbox">-->
-                                    {!/if!}
+                                     <input type="checkbox" id="notnullcheckbox" {#if item.notNullCheckbox == true} checked="checked" {/if} name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">
                                 </td>
 
                                 <td data-name="uniquecheckbox">
-                                        <input type="checkbox" id="uniquecheckbox" name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">
-                                    {!#if item.CheckBoxUnique == true!}
-<!--                                        <input type="checkbox" id="uniquecheckbox{count - 1}" checked="{item.CheckBoxUnique == true ?: checked }"  name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">-->
-                                    {!#else!}
-<!--                                        <input type="checkbox" id="uniquecheckbox{count - 1}{count - 1}" name="uniquecheckbox">-->
-                                    {!/if!}
+                                    <input type="checkbox" id="uniquecheckbox" {#if item.CheckBoxUnique == true} checked="checked" {/if} name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">
                                 </td>
                                 <td data-name="fkoption">
-                                    <select name="fkoption" id="fkoption" onchange="showDiv($(this).closest('tr').index())">
+                                    <select name="fkoption" id="fkoption" onchange="showDiv({count})">
                                         <option value="0">None</option>
                                         {#for tabla in tablasCreadas}
-                                            {#if tabla.nombreTabla == item.fkTablaRelacionada}
-                                                <option value="{tabla.nombreTabla}" selected>{tabla.nombreTabla}</option>
-                                            {#else}
-                                                <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+                                            {#if tabla.nombreTabla != tablaDetalle.nombreTabla}
+                                                {#if tabla.nombreTabla == item.fkTablaRelacionada}
+                                                    <option value="{tabla.nombreTabla}" selected>{tabla.nombreTabla}</option>
+                                                {#else}
+                                                    <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+                                                {/if}
                                             {/if}
                                         {/for}
                                     </select>
@@ -144,8 +131,9 @@
                                 </td>
 
                                 <td data-name="del">
-                                    <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
-                                            aria-hidden="true">×</span></button>
+                                    <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'>
+                                        <span aria-hidden="true">×</span>
+                                    </button>
                                 </td>
                             </tr>
 
@@ -163,13 +151,11 @@
 </body>
 </html>
 <script>
-    console.log("there")
     function showDiv(rowIndex)
     {
-        $('#tab_logic').find('tr').each(function (index) {
+        $('#tab_logic').find('tbody > tr').each(function (index) {
             var row = $(this);
-
-            if (index === rowIndex) {
+            if (index === (rowIndex - 1)) {
                 if (row.find("#fkoption").val() !== '0') {
                     row.find("#fkRelacion").show();
                 }else {
@@ -343,5 +329,13 @@
                 console.log(textStatus);
             });
         });
+
+        if (document.readyState === 'interactive') {
+            QuitarTexto();
+            $('#tab_logic').find('tbody > tr').each(function (index) {
+                var row = $(this);
+                showDiv(index);
+            });
+        }
     });
 </script>

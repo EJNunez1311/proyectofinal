@@ -59,7 +59,6 @@
     <tr class="header">
         <th style="width:40%;">Name</th>
         <th style="width:30%;">Options</th>
-        <th style="width:30%;">Relaciones</th>
     </tr>
     {#if tablasGeneradas}
         {#for tabla in tablasGeneradas}
@@ -70,7 +69,7 @@
                         <i class="fa fa-eye"></i>
                     </button>
                     <a class="btn btn-danger" href="/api/form/eliminar/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
-<!--                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>-->
+                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>
                     <div class="modal" id="myModal{count}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">

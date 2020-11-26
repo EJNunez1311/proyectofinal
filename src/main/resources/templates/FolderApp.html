@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{title}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-image: url("https://www.data-recovery-service.eu/attachments/Image/Startseite-02_1.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+        #input-create {
+            display: inline-block !important;
+            width:200px;
+            max-width:500px;
+            margin: 20px;
+        }
+
+        #input-username {
+            display: inline-block !important;
+            width:200px;
+            max-width:500px;
+            margin: 20px;
+        }
+
+        #input-password {
+            display: inline-block !important;
+            width:200px;
+            max-width:500px;
+            margin: 20px;
+        }
+
+
+        #button-create {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+{#include menu}
+{/include}
+<div>
+    <div class="w3-container w3-center">
+        <form id="FindTable">
+            <input class="w3-center w3-input w3-animate-input" id="input-create" name="ruta" type="text" placeholder="Ruta">
+            <br>
+            <button class="w3-button w3-blue" id="button-create" type="submit"><i class="fa fa-spin fa-spinner" id="icon-create" style="display: none"></i>  Buscar</button>
+        </form>
+
+    </div>
+    <div class="w3-display-bottomleft w3-padding-large">
+        Powered by <a href="https://pucmm.edu.do/Ingenierias/sistemas-computacion" target="_blank">ISC</a>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    var creating = false;
+    $("#FindTable").submit(function(e) {
+        // alert("Button Working!");
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+
+        var nombre = $("#input-create").val();
+        if (!nombre) {
+            alert('Debe especificar la ruta');
+            return;
+        }
+
+        if (!creating) {
+            $.ajax({
+                type: "POST",
+                url: '/api/app/folder',
+                data: form.serialize(),
+                beforeSend: function(){
+                    creating = true;
+                    $('#icon-create').show();
+                },// serializes the form's elements.
+                success: function(data)
+                {
+                    window.location.href="/api/folder/app/ver";
+                },
+                error: function (data) {
+                    $('#icon-create').hide();
+                    creating = false;
+                }
+            });
+
+        }
+
+    });
+</script>
