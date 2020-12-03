@@ -1688,7 +1688,10 @@ public class homepage {
 
         if (seguridad == 1) {
             CrearUsuarioApi();
+            JSONWriter jsonWriter = new JSONWriter(nombre);
+            jsonWriter.crearConfigJson(nombre);
         }
+
         String path = System.getProperty("user.dir");
         String userHome = System.getProperty("user.home");
 
