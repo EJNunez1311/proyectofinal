@@ -854,6 +854,12 @@ public class homepage {
             File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
             if (!theDir.exists()) theDir.mkdirs();
 
+
+            theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/");
+            if (!theDir.exists()) theDir.mkdirs();
+
+
+
             /////////////////////////
             clase = nomb.toLowerCase();//nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
             String claseminus = nomb.toLowerCase();
@@ -1348,6 +1354,10 @@ public class homepage {
 
         File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
         if (!theDir.exists()) theDir.mkdirs();
+
+        theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/");
+        if (!theDir.exists()) theDir.mkdirs();
+
 
 
         if (formValue != null) {
