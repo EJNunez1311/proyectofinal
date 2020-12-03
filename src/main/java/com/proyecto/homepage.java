@@ -859,7 +859,6 @@ public class homepage {
             if (!theDir.exists()) theDir.mkdirs();
 
 
-
             /////////////////////////
             clase = nomb.toLowerCase();//nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
             String claseminus = nomb.toLowerCase();
@@ -1359,7 +1358,6 @@ public class homepage {
         if (!theDir.exists()) theDir.mkdirs();
 
 
-
         if (formValue != null) {
             //Entity Name
             System.out.println(formValue.getNombreTabla());
@@ -1686,6 +1684,7 @@ public class homepage {
 
 
     public void creartodo() throws IOException {
+
 
         if (seguridad == 1) {
             CrearUsuarioApi();
