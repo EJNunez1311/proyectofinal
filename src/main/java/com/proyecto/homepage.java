@@ -1182,7 +1182,7 @@ public class homepage {
         return true;
     }
 
-    public void CrearUsuarioApi(){
+    public void CrearUsuarioApi() {
 
         String UserApi = "package org.proyecto.api;\n" +
                 "\n" +
@@ -1677,8 +1677,9 @@ public class homepage {
 
     public void creartodo() throws IOException {
 
-
-        CrearUsuarioApi();
+        if (seguridad == 1) {
+            CrearUsuarioApi();
+        }
         String path = System.getProperty("user.dir");
         String userHome = System.getProperty("user.home");
 
