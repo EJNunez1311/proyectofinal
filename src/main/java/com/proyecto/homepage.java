@@ -70,7 +70,6 @@ public class homepage {
     Template FolderAppView;
 
 
-
     private static final Logger LOGGER = Logger.getLogger("ListenerBean");
 
     void onStart(@Observes StartupEvent ev) {
@@ -114,12 +113,10 @@ public class homepage {
             File directory = new File(rutaFolder);
             if (directory.exists()) {
                 File[] files = directory.listFiles();
-                for (File file : Objects.requireNonNull(files))
-                {
-                    if (file.isDirectory())
-                    {
+                for (File file : Objects.requireNonNull(files)) {
+                    if (file.isDirectory()) {
                         boolean tieneArchivoPomGradle = listFiles(file.getAbsolutePath());
-                        if (tieneArchivoPomGradle){
+                        if (tieneArchivoPomGradle) {
                             folder.add(file.getName());
                         }
                     }
@@ -127,13 +124,12 @@ public class homepage {
             }
         }
 
-        for (String name : folder)
-        {
+        for (String name : folder) {
             System.out.println(name);
         }
         return FolderAppView
-            .data("title", "Name of Application")
-            .data("rutas", folder);
+                .data("title", "Name of Application")
+                .data("rutas", folder);
     }
 
 
@@ -150,7 +146,7 @@ public class homepage {
     //Metodo para recibir el nombre de la app y generar los primero parametros de la app!
     public boolean GetFolderApp(@FormParam("ruta") String ruta) throws IOException {
         rutaFolder = ruta;
-        return  true;
+        return true;
     }
 
     @POST
@@ -159,9 +155,9 @@ public class homepage {
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean FolderAppSeleccion(ArrayList<AppFolder> appFolders) {
         //TODO: validar username y password
-        for(AppFolder appFolder : appFolders) {
-            System.out.println("Nombre -> "+ appFolder.nombreFolder);
-            System.out.println("Microservicio -> "+ appFolder.microservicioCheckbox);
+        for (AppFolder appFolder : appFolders) {
+            System.out.println("Nombre -> " + appFolder.nombreFolder);
+            System.out.println("Microservicio -> " + appFolder.microservicioCheckbox);
             System.out.println("Security -> " + appFolder.seguridadCheckbox);
         }
         return false;
@@ -180,7 +176,7 @@ public class homepage {
         System.out.println("Microservicio -> " + microserviceCheckbox);
         System.out.println("Security -> " + securityCheckbox);
 
-        microservicio =  ((microserviceCheckbox != null) ? 1 : 0);
+        microservicio = ((microserviceCheckbox != null) ? 1 : 0);
         seguridad = ((securityCheckbox != null) ? 1 : 0);
         System.out.println(microservicio);
         System.out.println(seguridad);
@@ -536,15 +532,15 @@ public class homepage {
         for (String nomb : nombreTablas) {
             System.out.println(nomb);
 
-//            String clase;
-//            String atributo;
-//            String tipo;
-//            String modelos = "";
-//            String getset = "";
-//            String entidad = "";
-//            String modelaje;
-//            String tipopk = "long";
-//            int haypk = 0;
+            String clase;
+            String atributo;
+            String tipo;
+            String modelos = "";
+            String getset = "";
+            String entidad = "";
+            String modelaje;
+            String tipopk = "long";
+            int haypk = 0;
 //
 //            String path = System.getProperty("user.dir");
 //            String userHome = System.getProperty("user.home");
@@ -1715,22 +1711,17 @@ public class homepage {
         return null;
     }
 
-    private boolean listFiles(String ruta)
-    {
+    private boolean listFiles(String ruta) {
         File folder = new File(ruta);
 
         File[] files = folder.listFiles();
 
-        for (File file : files)
-        {
-            if (file.isFile())
-            {
-                if (file.getName().equals("pom.xml")|| file.getName().equals("build.gradle")){
-                   return true;
+        for (File file : files) {
+            if (file.isFile()) {
+                if (file.getName().equals("pom.xml") || file.getName().equals("build.gradle")) {
+                    return true;
                 }
-            }
-            else if (file.isDirectory())
-            {
+            } else if (file.isDirectory()) {
                 listFiles(file.getAbsolutePath());
             }
         }
