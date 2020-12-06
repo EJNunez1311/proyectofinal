@@ -194,14 +194,6 @@
 
                     var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
                     c.attr("name", $(cur_td).data("name") + newid);
-                    var type =c.attr('type');
-                    if (type === 'checkbox') {
-                        c.prop('checked', false);
-                    } else {
-                        if (c.is("select")) {
-                            c.prop("selectedIndex", 0);
-                        }
-                    }
                     c.appendTo($(td));
                     td.appendTo($(tr));
                 } else {

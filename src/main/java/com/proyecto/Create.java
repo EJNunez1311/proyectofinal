@@ -189,9 +189,7 @@ public class Create implements Runnable {
                         "quarkus.oidc.client-id=quarkus-client\n" +
                         "quarkus.oidc.credentials.secret=mysecret\n" +
                         "quarkus.http.cors=true\n" +
-                        "quarkus.oidc.tls.verification=none\n" +
-                        "grant_type=password\n";
-
+                        "quarkus.oidc.tls.verification=none\n";
             }
             myWriter.write(apppropert);
             myWriter.close();

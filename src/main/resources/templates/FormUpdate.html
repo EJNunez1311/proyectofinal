@@ -111,7 +111,7 @@
                                 </td>
                                 <td data-name="tipoatributo">
                                     <select name="tipoatributo" id="tipoatributo">
-<!--                                        <option value="">Select Option</option>-->
+                                        <option value="">Select Option</option>
                                         {#for tipo in tipoAtributos}
                                             {#if item.tipoAtributo == tipo}
                                                 <option value="{tipo}" selected>{tipo}</option>
@@ -186,6 +186,7 @@
             })
 //    "data-id": newid
             document.getElementById("addr" + newid);
+            setTimeout(() => {console.log(document.getElementById("addr" + newid))},500);
 
 // loop through each td and create new elements with name of newid
             $.each($("#tab_logic tbody tr:nth(0) td"), function () {
@@ -194,7 +195,7 @@
 
                 var children = cur_td.children();
 
-// add new td and element if it has a name
+// add new td and element if it has a nane
                 if ($(this).data("name") !== undefined) {
                     td = $("<td></td>", {
                         "data-name": $(cur_td).data("name")
@@ -202,15 +203,6 @@
 
                     var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
                     c.attr("name", $(cur_td).data("name") + newid);
-
-                    var type = c.attr('type');
-                    if (type === 'checkbox') {
-                        c.prop('checked', false);
-                    } else {
-                        if (c.is("select")) {
-                            c.prop("selectedIndex", 0);
-                        }
-                    }
                     c.appendTo($(td));
                     td.appendTo($(tr));
                 } else {
