@@ -531,7 +531,7 @@ public class homepage {
 
         for (String nomb : nombreTablas) {
             System.out.println(nomb);
-        }
+
 
             String clase;
             String atributo;
@@ -1072,7 +1072,7 @@ public class homepage {
 
 
                 String archivoapi =
-                        "package org.proyecto.api;\n" +
+                        "package org.proyecto.Api;\n" +
                                 "\n" +
                                 "import org.proyecto.Entity.*;\n" +
                                 "import javax.inject.Inject;\n" +
@@ -1148,7 +1148,7 @@ public class homepage {
 
 
                 try {
-                    File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/api/" + clase + "Api.java");
+                    File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
                     if (myObj.createNewFile()) {
                         // System.out.println("File created: " + myObj.getName());
                     } else {
@@ -1160,7 +1160,7 @@ public class homepage {
                 }
 
                 try {
-                    FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/api/" + clase + "Api.java");
+                    FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
 
                     myWriter.write(archivoapi
                     );
@@ -1190,7 +1190,7 @@ public class homepage {
 
     public void CrearUsuarioApi() {
 
-        String UserApi = "package org.proyecto.api;\n" +
+        String UserApi = "package org.proyecto.Api;\n" +
                 "\n" +
                 "import org.eclipse.microprofile.config.inject.ConfigProperty;\n" +
                 "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
@@ -1274,7 +1274,7 @@ public class homepage {
         String userHome = System.getProperty("user.home");
 
         try {
-            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/api/UserToken.java");
+            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/UserToken.java");
             if (myObj.createNewFile()) {
                 // System.out.println("File created: " + myObj.getName());
             } else {
@@ -1286,7 +1286,7 @@ public class homepage {
         }
 
         try {
-            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/api/UserToken.java");
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/Api/UserToken.java");
             myWriter.write(UserApi);
             myWriter.close();
             //   System.out.println("Clase api generado");
@@ -1547,7 +1547,7 @@ public class homepage {
             }
 
             String archivoapi =
-                    "package org.proyecto.api;\n" +
+                    "package org.proyecto.Api;\n" +
                             "\n" +
                             "import org.proyecto.Entity.*;\n" +
                             "import javax.inject.Inject;\n" +
@@ -1623,7 +1623,7 @@ public class homepage {
 
 
             try {
-                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/api" + clase + "Api.java");
+                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
                 if (myObj.createNewFile()) {
                     // System.out.println("File created: " + myObj.getName());
                 } else {
@@ -1635,7 +1635,7 @@ public class homepage {
             }
 
             try {
-                FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/api" + clase + "Api.java");
+                FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
 
                 myWriter.write(archivoapi
                 );
