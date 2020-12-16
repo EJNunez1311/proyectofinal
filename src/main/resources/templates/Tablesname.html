@@ -53,47 +53,65 @@
 <body>
 {#include menu}
 {/include}
-<h2>Table List</h2>
+<div class="container">
 
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <h2>Table List</h2>
 
-<table id="myTable">
-    <tr class="header">
-        <th style="width:40%;">Name</th>
-        <th class="text-center" style="width:20%;">Details</th>
-        <th class="text-center" style="width:10%;">Relation(Fk)</th>
-        <th style="width:20%;">Generated</th>
-        <th style="width:10%;">Generate API</th>
-    </tr>
-    {#if tablas}
-    {#for tabla in tablas}
-    <tr>
-        <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
-        <td class="text-center"><a href="/api/form/update/{tabla.nombreTabla}">Ver</a></td>
-        <td class="text-center">
-            {#if tabla.tieneRelacionFk == true}
-            <a href="/api/fk/{tabla.nombreTabla}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
-            {/if}
-        </td>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
 
-        {#if tabla.creado == true}
-        <td class="mt-2 badge badge-success" title="Esta tabla ya está generada">
-            Table generated<input type="hidden" id="generado" value="1">
-        </td>
-        <td><input type="checkbox" disabled checked value="1"></td>
-        {#else}
-        <td></td>
-        <td><input type="checkbox" id="checkedGenerate" value="1"></td>
-        {/if}
-    </tr>
-    {/for}
-    {/if}
+    <div class="table-responsive">
+        <table class="table table-sm" id="myTable">
+            <thead class="thead-light">
+                <tr>
+                    <th style="width: 5%">#</th>
+                    <th style="width:20%;">Name</th>
+                    <th class="text-center" style="width:20%;">Details</th>
+                    <th class="text-center" style="width:10%;">Relation(Fk)</th>
+                    <th style="width:20%;">Generated</th>
+                    <th style="width:30%;"><input type="checkbox" class="mr-2" onclick="seleccionarTodo($(this))" value="1"> Generate API</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#if tablas}
+                {#for tabla in tablas}
+                <tr>
+                    <td scope="row">{count}</td>
+                    <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
+                    <td class="text-center"><a href="/api/form/update/{tabla.nombreTabla}">Ver</a></td>
+                    <td class="text-center">
+                        {#if tabla.tieneRelacionFk == true}
+                        <a href="/api/fk/{tabla.nombreTabla}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
+                        {/if}
+                    </td>
 
-</table>
+                    {#if tabla.creado == true}
+                    <td class="mt-2 badge badge-success" title="Esta tabla ya está generada">
+                        Table generated<input type="hidden" id="generado" value="1">
+                    </td>
+                    <td><input type="checkbox" disabled checked value="1"></td>
+                    {#else}
+                    <td></td>
+                    <td><input type="checkbox" id="checkedGenerate" value="1"></td>
+                    {/if}
+                </tr>
+                {/for}
+                {/if}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <a id="createapp" class="btn btn-primary float-right">Create APP</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
 
-<div class="mt-3 mr-3">
-    <a id="createapp" class="btn btn-primary float-right">Create APP</a>
+    </div>
 </div>
+
+<!--<div class="mt-3 mr-3">-->
+<!--    <a id="createapp" class="btn btn-primary float-right">Create APP</a>-->
+<!--</div>-->
 
 <script>
     function myFunction() {
@@ -114,6 +132,18 @@
             }
         }
     }
+
+    function seleccionarTodo (check) {
+        $('#myTable').find('tr').each(function (index) {
+            var row = $(this);
+
+            if (index !== 0) {
+                var value = check.is(':checked');
+                row.find("#checkedGenerate").prop('checked', value);
+            }
+        });
+    }
+
     $(document).ready(function () {
         $('#createapp').click(function () {
             var arr = [];

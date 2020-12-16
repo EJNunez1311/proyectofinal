@@ -7,6 +7,36 @@ public class Data {
     public static ArrayList<FormValue> tablas = new ArrayList<>();
     public static ArrayList<FormValue> tablasGeneradas = new ArrayList<>();
 
+    public static final String panel1 = "   public static ArrayList<String> obtenerAtributos() {\n" +
+            "        ArrayList<String> tipoAtributos = new ArrayList<>();\n" +
+            "        tipoAtributos.add(\"String\");\n" +
+            "        tipoAtributos.add(\"Integer\");\n" +
+            "        tipoAtributos.add(\"Boolean\");\n" +
+            "        tipoAtributos.add(\"Double\");\n" +
+            "        tipoAtributos.add(\"Date\");\n" +
+            "        tipoAtributos.add(\"Enum\");\n" +
+            "        tipoAtributos.add(\"Long\");\n" +
+            "\n" +
+            "        return tipoAtributos;\n" +
+            "    }";
+    public static final String panel2 = "    public static ArrayList<TableFk> obtenerFk() {\n" +
+            "        ArrayList<TableFk> listaFk = new ArrayList<>();\n" +
+            "//        listaFk.add(new TableFk(\"employees\", \"dept_emp\", \"emp_no\", \"employees\", \"emp_no\"));\n" +
+            "//        listaFk.add(new TableFk(\"employees\", \"dept_emp\", \"dept_no\", \"departments\", \"dept_no\"));\n" +
+            "//        listaFk.add(new TableFk(\"employees\", \"dept_manager\", \"emp_no\", \"employees\", \"emp_no\"));\n" +
+            "//        listaFk.add(new TableFk(\"employees\", \"dept_manager\", \"dept_no\", \"departments\", \"dept_no\"));\n" +
+            "//        listaFk.add(new TableFk(\"employees\", \"titles\", \"emp_no\", \"employees\", \"emp_no\"));\n" +
+            "        return  listaFk;\n" +
+            "    }\n";
+    public static final String panel3 = " public static ArrayList<String> obtenerBasesDeDatos() {\n" +
+            "        ArrayList<String> basesDeDatos = new ArrayList<>();\n" +
+            "        basesDeDatos.add(\"Prueba #1\");\n" +
+            "        basesDeDatos.add(\"Prueba #2\");\n" +
+            "        basesDeDatos.add(\"Prueba #3\");\n" +
+            "        basesDeDatos.add(\"Prueba #4\");\n" +
+            "        return  basesDeDatos;\n" +
+            "    }\n";
+
     public static void fillList(){
 
         ArrayList<Form> formValue1 = new ArrayList<>();
@@ -77,4 +107,5 @@ public class Data {
 
         return TablasCreadas;
     }
+
 }
