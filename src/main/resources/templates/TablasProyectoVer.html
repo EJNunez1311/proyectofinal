@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+    <title>{title}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #myInput {
+            background-image: url("https://cdn2.iconfinder.com/data/icons/font-awesome/1792/search-512.png");
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+        #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #myTable tr.header, #myTable tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+
+</head>
+
+<body>
+{#include menu}
+{/include}
+<div class="container">
+    <h2>Tablas del proyecto</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">Api</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Nombres de Tablas en Api</li>
+                        {#if apis}
+                            {#for nombreTabla in apis}
+                                <li class="list-group-item">{nombreTabla}</li>
+                            {/for}
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">Entities</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Nombres de Tablas en Entity</li>
+                        {#if entities}
+                            {#for nombreTabla in entities}
+                            <li class="list-group-item">{nombreTabla}</li>
+                            {/for}
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">Nuevas Tablas</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Nombres De Nuevas Tablas</li>
+                        {#if listaNueva}
+                            {#for item in listaNueva}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {item.nombreTabla}
+                                    <span>
+                                         <a class="btn btn-danger" href="/api/folder/form/eliminar/{count}" title="Eliminar tabla">
+                                             <i class="fa fa-trash"></i>
+                                         </a>
+                                         <a class="btn btn-warning" href="/api/folder/form/actualizar/{nombreProyecto}/{count}" title="Actualizar tabla">
+                                             <i class="fa fa-edit"></i>
+                                         </a>
+                                    </span>
+                                </li>
+                            {/for}
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <a class="btn btn-success float-right" href="/api/folder/form/{nombreProyecto}">Add Table</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

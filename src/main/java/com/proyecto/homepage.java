@@ -70,8 +70,16 @@ public class homepage {
     Template FolderAppView;
     @Inject
     Template CodigoVer;
+    @Inject
+    Template TablasProyectoVer;
+    @Inject
+    Template FormProyecto;
+    @Inject
+    Template FormUpdateProyecto;
 
     private static final Logger LOGGER = Logger.getLogger("ListenerBean");
+    private String rutaEntity ="";
+    private String rutaApi ="";
 
     void onStart(@Observes StartupEvent ev) {
         LOGGER.info("The application is starting...");
@@ -104,6 +112,122 @@ public class homepage {
         return ApplicationName.data("title", "Name of Application");
     }
 
+
+    @GET
+    @Path("/folder/app/ver/{nombreProyecto}")
+    public TemplateInstance GetFolderAppTableView(@PathParam("nombreProyecto") String nombreProyecto) {
+        // TODO: Find folder with pom.xml
+        ArrayList<String> listaApi = new ArrayList<>();
+        ArrayList<String> listaEntity = new ArrayList<>();
+        System.out.println(rutaFolder);
+        if (!rutaFolder.isEmpty()) {
+            File directory = new File(rutaFolder + '\\'+ nombreProyecto);
+            if (directory.exists()) {
+                listApi(directory.getAbsolutePath(), false);
+                if (!rutaApi.isEmpty()) {
+                    File apis = new File(rutaApi);
+                    for (File file : apis.listFiles()) {
+                        listaApi.add(file.getName());
+                    }
+                }
+
+               listEntity(directory.getAbsolutePath(), false);
+                System.out.println("StringEntity-> "+ rutaEntity);
+                if (!rutaEntity.isEmpty()) {
+                    File entities = new File(rutaEntity);
+                    for (File file : entities.listFiles()) {
+                        listaEntity.add(file.getName());
+                    }
+                }
+            }
+        }
+
+        return TablasProyectoVer
+                .data("title", "Name of Application")
+                .data("entities", listaEntity)
+                .data("apis", listaApi)
+                .data("nombreProyecto", nombreProyecto)
+                .data("listaNueva", Data.tablasProyecto);
+    }
+
+    @GET
+    @Path("/folder/form/{nombreProyecto}")
+    public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
+        return FormProyecto.data("title", "Table Creation")
+                .data("tipoAtributos", Data.obtenerAtributos())
+                .data("tablasCreadas", Data.tablasGeneradas)
+                .data("nombreProyecto", nombreProyecto)
+                .data("relaciones", Data.obtenerRelaciones());
+    }
+
+
+    @POST
+    @Path("/folder/form")
+    public boolean CrearTableProyecto(FormValue formValue) {
+
+
+//        crearClase(formValue);
+
+        for (Form form : formValue.getFilas()) {
+            System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "
+                    + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
+//            + form.isFkCheckbox()
+        }
+
+        Data.tablasProyecto.add(formValue);
+
+        return true;
+    }
+
+    @GET
+    @Path("/folder/form/actualizar/{nombreProyecto}/{index}")
+    public TemplateInstance TableUpdateProyecto(@PathParam("index") int index, @PathParam("nombreProyecto") String nombreProyecto) {
+        FormValue formValue = new FormValue();
+        if (index <= Data.tablasProyecto.size()) {
+            formValue = Data.tablasProyecto.get(index - 1);
+        }
+
+        return FormUpdateProyecto.data("title", "Table Update")
+                .data("tablaDetalle", formValue)
+                .data("index", index)
+                .data("nombreProyecto", nombreProyecto)
+                .data("tipoAtributos", Data.obtenerAtributos())
+                .data("tablasCreadas", Data.tablasProyecto)
+                .data("relaciones", Data.obtenerRelaciones());
+    }
+
+    @POST
+    @Path("/folder/form/actualizar/{index}")
+    public boolean ActualizarTableProyecto(@PathParam("index") int index, FormValue formValue) {
+        for (Form form : formValue.getFilas()) {
+            System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
+                    + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: " + form.getFkTablaRelacionada() + " Tipo de relacion: "
+                    + form.getFkRelacion());
+//            + form.isFkCheckbox()
+        }
+        if (index <= Data.tablasProyecto.size()) {
+            FormValue formValueActual = Data.tablasProyecto.get(index - 1);
+            if (formValueActual != null) {
+                formValueActual.nombreTabla = formValue.nombreTabla;
+                formValueActual.creado = formValue.creado;
+                formValueActual.filas = formValue.filas;
+            }
+        }
+        return true;
+    }
+
+    @GET
+    @Path("/folder/form/eliminar/{index}")
+    public TemplateInstance TableDeletePdoyecto(@PathParam("index") int index) {
+        if (index <= Data.tablasProyecto.size()) {
+            Data.tablasProyecto.remove(index - 1);
+        }
+
+        return TablasProyectoVer.data("title", "Table View")
+                .data("tablasProyecto", Data.tablasProyecto);
+    }
+
     @GET
     @Path("/folder/app/ver")
     public TemplateInstance GetFolderAppView() {
@@ -132,7 +256,6 @@ public class homepage {
                 .data("title", "Name of Application")
                 .data("rutas", folder);
     }
-
 
     @GET
     @Path("/app/folder")
@@ -1860,6 +1983,47 @@ public class homepage {
                 }
             } else if (file.isDirectory()) {
                 listFiles(file.getAbsolutePath());
+            }
+        }
+        return false;
+    }
+
+    private boolean listApi(String ruta, boolean encontrado) {
+        File folder = new File(ruta);
+
+        File[] files = folder.listFiles();
+        if (encontrado) {
+            rutaApi = ruta;
+            return true;
+        }
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                if (file.getName().equals("Api")) {
+                    listEntity(file.getAbsolutePath(), true);
+                } else {
+                    listApi(file.getAbsolutePath(), false);
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean listEntity(String ruta, boolean encontrado) {
+        File folder = new File(ruta);
+
+        File[] files = folder.listFiles();
+        if (encontrado) {
+            rutaEntity = ruta;
+            return true;
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                if (file.getName().equals("Entity")) {
+                   listEntity(file.getAbsolutePath(), true);
+                } else {
+                    listEntity(file.getAbsolutePath(), false);
+                }
             }
         }
         return false;
