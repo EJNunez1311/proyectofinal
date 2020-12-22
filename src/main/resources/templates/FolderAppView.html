@@ -73,7 +73,7 @@
                 <td class="text-center"><input type="checkbox" id="checkboxMicroServicio{count}" name="checkboxMicroServicio{count}" value="1"></td>
                 <td class="text-center"><input type="checkbox" id="checkboxSeguridad{count}" name="checkboxSeguridad{count}" value="1"></td>
                 <td class="text-center">
-                    <a class="btn btn-danger" id="info{count}" href="/api/folder/app/ver/{ruta}" onclick="mostrarIcono({count})" title="Ver Tablas del Proyecto">
+                    <a class="btn btn-danger" id="info{count}" href="/proyecto/folder/app/ver/{ruta}" onclick="mostrarIcono({count})" title="Ver Tablas del Proyecto">
                         <i class="fa fa-eye"></i></a>
                     <i class="fa fa-spin fa-spinner" id="icon-create{count}" style="display: none"></i>
                 </td>
@@ -111,7 +111,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/folder/app/ver',
+                url: '/proyecto/folder/app/ver',
                 contentType: 'application/json',
                 data: jsonData,
                 dataType: 'json'

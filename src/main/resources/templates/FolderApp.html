@@ -84,7 +84,7 @@
         if (!creating) {
             $.ajax({
                 type: "POST",
-                url: '/api/app/folder',
+                url: '/proyecto/app/folder',
                 data: form.serialize(),
                 beforeSend: function(){
                     creating = true;
@@ -92,7 +92,7 @@
                 },// serializes the form's elements.
                 success: function(data)
                 {
-                    window.location.href="/api/folder/app/ver";
+                    window.location.href="/proyecto/folder/app/ver";
                 },
                 error: function (data) {
                     $('#icon-create').hide();

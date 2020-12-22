@@ -145,7 +145,7 @@
             </div>
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
-        <a id="creados" class="btn btn-info float-right" href="/api/folder/app/ver/{nombreProyecto}">Ver Creados</a>
+        <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">Ver Creados</a>
         <a id="enviardatos" class="btn btn-primary float-right mr-2">Actualizar Tabla</a>
     </div>
 </body>
@@ -326,7 +326,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/folder/form/actualizar/'+index,
+                url: '/proyecto/folder/form/actualizar/'+index,
                 contentType: 'application/json',
                 data: jsonData,
                 dataType: 'json'

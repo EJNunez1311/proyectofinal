@@ -121,7 +121,7 @@
     <!--        <a id="enviardatos" class="btn btn-primary float-right">Create Another Table</a>-->
 
 
-    <a id="creados" class="btn btn-info float-right" href="/api/folder/app/ver/{nombreProyecto}">Ver Creados</a>
+    <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">Ver Creados</a>
     <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
 </div>
 </body>
@@ -300,7 +300,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '/api/folder/form',
+                    url: '/proyecto/folder/form',
                     contentType: 'application/json',
                     data: jsonData,
                     dataType: 'json'
