@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 @Startup
@@ -35,6 +37,8 @@ public class FolderApp {
     private String rutaEntity ="";
     private String rutaApi ="";
     String rutaFolder = "";
+
+    ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
 
 
     @GET
@@ -72,7 +76,13 @@ public class FolderApp {
                 }
             }
         }
-
+        ArrayList <String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
+                .flatMap(x -> x.stream())
+                .collect(Collectors.toList());
+        listaTablasCreadas = new ArrayList<>();
+        for (String item : listaTablas) {
+            listaTablasCreadas.add(new FormValue(item, false, false, null));
+        }
         return TablasProyectoVer
                 .data("title", "Name of Application")
                 .data("entities", listaEntity)
@@ -85,9 +95,11 @@ public class FolderApp {
     @GET
     @Path("/folder/form/{nombreProyecto}")
     public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
+
+
         return FormProyecto.data("title", "Table Creation")
                 .data("tipoAtributos", Data.obtenerAtributos())
-                .data("tablasCreadas", Data.tablasGeneradas)
+                .data("tablasCreadas", listaTablasCreadas)
                 .data("nombreProyecto", nombreProyecto)
                 .data("relaciones", Data.obtenerRelaciones());
     }
@@ -125,7 +137,7 @@ public class FolderApp {
                 .data("index", index)
                 .data("nombreProyecto", nombreProyecto)
                 .data("tipoAtributos", Data.obtenerAtributos())
-                .data("tablasCreadas", Data.tablasProyecto)
+                .data("tablasCreadas", listaTablasCreadas)
                 .data("relaciones", Data.obtenerRelaciones());
     }
 
@@ -150,14 +162,57 @@ public class FolderApp {
     }
 
     @GET
-    @Path("/folder/form/eliminar/{index}")
-    public TemplateInstance TableDeletePdoyecto(@PathParam("index") int index) {
+    @Path("/folder/form/eliminar/{nombreProyecto}/{index}")
+    public TemplateInstance TableDeletePdoyecto(@PathParam("index") int index, @PathParam("nombreProyecto") String nombreProyecto) {
         if (index <= Data.tablasProyecto.size()) {
             Data.tablasProyecto.remove(index - 1);
         }
 
-        return TablasProyectoVer.data("title", "Table View")
-                .data("tablasProyecto", Data.tablasProyecto);
+        ArrayList<String> listaApi = new ArrayList<>();
+        ArrayList<String> listaEntity = new ArrayList<>();
+        System.out.println(rutaFolder);
+        if (!rutaFolder.isEmpty()) {
+            File directory = new File(rutaFolder + '\\'+ nombreProyecto);
+            if (directory.exists()) {
+                listApi(directory.getAbsolutePath(), false);
+                System.out.println("StringaApi-> "+ rutaApi);
+                if (!rutaApi.isEmpty()) {
+                    File apis = new File(rutaApi);
+                    for (File file : apis.listFiles()) {
+                        if (file.isFile()){
+                            int lastPeriodPos = file.getName().lastIndexOf('.');
+                            listaApi.add(file.getName().substring(0, lastPeriodPos));
+                        }
+                    }
+                }
+
+                listEntity(directory.getAbsolutePath(), false);
+                System.out.println("StringEntity-> "+ rutaEntity);
+                if (!rutaEntity.isEmpty()) {
+                    File entities = new File(rutaEntity);
+                    for (File file : entities.listFiles()) {
+                        if (file.isFile()){
+                            int lastPeriodPos = file.getName().lastIndexOf('.');
+                            listaEntity.add(file.getName().substring(0, lastPeriodPos));
+                        }
+                    }
+                }
+            }
+        }
+        ArrayList <String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
+                .flatMap(x -> x.stream())
+                .collect(Collectors.toList());
+        listaTablasCreadas = new ArrayList<>();
+        for (String item : listaTablas) {
+            listaTablasCreadas.add(new FormValue(item, false, false, null));
+        }
+        
+        return TablasProyectoVer
+                .data("title", "Name of Application")
+                .data("entities", listaEntity)
+                .data("apis", listaApi)
+                .data("nombreProyecto", nombreProyecto)
+                .data("listaNueva", Data.tablasProyecto);
     }
 
     @GET
