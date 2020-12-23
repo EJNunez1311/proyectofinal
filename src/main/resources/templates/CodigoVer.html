@@ -5,6 +5,8 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/default.min.css">
     <title>{title}</title>
 
 </head>
@@ -19,13 +21,24 @@
         <div class="col-md-6">
             <div class="card card-info">
                 <div class="card-header">Prueba de Codigo Generado Panel 1</div>
-                <div class="card-body">{panel1}</div>
+                <div class="card-body">
+                    <pre>
+                        <code>
+                            {panel1}
+                        </code>
+                    </pre>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="card card-info">
                 <div class="card-header">Prueba de Codigo Generado Panel 2</div>
-                <div class="card-body">{panel2}</div>
+                <div class="card-body">
+                    <pre>
+                        <code>
+                            {panel2}
+                        </code>
+                    </pre></div>
             </div>
         </div>
     </div>
@@ -34,7 +47,13 @@
         <div class="col-md-6">
             <div class="card card-primary">
                 <div class="card-header">Prueba de Codigo Generado Panel 3</div>
-                <div class="card-body">{panel3}</div>
+                <div class="card-body">
+                      <pre>
+                        <code>
+                            {panel3}
+                        </code>
+                    </pre>
+                </div>
             </div>
         </div>
     </div>
@@ -53,5 +72,11 @@
         src="https://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+    hljs.configure({useBR: true});
+</script>
+
 </body>
 </html>
