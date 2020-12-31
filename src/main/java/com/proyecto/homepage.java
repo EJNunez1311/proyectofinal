@@ -108,16 +108,17 @@ public class homepage {
     @Produces(MediaType.TEXT_PLAIN)
     //Metodo para recibir el nombre de la app y generar los primero parametros de la app!
     public Response GetAppName(@FormParam("name") String name,
-                               @FormParam("microserviceCheckbox") String microserviceCheckbox,
                                @FormParam("securityCheckbox") String securityCheckbox) throws IOException {
+        //        @FormParam("microserviceCheckbox") String microserviceCheckbox
         nombre = name;
         System.out.println("Nombre -> " + name);
-        System.out.println("Microservicio -> " + microserviceCheckbox);
+//        System.out.println("Microservicio -> " + microserviceCheckbox);
+
         System.out.println("Security -> " + securityCheckbox);
 
-        microservicio = ((microserviceCheckbox != null) ? 1 : 0);
+//        microservicio = ((microserviceCheckbox != null) ? 1 : 0);
         seguridad = ((securityCheckbox != null) ? 1 : 0);
-        System.out.println(microservicio);
+//        System.out.println(microservicio);
         System.out.println(seguridad);
 
 //TODO: Usar campo de security y microservice
@@ -173,7 +174,7 @@ public class homepage {
         }
 
         return DbFk
-                .data("title", "Listado de Fk")
+                .data("title", "Foreign Keys of " + table)
                 .data("listafk", listafk)
                 .data("NombreTabla", table);
     }
@@ -375,7 +376,7 @@ public class homepage {
     @GET
     @Path("/form/ver/codigos")
     public TemplateInstance FormCodigosVer() {
-        return CodigoVer.data("title", "Codigos Generados")
+        return CodigoVer.data("title", "Generated Code")
                 .data("panel1", Data.panel1)
                 .data("panel2", Data.panel2)
                 .data("panel3", Data.panel3);
@@ -472,7 +473,7 @@ public class homepage {
 //            }
 //        }
 
-        return FormUpdate.data("tablaDetalle", detalle).data("tipoAtributos", Data.obtenerAtributos());
+        return FormUpdate.data("tablaDetalle", detalle).data("tipoAtributos", Data.obtenerAtributos()).data("title", "Table " +name);
 //        return FormUpdate.data("tablaDetalle", tabla).data("tipoAtributos", Data.obtenerAtributos());
     }
 
