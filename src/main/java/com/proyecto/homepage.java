@@ -410,8 +410,10 @@ public class homepage {
 
 
     @GET
-    @Path("/form/ver/codigos")
-    public TemplateInstance FormCodigosVer() {
+    @Path("/form/ver/codigos/{nombre}")
+    public TemplateInstance FormCodigosVer(@PathParam("nombre") String nombre) {
+        //Imprime El nombre de la tabla que elegiste
+        System.out.println(nombre);
         return CodigoVer.data("title", "Generated Code")
                 .data( /*mostrarClase(FormValue EDGAR, 2)*/"Prueba", Data.panel1)
                 .data( /*mostrarClase(FormValue EDGAR, 2)*/"Prueba", Data.panel2)
@@ -1207,7 +1209,9 @@ public class homepage {
                 "    @ConfigProperty(name = \"quarkus.oidc.client-id\")\n" +
                 "    private String client_id;\n" +
                 "    @ConfigProperty(name = \"quarkus.oidc.credentials.secret\")\n" +
-                "    private String client_secret;\n" +
+                "    private String client_secret;\n"+
+                "    @ConfigProperty(name=\"urltoken_request\")\n" +
+                "    private String request;\n"+
                 "\n" +
                 "\n" +
                 "    @POST\n" +
@@ -1219,7 +1223,6 @@ public class homepage {
                 "\n" +
                 "        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);\n" +
                 "        int postDataLength = postData.length;\n" +
-                "        String request = \"http://localhost:8180/auth/realms/quarkus-realm/protocol/openid-connect/token\";\n" +
                 "        URL url = null;\n" +
                 "        try {\n" +
                 "            url = new URL(request);\n" +
