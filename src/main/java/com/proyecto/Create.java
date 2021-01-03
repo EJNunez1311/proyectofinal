@@ -8,6 +8,7 @@ public class Create implements Runnable {
     String nombre;
     int seguridad = 0;
     int microservicio = 0;
+    String appProperties = "";
 
     public Create(String name,int seg, int serv){
         nombre = name;
@@ -193,6 +194,7 @@ public class Create implements Runnable {
                         "grant_type=password\n";
 
             }
+            appProperties = apppropert;
             myWriter.write(apppropert);
             myWriter.close();
             //  System.out.println("Successfully wrote to the file.");
@@ -203,5 +205,9 @@ public class Create implements Runnable {
 
         //////////////////////////////////////////////////////////
 
+    }
+
+    public String getAppProperties(){
+        return appProperties;
     }
 }
