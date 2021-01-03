@@ -413,21 +413,19 @@ public class homepage {
     @Path("/form/ver/codigos/{nombre}")
     public TemplateInstance FormCodigosVer(@PathParam("nombre") String nombre) {
         //Imprime El nombre de la tabla que elegiste
-        System.out.println(nombre);
         FormValue tabla = null;
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
-                if (form.getNombre().equals(nombre) ) {
+                if (formValue.nombreTabla.equals(nombre) ) {
                     tabla=formValue;
                     break;
                 }
             }
         }
-
         return CodigoVer.data("title", "Generated Code")
-                .data("panel1", mostrarClase(tabla, 1))
-                .data("panel2", mostrarClase(tabla, 2))
-                .data("panel3",appProperties);
+                .data("panel1","\n" + mostrarClase(tabla, 1))
+                .data("panel2","\n" + mostrarClase(tabla, 2))
+                .data("panel3","\n" + appProperties);
     }
 
 
