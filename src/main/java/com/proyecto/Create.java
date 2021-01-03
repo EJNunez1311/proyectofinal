@@ -204,6 +204,30 @@ public class Create implements Runnable {
             e.printStackTrace();
         }
 
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/JF-LINP.txt");
+            if (myObj.createNewFile()) {
+                //   System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/JF-LINP.txt");
+            myWriter.write("Txt Identifier, please do not delete if you still want to use the framework."
+            );
+            myWriter.close();
+            //  System.out.println("Modelo generado");
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
         //////////////////////////////////////////////////////////
 
     }
