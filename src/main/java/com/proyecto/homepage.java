@@ -1013,7 +1013,7 @@ public class homepage {
 //            System.out.println("Tabla agregada a lista " + formValue.nombreTabla);
 //        }
 
-        crearClase(formValue);
+//        crearClase(formValue);
 
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
@@ -1027,6 +1027,13 @@ public class homepage {
 
         return true;
 
+    }
+
+    @POST
+    @Path("/form/createdb")
+    public boolean CrearOnlyDBTable(FormValue formValue) {
+        crearClaseDB(formValue);
+        return true;
     }
 
     public void crearClase(FormValue formValue) {
