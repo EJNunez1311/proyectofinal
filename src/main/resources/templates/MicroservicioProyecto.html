@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{title}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <style>
+        body {
+            /*background-image: url("https://www.data-recovery-service.eu/attachments/Image/Startseite-02_1.jpg");*/
+            background-image: url("https://i.ibb.co/G3JgSn5/cool-background.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+        #input-create {
+            display: inline-block !important;
+            width:200px;
+            max-width:500px;
+            margin: 20px;
+        }
+
+        #button-create {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+{#include menu}
+{/include}
+<div>
+    <div class="w3-container w3-center">
+        <form id="CreateName" class="w3-container">
+            <input class="w3-center w3-input w3-animate-input" id="input-create" name="name" type="text" placeholder="Application Name" >
+            <br>
+
+             <input type="checkbox" id="securityCheckbox" name="securityCheckbox" value="1">
+             <label for="securityCheckbox" class="w3-text-white mr-4">Include Keycloak Security</label><br>
+
+            <button class="w3-button w3-blue" id="button-create" type="submit">Create</button>
+        </form>
+
+    </div>
+    <div class="w3-display-bottomleft w3-padding-large">
+        Powered by <a href="https://pucmm.edu.do/Ingenierias/sistemas-computacion" target="_blank">ISC</a>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    var optionCookie = getCookie("OptionCookie");
+    var url;
+    if (optionCookie == 'EmptyServer') {
+        url = "/api/form";
+    } else if (optionCookie == 'ServerAuth') {
+        url = "Good day";
+    } else if (optionCookie =='Database'){
+        url = "/api/db";
+    }else if (optionCookie =='MicroServices'){
+        url = "/microservices";
+    }
+
+
+    function Prueba(){
+        // deleteCookie()
+        alert(optionCookie);
+    }
+    $("#CreateName").submit(function(e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        // var url = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: '/microservices/crear/proyecto',
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                alert(data); // show response from the php script.
+                window.location.href=url;
+            }
+        });
+    });
+</script>

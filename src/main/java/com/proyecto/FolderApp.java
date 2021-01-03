@@ -206,7 +206,7 @@ public class FolderApp {
         for (String item : listaTablas) {
             listaTablasCreadas.add(new FormValue(item, false, false, null));
         }
-        
+
         return TablasProyectoVer
                 .data("title", "Name of Application")
                 .data("entities", listaEntity)
