@@ -414,10 +414,20 @@ public class homepage {
     public TemplateInstance FormCodigosVer(@PathParam("nombre") String nombre) {
         //Imprime El nombre de la tabla que elegiste
         System.out.println(nombre);
+        FormValue tabla = null;
+        for (FormValue formValue : Data.tablasGeneradas) {
+            for (Form form : formValue.filas) {
+                if (form.getNombre().equals(nombre) ) {
+                    tabla=formValue;
+                    break;
+                }
+            }
+        }
+
         return CodigoVer.data("title", "Generated Code")
-                .data( /*mostrarClase(FormValue EDGAR, 2)*/"Prueba", Data.panel1)
-                .data( /*mostrarClase(FormValue EDGAR, 2)*/"Prueba", Data.panel2)
-                .data(appProperties, Data.panel3);
+                .data("panel1", mostrarClase(tabla, 1))
+                .data("panel2", mostrarClase(tabla, 2))
+                .data("panel3",appProperties);
     }
 
 
