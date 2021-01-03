@@ -281,7 +281,7 @@ public class FolderApp {
 
         for (File file : files) {
             if (file.isFile()) {
-                if (file.getName().equals("pom.xml") || file.getName().equals("build.gradle")) {
+                if (file.getName().equals("JF-LINP.txt")) {
                     return true;
                 }
             } else if (file.isDirectory()) {
