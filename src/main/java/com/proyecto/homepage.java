@@ -124,19 +124,44 @@ public class homepage {
 
 //TODO: Usar campo de security y microservice
 
-        Create r = new Create(nombre, seguridad, microservicio);
-        Thread a = new Thread(r);
-        a.start();
-        try {
-            a.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        Create r = new Create(nombre, seguridad, microservicio);
+//        Thread a = new Thread(r);
+//        a.start();
+//        try {
+//            a.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        appProperties = r.getAppProperties();
+
+        Runnable r = new Create(nombre, seguridad, microservicio);
+        new Thread(r).start();
+
+        appProperties = "#Datasource Config\n" +
+                "quarkus.datasource.db-kind=mysql\n" +
+                "quarkus.datasource.driver=com.mysql.cj.jdbc.Driver\n" +
+                "quarkus.datasource.username=root\n" +
+                "quarkus.datasource.password=12345678\n" +
+                "quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/prueba\n" +
+                "quarkus.hibernate-orm.log.sql=true\n" +
+                "# drop and create the database at startup (use `update` to only update the schema)\n" +
+                "quarkus.hibernate-orm.database.generation=update\n" +
+                "quarkus.smallrye-openapi.path=/swagger\n" +
+                "quarkus.swagger-ui.always-include=true\n" +
+                "quarkus.swagger-ui.path=/explorer\n" +
+                "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n";
+        if(seguridad != 0){
+            appProperties = appProperties + "# Keycloak with 100 offset\n" +
+                    "keycloak.url=http://localhost:8180\n" +
+                    "\n" +
+                    "quarkus.oidc.enabled=true\n" +
+                    "quarkus.oidc.auth-server-url=${keycloak.url}/auth/realms/quarkus-realm\n" +
+                    "quarkus.oidc.client-id=quarkus-client\n" +
+                    "quarkus.oidc.credentials.secret=mysecret\n" +
+                    "quarkus.http.cors=true\n" +
+                    "quarkus.oidc.tls.verification=none\n" +
+                    "grant_type=password\n";
         }
-        appProperties = r.getAppProperties();
-
-        //Runnable r = new Create(nombre, seguridad, microservicio);
-        //new Thread(r).start();
-
 
         return Response.ok().build();
 
