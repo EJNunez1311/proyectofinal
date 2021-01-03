@@ -219,7 +219,8 @@ public class Create implements Runnable {
 
         try {
             FileWriter myWriter = new FileWriter(path + "/" + nombre + "/JF-LINP.txt");
-            myWriter.write("Txt Identifier, please do not delete if you still want to use the framework."
+            myWriter.write("Txt Identifier, please do not delete if you still want to use the framework." +
+                    "\n Created on : " + java.time.LocalTime.now()
             );
             myWriter.close();
             //  System.out.println("Modelo generado");
