@@ -49,8 +49,11 @@ public class FolderApp {
         ArrayList<String> listaEntity = new ArrayList<>();
         System.out.println(rutaFolder);
         if (!rutaFolder.isEmpty()) {
-            File directory = new File(rutaFolder + '\\'+ nombreProyecto);
+            File directory = new File(rutaFolder + '/'+ nombreProyecto);
+
             if (directory.exists()) {
+                rutaApi = "";
+                rutaEntity  = "";
                 listApi(directory.getAbsolutePath(), false);
                 System.out.println("StringaApi-> "+ rutaApi);
                 if (!rutaApi.isEmpty()) {
@@ -84,11 +87,11 @@ public class FolderApp {
             listaTablasCreadas.add(new FormValue(item, false, false, null));
         }
         return TablasProyectoVer
-                .data("title", "Name of Application")
-                .data("entities", listaEntity)
-                .data("apis", listaApi)
-                .data("nombreProyecto", nombreProyecto)
-                .data("listaNueva", Data.tablasProyecto);
+            .data("title", "Name of Application")
+            .data("entities", listaEntity)
+            .data("apis", listaApi)
+            .data("nombreProyecto", nombreProyecto)
+            .data("listaNueva", Data.tablasProyecto);
     }
 
 
@@ -97,11 +100,12 @@ public class FolderApp {
     public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
 
 
-        return FormProyecto.data("title", "Table Creation")
-                .data("tipoAtributos", Data.obtenerAtributos())
-                .data("tablasCreadas", listaTablasCreadas)
-                .data("nombreProyecto", nombreProyecto)
-                .data("relaciones", Data.obtenerRelaciones());
+        return FormProyecto
+            .data("title", "Table Creation")
+            .data("tipoAtributos", Data.obtenerAtributos())
+            .data("tablasCreadas", listaTablasCreadas)
+            .data("nombreProyecto", nombreProyecto)
+            .data("relaciones", Data.obtenerRelaciones());
     }
 
 
@@ -132,13 +136,14 @@ public class FolderApp {
             formValue = Data.tablasProyecto.get(index - 1);
         }
 
-        return FormUpdateProyecto.data("title", "Table Update")
-                .data("tablaDetalle", formValue)
-                .data("index", index)
-                .data("nombreProyecto", nombreProyecto)
-                .data("tipoAtributos", Data.obtenerAtributos())
-                .data("tablasCreadas", listaTablasCreadas)
-                .data("relaciones", Data.obtenerRelaciones());
+        return FormUpdateProyecto
+            .data("title", "Table Update")
+            .data("tablaDetalle", formValue)
+            .data("index", index)
+            .data("nombreProyecto", nombreProyecto)
+            .data("tipoAtributos", Data.obtenerAtributos())
+            .data("tablasCreadas", listaTablasCreadas)
+            .data("relaciones", Data.obtenerRelaciones());
     }
 
     @POST
@@ -254,7 +259,6 @@ public class FolderApp {
     @Path("/app/folder")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
-    //Metodo para recibir el nombre de la app y generar los primero parametros de la app!
     public boolean GetFolderApp(@FormParam("ruta") String ruta) throws IOException {
         rutaFolder = ruta;
         return true;
@@ -297,8 +301,12 @@ public class FolderApp {
         File[] files = folder.listFiles();
         if (encontrado) {
             rutaApi = ruta;
+            System.out.println(ruta);
             return true;
         }
+
+        System.out.println(ruta);
+
 
         for (File file : files) {
             if (file.isDirectory()) {
@@ -318,6 +326,7 @@ public class FolderApp {
         File[] files = folder.listFiles();
         if (encontrado) {
             rutaEntity = ruta;
+            System.out.println(ruta);
             return true;
         }
         for (File file : files) {

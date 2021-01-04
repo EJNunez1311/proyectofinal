@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+
+
+    {#include menu}
+    {/include}
+</head>
+<body>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 table-responsive">
+                <form>
+                    <label for="tname">Table Name:</label><br>
+                    <input type="text" id="tname" name="tname" value="{tablaDetalle.nombreTabla}"><br>
+                </form>
+                <!-- <div>
+                    <div class="input-group">
+                        <a href="/api/db/table">Back to others tables</a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <input type="hidden" id="nombreProyecto" value="{proyecto}">
+        <div class="row clearfix">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Name
+                            </th>
+                            <th class="text-center">
+                                Data Type
+                            </th>
+                            <th class="text-center">
+                                <p id="text" style="color: red;font-size:50%">Primary Key will auto generated</p>
+                                Primary Key
+                            </th>
+                            <th class="text-center">
+                                NOT NULL
+                            </th>
+                            <th class="text-center">
+                                UNIQUE
+                            </th>
+                            <th class="text-center">
+                                Foreign Key
+                            </th>
+                            <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <form>
+                        <input type="hidden" id="index" value="{index}"/>
+                        {#for item in tablaDetalle.filas}
+                            <tr>
+                                <td data-name="nombre">
+                                    <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{item.nombre}" class="form-control"/>
+                                </td>
+                                <td data-name="tipoatributo">
+                                    <select name="tipoatributo" id="tipoatributo">
+<!--                                        <option value="">Select Option</option>-->
+                                        {#for tipo in tipoAtributos}
+                                            {#if item.tipoAtributo == tipo}
+                                                <option value="{tipo}" selected>{tipo}</option>
+                                            {#else}
+                                                <option value="{tipo}">{tipo}</option>
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
+
+                                <td data-name="pkcheckbox">
+                                    <input type="checkbox" id="pkcheckbox" onclick="QuitarTexto()" name="pkcheckbox" {#if item.pkCheckcbox == true} checked="checked" {/if} onclick="QuitarTexto()">
+                                </td>
+
+                                <td data-name="notnullcheckbox">
+                                     <input type="checkbox" id="notnullcheckbox" {#if item.notNullCheckbox == true} checked="checked" {/if} name="notnullcheckbox"  value="{item.notNullCheckbox == true ?: 1 }">
+                                </td>
+
+                                <td data-name="uniquecheckbox">
+                                    <input type="checkbox" id="uniquecheckbox" {#if item.CheckBoxUnique == true} checked="checked" {/if} name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">
+                                </td>
+                                <td data-name="fkoption">
+                                    <select name="fkoption" id="fkoption" onchange="showDiv({count})">
+                                        <option value="0">None</option>
+                                        {#for tabla in tablasCreadas}
+                                            {#if tabla.nombreTabla != tablaDetalle.nombreTabla}
+                                                {#if tabla.nombreTabla == item.fkTablaRelacionada}
+                                                    <option value="{tabla.nombreTabla}" selected>{tabla.nombreTabla}</option>
+                                                {#else}
+                                                    <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+                                                {/if}
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
+
+                                <td data-name="relationoption" >
+                                    <select id="fkRelacion">
+                                        <option value="0">None</option>
+                                        {#for relacion in relaciones}
+                                            {#if relacion.valor == item.fkRelacion}
+                                                <option value="{relacion.valor}" selected>{relacion.nombre}</option>
+                                            {#else}
+                                                <option value="{relacion.valor}">{relacion.nombre}</option>
+                                            {/if}
+                                        {/for}
+                                    </select>
+                                </td>
+
+                                <td data-name="del">
+                                    <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'>
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        {/for}
+                    </form>
+
+                    </tbody>
+                </table>
+            </div>
+            <a id="add_row" class="btn btn-primary float-right">Add Row</a>
+        </div>
+        <a id="creados" class="btn btn-info float-right" href="/microservices/form/ver/{proyecto}">Ver Creados</a>
+        <a id="enviardatos" class="btn btn-primary float-right mr-2">Actualizar Tabla</a>
+    </div>
+</body>
+</html>
+<script>
+    function showDiv(rowIndex)
+    {
+        $('#tab_logic').find('tbody > tr').each(function (index) {
+            var row = $(this);
+            if (rowIndex > 0) {
+                rowIndex -= 1;
+            }
+            if (index === rowIndex) {
+                if (row.find("#fkoption").val() !== '0') {
+                    row.find("#fkRelacion").show();
+                }else {
+                    row.find("#fkRelacion").hide();
+                }
+            }
+        });
+    }
+
+    function QuitarTexto() {
+        var text = document.getElementById("text");
+        text.style.display = "block";
+        $('#tab_logic').find('tr').each(function (index) {
+            var row = $(this);
+
+            var check = row.find("#pkcheckbox");
+            if (check.is(':checked') === true) {
+                text.style.display = "none";
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        $("#add_row").on("click", function () {
+// Dynamic Rows Code
+
+// Get max row id and set new id
+            var newid = 0;
+            $.each($("#tab_logic tr"), function () {
+                if (parseInt($(this).data("id")) > newid) {
+                    newid = parseInt($(this).data("id"));
+                }
+            });
+            newid++;
+            console.log(newid);
+
+            var tr = $("<tr></tr>", {
+                id: "addr" + newid,
+                "data-id": newid
+            })
+//    "data-id": newid
+            document.getElementById("addr" + newid);
+            setTimeout(() => {console.log(document.getElementById("addr" + newid))},500);
+
+// loop through each td and create new elements with name of newid
+            $.each($("#tab_logic tbody tr:nth(0) td"), function () {
+                var td;
+                var cur_td = $(this);
+
+                var children = cur_td.children();
+
+// add new td and element if it has a nane
+                if ($(this).data("name") !== undefined) {
+                    td = $("<td></td>", {
+                        "data-name": $(cur_td).data("name")
+                    });
+
+                    var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
+                    c.attr("name", $(cur_td).data("name") + newid);
+                    var type = c.attr('type');
+                    if (type === 'checkbox') {
+                        c.prop('checked', false);
+                    } else {
+                        if (c.is("select")) {
+                            c.prop("selectedIndex", 0);
+
+                        }
+                    }
+                    c.appendTo($(td));
+                    td.appendTo($(tr));
+                } else {
+                    td = $("<td></td>", {
+                        'text': $('#tab_logic tr').length
+                    }).appendTo($(tr));
+                }
+            });
+
+// add delete button and td
+            /*
+            $("<td></td>").append(
+            $("<button class='btn btn-danger glyphicon glyphicon-remove row-remove'></button>")
+            .click(function() {
+            $(this).closest("tr").remove();
+            })
+            ).appendTo($(tr));
+            */
+
+// add the new row
+            $(tr).appendTo($('#tab_logic'));
+
+            $(tr).find("td button.row-remove").on("click", function () {
+                $(this).closest("tr").remove();
+                newid-1;
+                console.log(newid);
+            });
+        });
+
+
+// Sortable Code
+        var fixHelperModified = function (e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+
+            $helper.children().each(function (index) {
+                $(this).width($originals.eq(index).width())
+            });
+
+            return $helper;
+        };
+
+        $(".table-sortable tbody").sortable({
+            helper: fixHelperModified
+        }).disableSelection();
+
+        $(".table-sortable thead").disableSelection();
+
+
+        // $("#add_row").trigger("click");
+
+        $('#enviardatos').click(function () {
+            var arr = [];
+            var tname = $("#tname").val();
+            var index = $("#index").val();
+            var proyecto = $("#nombreProyecto").val();
+            if (tname === undefined || tname == null || tname === '') {
+                window.alert('Debe especifiar el nombre de la tabla');
+                return false
+            }
+            $('#tab_logic').find('tr').each(function (index) {
+                var row = $(this);
+
+                if (index !== 0) {
+                    var tabla = '';
+                    var relacion = '';
+                    if (row.find("#fkoption").val() !== '0') {
+                        tabla =row.find("#fkoption").val();
+                        relacion = row.find("#fkRelacion").val();
+                    }
+                    var obj = {
+                        nombre:  row.find("#nombre").val(),
+                        tipoAtributo: row.find("#tipoatributo").val(),
+                        pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
+                        notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
+                        CheckBoxUnique:  row.find("#uniquecheckbox").is(':checked') ,
+                        // pkCheckcbox: row.find("#pkcheckbox"+index)? row.find("#pkcheckbox"+index).is(':checked') : row.find("#pkcheckbox"+index+""+index).is(':checked'),
+                        // notNullCheckbox: row.find("#notnullcheckbox"+index)? row.find("#notnullcheckbox"+index).is(':checked') : row.find("#notnullcheckbox"+index+""+index).is(':checked'),
+                        // CheckBoxUnique: row.find("#uniquecheckbox"+index)? row.find("#uniquecheckbox"+index).is(':checked') : row.find("#uniquecheckbox"+index+""+index).is(':checked'),
+                        fkTablaRelacionada:  tabla,
+                        fkRelacion:  relacion,
+                    }
+
+                    if (obj.nombre === undefined || obj.nombre == null || obj.nombre === '') {
+                        window.alert('El nombre de la columna en la posición ('+ index +') no esta especificada');
+                        return false
+                    }
+                    arr.push(obj);
+                }
+            });
+
+            const data = {
+                nombreTabla : tname,
+                filas : arr
+            }
+            const jsonData = JSON.stringify(data);
+
+            $.ajax({
+                type: "POST",
+                url: '/microservices/form/actualizar'+ '/'+ proyecto + '/'+ index,
+                contentType: 'application/json',
+                data: jsonData,
+                dataType: 'json'
+            }).done(function(data) {
+                console.log("Data sent successfully");
+                console.log(data);
+                window.location.href = "/microservices/form/ver/" + proyecto;
+            }).error(function (jqXhr, textStatus, errorMessage) {
+                console.log("Error sending data");
+                console.log(jqXhr);
+                console.log(errorMessage);
+                console.log(textStatus);
+            });
+        });
+
+        if (document.readyState === 'interactive') {
+            QuitarTexto();
+            $('#tab_logic').find('tbody > tr').each(function (index) {
+                var row = $(this);
+                showDiv(index);
+            });
+        }
+    });
+</script>

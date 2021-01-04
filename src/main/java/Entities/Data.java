@@ -7,6 +7,7 @@ public class Data {
     public static ArrayList<FormValue> tablas = new ArrayList<>();
     public static ArrayList<FormValue> tablasProyecto = new ArrayList<>();
     public static ArrayList<FormValue> tablasGeneradas = new ArrayList<>();
+    public static ArrayList<ProyectoValue> proyectosGenerados = new ArrayList<>();
 
     public static final String panel1 = "   public static ArrayList<String> obtenerAtributos() {\n" +
             "        ArrayList<String> tipoAtributos = new ArrayList<>();\n" +

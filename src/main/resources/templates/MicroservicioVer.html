@@ -51,43 +51,66 @@
 </head>
 
 <body>
-{#include menu}
-{/include}
-<h2>MicroService Project Created</h2>
+    {#include menu}
+    {/include}
+    <div class="container">
 
-<table id="myTable">
-    <tr class="header">
-        <th style="width:40%;">Name</th>
-        <th style="width:30%;">Options</th>
-    </tr>
-    {#if tablasGeneradas}
-        {#for proyecto in proyectosGenerados}
-            <tr>
-                <td>{proyecto.nombreProyecto}<input type="hidden" id="nombre" value="{proyecto.nombreProyecto}"></td>
-                <td>
-<!--                    <button type="button" class="btn btn-primary" title="Ver informacion tabla" data-toggle="modal" data-target="#myModal{count}">-->
-<!--                        <i class="fa fa-eye"></i>-->
-<!--                    </button>-->
-                    <a class="btn btn-info" href="/api/form/ver/codigos" title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
-                    <a class="btn btn-danger" href="/api/form/eliminar/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
-                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>
-                </td>
-            </tr>
-        {/for}
-    {/if}
-</table>
-
-<div class="mt-3 mr-3">
-    {#if tablasGeneradas}
-        <a id="finalizar" class="btn btn-primary float-right" href="/microservices/createapp">Finalizar</a>
-    {/if}
-    <a id="crearMicroservicio" class="btn btn-success float-right mr-2" href="/microservices/form/proyecto">Agregar Proyecto</a>
-</div>
+        <h2>MicroService Project Created</h2>
+        <div class="table-responsive">
+            <table id="myTable">
+                <tr class="header">
+                    <th style="width:40%;">Name</th>
+                    <th style="width:30%;">Options</th>
+                </tr>
+                {#if proyectosGenerados}
+                    {#for proyecto in proyectosGenerados}
+                        <tr>
+                            <td>{proyecto.nombreProyecto}<input type="hidden" id="nombre" value="{proyecto.nombreProyecto}"></td>
+                            <td>
+            <!--                    <button type="button" class="btn btn-primary" title="Ver informacion tabla" data-toggle="modal" data-target="#myModal{count}">-->
+            <!--                        <i class="fa fa-eye"></i>-->
+            <!--                    </button>-->
+                                <a class="btn btn-info" href="/microservices/form/ver/{proyecto.nombreProyecto}" title="Agregar Tabla"><i class="fa fa-file"></i></a>
+                                <a class="btn btn-info" href="/microservices/importar/tablas/{proyecto.nombreProyecto}" title="Importar Tablas desde Base de Datos"><i class="fas fa-database"></i></a>
+                            </td>
+                        </tr>
+                    {/for}
+                {/if}
+            </table>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 mt-2 text-right">
+                {#if proyectosGenerados}
+                    <a id="finalizar" class="btn btn-primary float-right">Finalizar</a>
+                {/if}
+                <a id="crearMicroservicio" class="btn btn-success float-right mr-2" href="/microservices/crear/proyecto">Agregar Proyecto</a>
+            </div>
+        </div>
+    </div>
 
 <script>
+    $(document).ready(function () {
+        $("#finalizar").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: '/microservices/finalizar',
+                contentType: 'application/json',
+                dataType: 'json'
+            }).done(function(data) {
+                console.log("Data sent successfully");
+                console.log(data);
+                window.location.href = "";
+            }).error(function (jqXhr, textStatus, errorMessage) {
+                console.log("Error sending data");
+                console.log(jqXhr);
+                console.log(errorMessage);
+                console.log(textStatus);
+            });
+        });
+    });
 
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 </body>
 </html>
