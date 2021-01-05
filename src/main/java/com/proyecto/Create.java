@@ -8,6 +8,7 @@ public class Create implements Runnable {
     String nombre;
     int seguridad = 0;
     int microservicio = 0;
+    String appProperties = "";
 
     public Create(String name,int seg, int serv){
         nombre = name;
@@ -190,9 +191,11 @@ public class Create implements Runnable {
                         "quarkus.oidc.credentials.secret=mysecret\n" +
                         "quarkus.http.cors=true\n" +
                         "quarkus.oidc.tls.verification=none\n" +
-                        "grant_type=password\n";
+                        "grant_type=password\n" +
+                        "urltoken_request=${keycloak.url}/auth/realms/quarkus-realm/protocol/openid-connect/token";
 
             }
+            appProperties = apppropert;
             myWriter.write(apppropert);
             myWriter.close();
             //  System.out.println("Successfully wrote to the file.");
@@ -201,7 +204,36 @@ public class Create implements Runnable {
             e.printStackTrace();
         }
 
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/JF-LINP.txt");
+            if (myObj.createNewFile()) {
+                //   System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/JF-LINP.txt");
+            myWriter.write("Txt Identifier, please do not delete if you still want to use the framework." +
+                    "\n Created on : " + java.time.LocalTime.now()
+            );
+            myWriter.close();
+            //  System.out.println("Modelo generado");
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
         //////////////////////////////////////////////////////////
 
+    }
+
+    public String getAppProperties(){
+        return appProperties;
     }
 }
