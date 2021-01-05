@@ -84,7 +84,7 @@ public class homepage {
     String databasename_g = "prueba";
     int importado = 0;
     //Credenciales Admin para la DB (MYSQL)
-    String dbUserAdmin, dbUserPassword;
+    String dburl, dbUserAdmin, dbUserPassword;
     //Credenciales !=Admin para la DB (MySQL)
     String dbNamelist;
     List<FormValue> formValuesList = new ArrayList<FormValue>();
@@ -182,6 +182,7 @@ public class homepage {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName.name, dbUserAdmin, dbUserPassword);
             if (!myconnection.isClosed() || myconnection != null) {
+
                 dbNamelist = dbName.name;
 //                dbUserlist = dbName.username;
 //                dbUserPassword = dbName.password;
@@ -264,15 +265,15 @@ public class homepage {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     //Funcion para leer el nombre de la base de datos!
-    public boolean GetDataBaseName(@FormParam("username") String username, @FormParam("password") String password) throws IOException {
+    public boolean GetDataBaseName(@FormParam("databaseurl") String url, @FormParam("username") String username, @FormParam("password") String password) throws IOException {
         //Solo para tomar o leer el nombre de la base de datos.
         //TODO: validar username y password
-
         try {
 //          Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/information_schema", username, password);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://"+url+"/information_schema", username, password);
             if (!myconnection.isClosed() || myconnection != null) {
+                dburl = url;
                 dbUserAdmin = username;
                 dbUserPassword = password;
                 return true;
@@ -1496,6 +1497,9 @@ public class homepage {
 
         if (importado == 1) {
             content = new String(Files.readAllBytes(path2), charset);
+            content = content.replaceAll("localhost:3306", dburl);
+            Files.write(path2, content.getBytes(charset));
+            content = new String(Files.readAllBytes(path2), charset);
             content = content.replaceAll("prueba", dbNamelist);
             Files.write(path2, content.getBytes(charset));
 
@@ -1509,6 +1513,7 @@ public class homepage {
             content = content.replaceAll("12345678",dbUserPassword );
             Files.write(path2, content.getBytes(charset));
         }
+
     }
 
     public ResultSet chequearFK(String table) {
