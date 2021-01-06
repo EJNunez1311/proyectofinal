@@ -1,9 +1,6 @@
 package com.proyecto;
 
-import Entities.AppFolder;
-import Entities.Data;
-import Entities.Form;
-import Entities.FormValue;
+import Entities.*;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import io.quarkus.runtime.Startup;
@@ -13,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,6 +37,8 @@ public class FolderApp {
     String rutaFolder = "";
 
     ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
+
+    ArrayList<ProyectoValue> proyectoValues = new ArrayList<>();
 
 
     @GET
@@ -99,6 +99,19 @@ public class FolderApp {
     @Path("/folder/form/{nombreProyecto}")
     public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
 
+        int existe = 0;
+        ProyectoValue aux = new ProyectoValue(nombreProyecto, null);
+
+        for (ProyectoValue v : proyectoValues) {
+            if (v.getNombreProyecto().equals(nombreProyecto)) {
+                existe = 1;
+                break;
+            }
+        }
+        
+        if (existe == 0) {
+            proyectoValues.add(aux);
+        }
 
         return FormProyecto
                 .data("title", "Table Creation")
@@ -114,8 +127,9 @@ public class FolderApp {
     @Path("/folder/form")
     public boolean CrearTableProyecto(FormValue formValue) {
 
-
+//        Arreglando
 //        crearClase(formValue);
+
 
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
@@ -342,6 +356,264 @@ public class FolderApp {
             }
         }
         return false;
+    }
+
+    public void crearClase(FormValue formValue, String nombre, int seguridad) {
+
+        String nomb;
+        String clase;
+        String atributo;
+        String tipo;
+        String modelos = "\n";
+        String getset = "\n";
+        String entidad = "\n";
+        String tipopk = "long";
+        int haypk = 0;
+
+
+        File theDir = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/");
+        if (!theDir.exists()) theDir.mkdirs();
+
+        theDir = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/");
+        if (!theDir.exists()) theDir.mkdirs();
+
+
+        if (formValue != null) {
+            //Entity Name
+            System.out.println(formValue.getNombreTabla());
+
+            nomb = formValue.getNombreTabla();
+            clase = nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
+            String claseminus = nomb.toLowerCase();
+
+            //Entity details
+            for (Form form : formValue.getFilas()) {
+//                System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
+//                        + " -- not null " + form.isNotNullCheckbox() + "-- fk " + form.isCheckBoxUnique() +"--Unique" + form.isFkCheckbox());
+
+
+                ///////////////////////////////////
+                atributo = form.getNombre();
+                tipo = form.getTipoAtributo();
+
+                if (tipo.toLowerCase().contains("int")) {
+                    tipo = "int";
+                }
+                if (tipo.toLowerCase().contains("boolean")) {
+                    tipo = "boolean";
+                }
+                if (tipo.toLowerCase().contains("double")) {
+                    tipo = "double";
+                }
+
+                atributo = atributo.toLowerCase();
+                if (form.isPkCheckcbox()) {
+                    tipopk = form.getTipoAtributo();
+                    modelos = modelos +
+                            "    @Id \n";
+                    haypk = 1;
+                }
+                if (form.isNotNullCheckbox() && !form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(nullable = false) \n";
+                }
+                if (!form.isNotNullCheckbox() && form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(unique = true) \n";
+                }
+                if (form.isNotNullCheckbox() && form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(unique=true, nullable=false) \n";
+                }
+                modelos = modelos +
+                        "    public " + tipo + " " + atributo + ";\n" +
+                        "\n";
+
+                String aux;
+                aux = atributo.substring(0, 1).toUpperCase() + atributo.substring(1).toLowerCase();
+
+                getset = getset +
+                        "    public " + tipo + " get" + aux + "() {\n" +
+                        "        return " + atributo.toLowerCase() + ";\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public void set" + aux + "(" + tipo + " " + atributo.toLowerCase() + ") {\n" +
+                        "        this." + atributo.toLowerCase() + " = " + atributo.toLowerCase() + ";\n" +
+                        "    }\n";
+
+
+                entidad = entidad +
+                        "        entity.set" + aux + "(" + claseminus + ".get" + aux + "());\n";
+
+                ///////////////////////////////////
+            }
+
+            //String path = System.getProperty("user.dir");
+            String archivojava = "package org.proyecto.Entity;\n" +
+                    "import io.quarkus.hibernate.orm.panache.PanacheEntity;\n" +
+                    "import io.quarkus.hibernate.orm.panache.PanacheEntityBase;\n" +
+                    "import javax.persistence.*;\n" +
+                    "import java.sql.Date;\n" +
+                    "import java.io.Serializable;\n" +
+                    "import java.util.Set;\n";
+
+            if (haypk == 1) {
+                //String path = System.getProperty("user.dir");
+                archivojava = archivojava +
+                        "@Entity\n" +
+                        "public class " + clase + " extends PanacheEntityBase implements Serializable{\n"
+
+                        +
+
+                        modelos
+
+                        +
+
+                        getset
+
+                        +
+                        "}"
+                ;
+            } else {
+                archivojava = archivojava +
+                        "@Entity\n" +
+                        "public class " + clase + " extends PanacheEntity {\n" +
+
+                        modelos
+
+                        +
+
+                        getset
+
+                        +
+                        "}";
+            }
+
+
+            try {
+                File myObj = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+                if (myObj.createNewFile()) {
+                    //   System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            try {
+                FileWriter myWriter = new FileWriter(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+                myWriter.write(archivojava
+                );
+                myWriter.close();
+                //  System.out.println("Modelo generado");
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            String archivoapi =
+                    "package org.proyecto.Api;\n" +
+                            "\n" +
+                            "import org.proyecto.Entity.*;\n" +
+                            "import javax.inject.Inject;\n" +
+                            "import javax.persistence.EntityManager;\n" +
+                            "import javax.transaction.Transactional;\n" +
+                            "import javax.ws.rs.*;\n" +
+                            "import javax.ws.rs.core.MediaType;\n" +
+                            "import java.util.List;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
+                            "import io.quarkus.security.Authenticated;\n" +
+                            "import io.quarkus.security.identity.SecurityIdentity;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;\n" +
+                            "import javax.annotation.security.RolesAllowed;" +
+                            "\n" +
+                            "@Path(\"/api/" + nomb + "\")\n" +
+                            "@Produces(MediaType.APPLICATION_JSON)\n" +
+                            "@Consumes(MediaType.APPLICATION_JSON)\n" +
+                            "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n";
+            if (seguridad == 1) {
+                archivoapi = archivoapi + "@Authenticated\n" +
+                        "@SecurityRequirement(name = \"apiKey\")\n";
+            }
+            archivoapi = archivoapi +
+                    "public class " + clase + "Api {\n" +
+                    "\n" +
+                    "    @Inject\n" +
+                    "    EntityManager entityManager;\n" +
+                    "\n" +
+                    "\n" +
+                    "    @POST\n" +
+                    "    @Transactional\n" +
+                    "    public void add(" + clase + " " + claseminus + ") {\n" +
+                    "        " + clase + ".persist(" + claseminus + ");\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @GET\n" +
+                    "    public List<" + clase + "> get" + clase + "(){\n" +
+                    "        return " + clase + ".listAll();\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @PUT\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
+                    "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
+                    "\n" +
+                    "        if (entity == null) {\n" +
+                    "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "\n" +
+                    entidad +
+                    "        return entity;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @DELETE\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
+                    "        " + clase + ".deleteById(id);\n" +
+                    "    }\n" +
+                    "}";
+            if (seguridad == 1) {
+                archivoapi = archivoapi.replaceAll("@POST", "@POST\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@GET", "@GET\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n    @RolesAllowed(\"user\")");
+
+            }
+
+
+            try {
+                File myObj = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
+                if (myObj.createNewFile()) {
+                    // System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            try {
+                FileWriter myWriter = new FileWriter(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
+
+                myWriter.write(archivoapi
+                );
+                myWriter.close();
+                //   System.out.println("Clase api generado");
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+        }
     }
 
 }
