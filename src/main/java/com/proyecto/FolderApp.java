@@ -156,7 +156,7 @@ public class FolderApp {
         }
 
 
-        crearClase(formValue,proyectoActual);
+        crearClase(formValue, proyectoActual);
 
 //        Data.tablasProyecto.add(formValue);
 
@@ -394,10 +394,10 @@ public class FolderApp {
         int seguridad = 0;
 
 
-        File theDir = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/");
+        File theDir = new File(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Entity/");
         if (!theDir.exists()) theDir.mkdirs();
 
-        theDir = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/");
+        theDir = new File(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Api/");
         if (!theDir.exists()) theDir.mkdirs();
 
 
@@ -514,7 +514,7 @@ public class FolderApp {
 
 
             try {
-                File myObj = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+                File myObj = new File(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
                 if (myObj.createNewFile()) {
                     //   System.out.println("File created: " + myObj.getName());
                 } else {
@@ -526,7 +526,7 @@ public class FolderApp {
             }
 
             try {
-                FileWriter myWriter = new FileWriter(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
+                FileWriter myWriter = new FileWriter(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
                 myWriter.write(archivojava
                 );
                 myWriter.close();
@@ -613,7 +613,7 @@ public class FolderApp {
 
 
             try {
-                File myObj = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
+                File myObj = new File(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
                 if (myObj.createNewFile()) {
                     // System.out.println("File created: " + myObj.getName());
                 } else {
@@ -625,7 +625,7 @@ public class FolderApp {
             }
 
             try {
-                FileWriter myWriter = new FileWriter(rutaFolder + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
+                FileWriter myWriter = new FileWriter(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Api/" + clase + "Api.java");
 
                 myWriter.write(archivoapi
                 );
