@@ -4,7 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script
             src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -53,24 +54,29 @@
 <body>
 {#include menu}
 {/include}
-<h2>Tables Created</h2>
+<div class="container">
+    <h2>Tables Created</h2>
 
-<table id="myTable">
-    <tr class="header">
-        <th style="width:40%;">Name</th>
-        <th style="width:30%;">Options</th>
-    </tr>
-    {#if tablasGeneradas}
-        {#for tabla in tablasGeneradas}
+    <div class="table-responsive">
+        <table id="myTable">
+            <tr class="header">
+                <th style="width:40%;">Name</th>
+                <th style="width:30%;">Options</th>
+            </tr>
+            {#if tablasGeneradas}
+            {#for tabla in tablasGeneradas}
             <tr>
                 <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
                 <td>
-<!--                    <button type="button" class="btn btn-primary" title="Ver informacion tabla" data-toggle="modal" data-target="#myModal{count}">-->
-<!--                        <i class="fa fa-eye"></i>-->
-<!--                    </button>-->
-                    <a class="btn btn-info" href="/api/form/ver/codigos/{tabla.nombreTabla}" title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
-                    <a class="btn btn-danger" href="/api/form/eliminar/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
-                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>
+                    <!--                    <button type="button" class="btn btn-primary" title="Ver informacion tabla" data-toggle="modal" data-target="#myModal{count}">-->
+                    <!--                        <i class="fa fa-eye"></i>-->
+                    <!--                    </button>-->
+                    <a class="btn btn-info" href="/api/form/ver/codigos/{tabla.nombreTabla}"
+                       title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');" href="/api/form/eliminar/{count}" title="Eliminar tabla"><i
+                            class="fa fa-trash"></i></a>
+                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i
+                            class="fa fa-edit"></i></a>
                     <div class="modal" id="myModal{count}">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -110,25 +116,25 @@
                                             </thead>
                                             <tbody>
                                             {#for detalle in tabla.filas}
-                                                <tr>
-                                                    <td>{detalle.nombre}</td>
-                                                    <td>{detalle.tipoAtributo}</td>
-                                                    <td class="text-center">
-                                                        <span class="badge badge-{#if detalle.pkCheckcbox == true}success {#else}danger {/if}">{#if detalle.pkCheckcbox == true} Si {#else} No {/if}</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="badge badge-{#if detalle.notNullCheckbox == true}success {#else}danger {/if}">{#if detalle.notNullCheckbox == true} Si {#else} No {/if}</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="badge badge-{#if detalle.CheckBoxUnique == true}success {#else}danger {/if}">{#if detalle.CheckBoxUnique == true} Si {#else} No {/if}</span>
-                                                    </td>
-                                                    <td>
-                                                        {#if fkTablaRelacionada != '0'}
-                                                            <span>{detalle.fkTablaRelacionada}</span>
-                                                            <br><span class="text-muted">{detalle.fkRelacion}</span>
-                                                        {/if}
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td>{detalle.nombre}</td>
+                                                <td>{detalle.tipoAtributo}</td>
+                                                <td class="text-center">
+                                                    <span class="badge badge-{#if detalle.pkCheckcbox == true}success {#else}danger {/if}">{#if detalle.pkCheckcbox == true} Si {#else} No {/if}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge badge-{#if detalle.notNullCheckbox == true}success {#else}danger {/if}">{#if detalle.notNullCheckbox == true} Si {#else} No {/if}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge badge-{#if detalle.CheckBoxUnique == true}success {#else}danger {/if}">{#if detalle.CheckBoxUnique == true} Si {#else} No {/if}</span>
+                                                </td>
+                                                <td>
+                                                    {#if fkTablaRelacionada != '0'}
+                                                    <span>{detalle.fkTablaRelacionada}</span>
+                                                    <br><span class="text-muted">{detalle.fkRelacion}</span>
+                                                    {/if}
+                                                </td>
+                                            </tr>
                                             {/for}
                                             </tbody>
                                         </table>
@@ -145,21 +151,28 @@
                     </div>
                 </td>
             </tr>
-        {/for}
-    {/if}
-</table>
-
-<div class="mt-3 mr-3">
-    {#if tablasGeneradas}
-        <a id="createapp" class="btn btn-primary float-right" href="/api/createapp">Create APP</a>
-    {/if}
-    <a id="volver" class="btn btn-success float-right mr-2" href="/api/form">Add Table</a>
+            {/for}
+            {/if}
+        </table>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 float-right">
+            {#if tablasGeneradas}
+            <a id="createapp" class="btn btn-primary float-right" href="/api/createapp">Create APP</a>
+            {/if}
+            <a id="volver" class="btn btn-success float-right mr-2" href="/api/form">Add Table</a>
+        </div>
+    </div>
 </div>
+</div>
+
 
 <script>
 
 </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

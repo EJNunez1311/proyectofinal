@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body>
+<!-- Bootstrap NavBar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/api">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://eict.pucmm.edu.do/">Information<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-laptop-code"></i> Create APP
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','EmptyServer','1')">Empty Server</a>
+                    <a class="dropdown-item" href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','Database','1')"><i class="fas fa-database"></i> Import Database</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/microservices/create"onClick="deleteCookie();SetCookie('OptionCookie','MicroServices','1')"><i class="fas fa-server"></i>  Microservices</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-edit"></i> Edit APP
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/proyecto/app/folder"><i class="fas fa-folder-plus"></i> Folder App</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>
+
+<script>
+    function deleteCookie() {
+        document.cookie = "OptionCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "OptionCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/api;";
+    }
+    // path=/api;
+    // deleteCookie()
+    function SetCookie(c_name,value,expiredays)
+    {
+        deleteCookie()
+        var exdate=new Date()
+        exdate.setDate(exdate.getDate()+expiredays)
+        document.cookie=c_name+ "=" +escape(value)+
+            ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+    }
+</script>

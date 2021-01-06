@@ -34,9 +34,6 @@
                     <input type="text" id="tname" name="tname" value="{tablaDetalle.nombreTabla}"><br>
                 </form>
                 <div>
-                    <div class="input-group">
-                        <a href="/api/db/table">Back to others tables</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -63,9 +60,9 @@
                             <th class="text-center">
                                 UNIQUE
                             </th>
-                            <th class="text-center">
-                                Foreign Key
-                            </th>
+<!--                            <th class="text-center">-->
+<!--                                Foreign Key-->
+<!--                            </th>-->
                             <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
                             </th>
                         </tr>
@@ -102,34 +99,6 @@
                                 <td data-name="uniquecheckbox">
                                     <input type="checkbox" id="uniquecheckbox" {#if item.CheckBoxUnique == true} checked="checked" {/if} name="uniquecheckbox" value="{item.CheckBoxUnique == true ?: 1}">
                                 </td>
-                                <td data-name="fkoption">
-                                    <select name="fkoption" id="fkoption" onchange="showDiv({count})">
-                                        <option value="0">None</option>
-                                        {#for tabla in tablasCreadas}
-                                            {#if tabla.nombreTabla != tablaDetalle.nombreTabla}
-                                                {#if tabla.nombreTabla == item.fkTablaRelacionada}
-                                                    <option value="{tabla.nombreTabla}" selected>{tabla.nombreTabla}</option>
-                                                {#else}
-                                                    <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
-                                                {/if}
-                                            {/if}
-                                        {/for}
-                                    </select>
-                                </td>
-
-                                <td data-name="relationoption" >
-                                    <select id="fkRelacion">
-                                        <option value="0">None</option>
-                                        {#for relacion in relaciones}
-                                            {#if relacion.valor == item.fkRelacion}
-                                                <option value="{relacion.valor}" selected>{relacion.nombre}</option>
-                                            {#else}
-                                                <option value="{relacion.valor}">{relacion.nombre}</option>
-                                            {/if}
-                                        {/for}
-                                    </select>
-                                </td>
-
                                 <td data-name="del">
                                     <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'>
                                         <span aria-hidden="true">×</span>
@@ -333,7 +302,7 @@
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);
-                // window.location.href = "/api/form/ver";
+                window.location.href = "/proyecto/folder/app/ver/{nombreProyecto}";
             }).error(function (jqXhr, textStatus, errorMessage) {
                 console.log("Error sending data");
                 console.log(jqXhr);

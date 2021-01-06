@@ -127,7 +127,7 @@
             </div>
 <!--            <a id="add_row" class="btn btn-primary float-right">Add Row</a>-->
         </div>
-        <a id="createapp" class="btn btn-info float-right" href="/api/db/table">List of Tables</a>
+        <a id="createapp" class="btn btn-info float-right" href="/microservices/db/table">List of Tables</a>
         <a id="enviardatos" class="btn btn-primary float-right mr-2">Create Another Table</a>
     </div>
 </body>
@@ -255,14 +255,14 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/form/createdb',
+                url: '/microservices/form/createdb',
                 contentType: 'application/json',
                 data: jsonData,
                 dataType: 'json'
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);
-                window.location.href="/api/db/table"
+                window.location.href="/microservices/db/table"
                 // window.location.reload();
             }).error(function (jqXhr, textStatus, errorMessage) {
                 console.log("Error sending data");

@@ -17,14 +17,13 @@
     <style>
         body {
             /*background-image: url("https://www.data-recovery-service.eu/attachments/Image/Startseite-02_1.jpg");*/
-            /*background-image: url("https://i.ibb.co/G3JgSn5/cool-background.png");*/
-            background-image: url("https://i.postimg.cc/SsXMBXQG/photo5165728759888849129.jpg");
+            background-image: url("https://i.ibb.co/G3JgSn5/cool-background.png");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: 100% 100%;
         }
 
-        #input-create {
+        #input-databaseurl {
             display: inline-block !important;
             width:200px;
             max-width:500px;
@@ -57,9 +56,15 @@
 <div>
     <div class="w3-container w3-center">
         <form id="FindTable">
-            <input class="w3-center w3-input w3-animate-input" id="input-create" name="ruta" type="text" placeholder="Ruta">
+            <input class="w3-center w3-input w3-animate-input" id="input-databaseurl" name="databaseurl" type="text" placeholder="localhost:3306">
             <br>
-            <button class="w3-button w3-blue" id="button-create" type="submit"><i class="fa fa-spin fa-spinner" id="icon-create" style="display: none"></i>  Buscar</button>
+
+            <input class="w3-center w3-input w3-animate-input" id="input-username" name="username" type="text" placeholder="Database Username">
+            <br>
+
+            <input class="w3-center w3-input w3-animate-input" id="input-password" name="password" type="password" placeholder="Database Password">
+            <br>
+            <button class="w3-button w3-blue" id="button-create" type="submit">Buscar</button>
         </form>
 
     </div>
@@ -70,39 +75,48 @@
 </body>
 </html>
 <script>
-    var creating = false;
+
     $("#FindTable").submit(function(e) {
         // alert("Button Working!");
         e.preventDefault(); // avoid to execute the actual submit of the form.
 
         var form = $(this);
 
-        var nombre = $("#input-create").val();
-        if (!nombre) {
-            alert('Debe especificar la ruta');
+        var url = $("#input-databaseurl").val();
+        var usuario = $("#input-username").val();
+        var contrasena = $("#input-password").val();
+        // if (!nombre) {
+        //     alert('Debe especificar el nombre de la base de datos');
+        //     return;
+        // }
+        if (!url){
+            alert('Debe especificar la url');
+            return;
+        }
+        if (!usuario){
+            alert('Debe especificar el usuario');
             return;
         }
 
-        if (!creating) {
-            $.ajax({
-                type: "POST",
-                url: '/proyecto/app/folder',
-                data: form.serialize(),
-                beforeSend: function(){
-                    creating = true;
-                    $('#icon-create').show();
-                },// serializes the form's elements.
-                success: function(data)
-                {
-                    window.location.href="/proyecto/folder/app/ver";
-                },
-                error: function (data) {
-                    $('#icon-create').hide();
-                    creating = false;
-                }
-            });
-
+        if (!contrasena){
+            alert('Debe especificar la contraseña');
+            return;
         }
 
+        $.ajax({
+            type: "POST",
+            url: '/microservices/db',
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                console.log(data)
+                if (data==="true") {
+                    window.location.href="/microservices/db/acceso";
+                } else {
+                    alert('No se pudo conectar.');
+                }
+                //TODO: pasar lo que sea para buscar las base de datos de acceso
+            }
+        });
     });
 </script>

@@ -67,7 +67,7 @@
                         <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
                         <td>
                             <a class="btn btn-info" href="/microservices/form/ver/codigos/{proyecto}" title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
-                            <a class="btn btn-danger" href="/microservices/form/eliminar/{proyecto}/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');" href="/microservices/form/eliminar/{proyecto}/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
                             <a class="btn btn-warning" href="/microservices/form/actualizar/{proyecto}/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>
                         </td>
                     </tr>
@@ -78,7 +78,7 @@
     <div class="row mt-3">
         <div class="col-md-12 float-right">
             <a id="volver" class="btn btn-info float-right" href="/microservices/ver">Ver Proyectos</a>
-            <a id="volver" class="btn btn-success float-right mr-2" href="/microservices/form/{proyecto}">Add Table</a>
+            <a id="add-table" class="btn btn-success float-right mr-2" href="/microservices/form/{proyecto}">Add Table</a>
         </div>
     </div>
 </div>

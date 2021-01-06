@@ -12,7 +12,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
     <style>
-        #relationhidden{
+        #relationhidden {
             display: none;
         }
     </style>
@@ -53,13 +53,13 @@
                     <th class="text-center">
                         UNIQUE
                     </th>
-                    <th class="text-center">
-                        <p id="text" style="color: red;font-size:50%">If you use the auto generated PK, must use "id", and long.
-                        </p>
-                        <p id="text" style="color: red;font-size:50%">Attribute Names must be the same as the one you are aiming to make the relation
-                        </p>
-                        Foreign Key
-                    </th>
+                    <!--                    <th class="text-center">-->
+                    <!--                        <p id="text" style="color: red;font-size:50%">If you use the auto generated PK, must use "id", and long.-->
+                    <!--                        </p>-->
+                    <!--                        <p id="text" style="color: red;font-size:50%">Attribute Names must be the same as the one you are aiming to make the relation-->
+                    <!--                        </p>-->
+                    <!--                        Foreign Key-->
+                    <!--                    </th>-->
                     <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
                     </th>
                 </tr>
@@ -89,22 +89,6 @@
                             <input type="checkbox" id="uniquecheckbox" name="uniquecheckbox" value="1">
                         </td>
 
-                        <td data-name="fkoption">
-                            <select name="fkoption" id="fkoption" onchange="showDiv($(this).closest('tr').index())">
-                                <option value="0">None</option>
-                                {#for tabla in tablasCreadas}
-                                <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
-                                {/for}
-                            </select>
-                        </td>
-                        <td data-name="relationoption" >
-                            <select id="fkRelacion" style="display: none">
-                                <option value="0">None</option>
-                                {#for relacion in relaciones}
-                                <option value="{relacion.valor}" >{relacion.nombre}</option>
-                                {/for}
-                            </select>
-                        </td>
                 </form>
                 <td data-name="del">
                     <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
@@ -124,19 +108,23 @@
     <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">Ver Creados</a>
     <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
 </div>
+<select name="chequeartablas" hidden id="chequeartablas">
+    {#for tabla in tablasCreadas}
+    <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+    {/for}
+</select>
 </body>
 </html>
 <script>
 
-    function showDiv(rowIndex)
-    {
+    function showDiv(rowIndex) {
         $('#tab_logic').find('tr').each(function (index) {
             var row = $(this);
 
             if (index === rowIndex) {
                 if (row.find("#fkoption").val() !== '0') {
                     row.find("#fkRelacion").show();
-                }else {
+                } else {
                     row.find("#fkRelacion").hide();
                 }
             }
@@ -176,7 +164,9 @@
             })
 //    "data-id": newid
             document.getElementById("addr" + newid);
-            setTimeout(() => {console.log(document.getElementById("addr" + newid))},500);
+            setTimeout(() => {
+                console.log(document.getElementById("addr" + newid))
+            }, 500);
 
 // loop through each td and create new elements with name of newid
             $.each($("#tab_logic tbody tr:nth(0) td"), function () {
@@ -193,7 +183,7 @@
 
                     var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
                     c.attr("name", $(cur_td).data("name") + newid);
-                    var type =c.attr('type');
+                    var type = c.attr('type');
                     if (type === 'checkbox') {
                         c.prop('checked', false);
                     } else {
@@ -225,7 +215,7 @@
 
             $(tr).find("td button.row-remove").on("click", function () {
                 $(this).closest("tr").remove();
-                newid-1;
+                newid - 1;
                 console.log(newid);
             });
         });
@@ -256,11 +246,27 @@
             var puedeGuardar  = true;
             var arr = [];
             var tname = $("#tname").val();
+            var proyecto = $("#nombreProyecto").val();
             if (tname === undefined || tname == null || tname === '') {
                 window.alert('Debe especifiar el nombre de la tabla');
                 puedeGuardar = false;
                 return false
             }
+
+            var options = $('#chequeartablas option');
+
+            var values = $.map(options ,function(option) {
+                return option.value;
+            });
+
+            for (var item in values) {
+                if (values[item].toUpperCase() === tname.toUpperCase()) {
+                    window.alert('This Table already exist');
+                    puedeGuardar = false;
+                    return false;
+                }
+            }
+
             $('#tab_logic').find('tr').each(function (index) {
                 var row = $(this);
 
@@ -268,22 +274,22 @@
                     var tabla = '';
                     var relacion = '';
                     if (row.find("#fkoption").val() !== '0') {
-                        tabla =row.find("#fkoption").val();
+                        tabla = row.find("#fkoption").val();
                         relacion = row.find("#fkRelacion").val();
                     }
                     var obj = {
-                        nombre:  row.find("#nombre").val(),
+                        nombre: row.find("#nombre").val(),
                         tipoAtributo: row.find("#tipoatributo").val(),
                         pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
-                        notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
-                        CheckBoxUnique:  row.find("#uniquecheckbox").is(':checked') ,
+                        notNullCheckbox: row.find("#notnullcheckbox").is(':checked'),
+                        CheckBoxUnique: row.find("#uniquecheckbox").is(':checked'),
                         // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
-                        fkTablaRelacionada:  tabla,
-                        fkRelacion:  relacion,
+                        // fkTablaRelacionada:  tabla,
+                        // fkRelacion:  relacion,
                     }
 
                     if (obj.nombre === undefined || obj.nombre == null || obj.nombre === '') {
-                        window.alert('El nombre de la columna en la posición ('+ index +') no esta especificada');
+                        window.alert('El nombre de la columna en la posición (' + index + ') no esta especificada');
                         puedeGuardar = false;
                         return false;
                     }
@@ -293,8 +299,8 @@
 
             if (puedeGuardar) {
                 const data = {
-                    nombreTabla : tname,
-                    filas : arr
+                    nombreTabla: tname,
+                    filas: arr
                 }
                 const jsonData = JSON.stringify(data);
 
@@ -304,7 +310,7 @@
                     contentType: 'application/json',
                     data: jsonData,
                     dataType: 'json'
-                }).done(function(data) {
+                }).done(function (data) {
                     console.log("Data sent successfully");
                     console.log(data);
                     window.location.reload();

@@ -80,7 +80,7 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     {item.nombreTabla}
                                     <span>
-                                         <a class="btn btn-danger" href="/proyecto/folder/form/eliminar/{nombreProyecto}/{count}" title="Eliminar tabla">
+                                         <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');"href="/proyecto/folder/form/eliminar/{nombreProyecto}/{count}" title="Eliminar tabla">
                                              <i class="fa fa-trash"></i>
                                          </a>
                                          <a class="btn btn-warning" href="/proyecto/folder/form/actualizar/{nombreProyecto}/{count}" title="Actualizar tabla">
@@ -93,7 +93,8 @@
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <a class="btn btn-success float-right" href="/proyecto/folder/form/{nombreProyecto}">Add Table</a>
+                    <a class="btn btn-info float-right" href="/proyecto/folder/app/ver">Go Back</a>
+                    <a class="btn btn-success mr-2 float-right" href="/proyecto/folder/form/{nombreProyecto}">Add Table</a>
                 </div>
             </div>
         </div>

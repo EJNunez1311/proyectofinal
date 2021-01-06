@@ -34,8 +34,8 @@ public class FolderApp {
     @Inject
     Template FolderAppView;
 
-    private String rutaEntity ="";
-    private String rutaApi ="";
+    private String rutaEntity = "";
+    private String rutaApi = "";
     String rutaFolder = "";
 
     ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
@@ -47,31 +47,31 @@ public class FolderApp {
         // TODO: Find folder with pom.xml
         ArrayList<String> listaApi = new ArrayList<>();
         ArrayList<String> listaEntity = new ArrayList<>();
-        System.out.println(rutaFolder);
         if (!rutaFolder.isEmpty()) {
-            File directory = new File(rutaFolder + '/'+ nombreProyecto);
+            File directory = new File(rutaFolder + '/' + nombreProyecto);
 
             if (directory.exists()) {
                 rutaApi = "";
-                rutaEntity  = "";
+                rutaEntity = "";
                 listApi(directory.getAbsolutePath(), false);
-                System.out.println("StringaApi-> "+ rutaApi);
+                System.out.println("StringaApi-> " + rutaApi);
                 if (!rutaApi.isEmpty()) {
                     File apis = new File(rutaApi);
                     for (File file : apis.listFiles()) {
-                        if (file.isFile()){
+                        if (file.isFile()) {
                             int lastPeriodPos = file.getName().lastIndexOf('.');
                             listaApi.add(file.getName().substring(0, lastPeriodPos));
+                            System.out.println(file.getName());
                         }
                     }
                 }
 
                 listEntity(directory.getAbsolutePath(), false);
-                System.out.println("StringEntity-> "+ rutaEntity);
+                System.out.println("StringEntity-> " + rutaEntity);
                 if (!rutaEntity.isEmpty()) {
                     File entities = new File(rutaEntity);
                     for (File file : entities.listFiles()) {
-                        if (file.isFile()){
+                        if (file.isFile()) {
                             int lastPeriodPos = file.getName().lastIndexOf('.');
                             listaEntity.add(file.getName().substring(0, lastPeriodPos));
                         }
@@ -79,7 +79,7 @@ public class FolderApp {
                 }
             }
         }
-        ArrayList <String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
+        ArrayList<String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
                 .flatMap(x -> x.stream())
                 .collect(Collectors.toList());
         listaTablasCreadas = new ArrayList<>();
@@ -87,11 +87,11 @@ public class FolderApp {
             listaTablasCreadas.add(new FormValue(item, false, false, null));
         }
         return TablasProyectoVer
-            .data("title", "Name of Application")
-            .data("entities", listaEntity)
-            .data("apis", listaApi)
-            .data("nombreProyecto", nombreProyecto)
-            .data("listaNueva", Data.tablasProyecto);
+                .data("title", "Name of Application")
+                .data("entities", listaEntity)
+                .data("apis", listaApi)
+                .data("nombreProyecto", nombreProyecto)
+                .data("listaNueva", Data.tablasProyecto);
     }
 
 
@@ -101,11 +101,12 @@ public class FolderApp {
 
 
         return FormProyecto
-            .data("title", "Table Creation")
-            .data("tipoAtributos", Data.obtenerAtributos())
-            .data("tablasCreadas", listaTablasCreadas)
-            .data("nombreProyecto", nombreProyecto)
-            .data("relaciones", Data.obtenerRelaciones());
+                .data("title", "Table Creation")
+                .data("tipoAtributos", Data.obtenerAtributos())
+                .data("nombreProyecto", nombreProyecto)
+                .data("tablasCreadas", listaTablasCreadas);
+
+//            .data("relaciones", Data.obtenerRelaciones());
     }
 
 
@@ -137,13 +138,13 @@ public class FolderApp {
         }
 
         return FormUpdateProyecto
-            .data("title", "Table Update")
-            .data("tablaDetalle", formValue)
-            .data("index", index)
-            .data("nombreProyecto", nombreProyecto)
-            .data("tipoAtributos", Data.obtenerAtributos())
-            .data("tablasCreadas", listaTablasCreadas)
-            .data("relaciones", Data.obtenerRelaciones());
+                .data("title", "Table Update")
+                .data("tablaDetalle", formValue)
+                .data("index", index)
+                .data("nombreProyecto", nombreProyecto)
+                .data("tipoAtributos", Data.obtenerAtributos());
+//            .data("tablasCreadas", listaTablasCreadas)
+//            .data("relaciones", Data.obtenerRelaciones());
     }
 
     @POST
@@ -169,6 +170,8 @@ public class FolderApp {
     @GET
     @Path("/folder/form/eliminar/{nombreProyecto}/{index}")
     public TemplateInstance TableDeletePdoyecto(@PathParam("index") int index, @PathParam("nombreProyecto") String nombreProyecto) {
+//        String nombre_borrar = Data.tablasProyecto.get(index).nombreTabla;
+//        System.out.println("Tabla a borrar: " + nombre_borrar);
         if (index <= Data.tablasProyecto.size()) {
             Data.tablasProyecto.remove(index - 1);
         }
@@ -177,14 +180,14 @@ public class FolderApp {
         ArrayList<String> listaEntity = new ArrayList<>();
         System.out.println(rutaFolder);
         if (!rutaFolder.isEmpty()) {
-            File directory = new File(rutaFolder + '\\'+ nombreProyecto);
+            File directory = new File(rutaFolder + '\\' + nombreProyecto);
             if (directory.exists()) {
                 listApi(directory.getAbsolutePath(), false);
-                System.out.println("StringaApi-> "+ rutaApi);
+                System.out.println("StringaApi-> " + rutaApi);
                 if (!rutaApi.isEmpty()) {
                     File apis = new File(rutaApi);
                     for (File file : apis.listFiles()) {
-                        if (file.isFile()){
+                        if (file.isFile()) {
                             int lastPeriodPos = file.getName().lastIndexOf('.');
                             listaApi.add(file.getName().substring(0, lastPeriodPos));
                         }
@@ -192,11 +195,11 @@ public class FolderApp {
                 }
 
                 listEntity(directory.getAbsolutePath(), false);
-                System.out.println("StringEntity-> "+ rutaEntity);
+                System.out.println("StringEntity-> " + rutaEntity);
                 if (!rutaEntity.isEmpty()) {
                     File entities = new File(rutaEntity);
                     for (File file : entities.listFiles()) {
-                        if (file.isFile()){
+                        if (file.isFile()) {
                             int lastPeriodPos = file.getName().lastIndexOf('.');
                             listaEntity.add(file.getName().substring(0, lastPeriodPos));
                         }
@@ -204,7 +207,7 @@ public class FolderApp {
                 }
             }
         }
-        ArrayList <String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
+        ArrayList<String> listaTablas = (ArrayList<String>) Stream.of(listaApi, listaEntity)
                 .flatMap(x -> x.stream())
                 .collect(Collectors.toList());
         listaTablasCreadas = new ArrayList<>();
@@ -301,19 +304,17 @@ public class FolderApp {
         File[] files = folder.listFiles();
         if (encontrado) {
             rutaApi = ruta;
-            System.out.println(ruta);
             return true;
         }
-
-        System.out.println(ruta);
-
 
         for (File file : files) {
             if (file.isDirectory()) {
                 if (file.getName().equals("Api")) {
                     listApi(file.getAbsolutePath(), true);
                 } else {
-                    listApi(file.getAbsolutePath(), false);
+                    if (!file.getName().equals("target")) {
+                        listApi(file.getAbsolutePath(), false);
+                    }
                 }
             }
         }
@@ -326,15 +327,17 @@ public class FolderApp {
         File[] files = folder.listFiles();
         if (encontrado) {
             rutaEntity = ruta;
-            System.out.println(ruta);
             return true;
         }
+//        System.out.println(ruta);
         for (File file : files) {
             if (file.isDirectory()) {
                 if (file.getName().equals("Entity")) {
                     listEntity(file.getAbsolutePath(), true);
                 } else {
-                    listEntity(file.getAbsolutePath(), false);
+                    if (!file.getName().equals("target")) {
+                        listEntity(file.getAbsolutePath(), false);
+                    }
                 }
             }
         }

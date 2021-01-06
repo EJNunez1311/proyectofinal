@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+
+    <title>{title}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #myInput {
+            background-image: url("https://cdn2.iconfinder.com/data/icons/font-awesome/1792/search-512.png");
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+
+        #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #myTable tr.header, #myTable tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+
+</head>
+
+<body>
+{#include menu}
+{/include}
+<div class="container">
+
+    <h2>Table List</h2>
+
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+    <div class="table-responsive">
+        <table class="table table-sm" id="myTable">
+            <thead class="thead-light">
+                <tr>
+                    <th style="width: 5%">#</th>
+                    <th style="width:20%;">Name</th>
+                    <th class="text-center" style="width:20%;">Details</th>
+                    <th class="text-center" style="width:10%;">Relation(Fk)</th>
+                    <th style="width:20%;">Generated</th>
+                    <th style="width:30%;"><input type="checkbox" class="mr-2" onclick="seleccionarTodo($(this))" value="1"> Generate API</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#if tablas}
+                {#for tabla in tablas}
+                <tr>
+                    <td scope="row">{count}</td>
+                    <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
+                    <td class="text-center"><a href="/microservices/form/update/{tabla.nombreTabla}">Ver</a></td>
+                    <td class="text-center">
+                        {#if tabla.tieneRelacionFk == true}
+                        <a href="/microservices/fk/{tabla.nombreTabla}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
+                        {/if}
+                    </td>
+
+                    {#if tabla.creado == true}
+                    <td class="mt-2 badge badge-success" title="This Table is imported.">
+                        Table Imported<input type="hidden" id="generado" value="1">
+                    </td>
+                    <td><input type="checkbox" disabled checked value="1"></td>
+                    {#else}
+                    <td></td>
+                    <td><input type="checkbox" id="checkedGenerate" value="1"></td>
+                    {/if}
+                </tr>
+                {/for}
+                {/if}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <a id="backtoproject" href="/microservices/ver" class="btn btn-info float-right">Back to projects</a>
+                        <a id="createapp" class="btn btn-primary mr-2 float-right">Generate Tables</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+<!--<div class="mt-3 mr-3">-->
+<!--    <a id="createapp" class="btn btn-primary float-right">Create APP</a>-->
+<!--</div>-->
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function seleccionarTodo (check) {
+        $('#myTable').find('tr').each(function (index) {
+            var row = $(this);
+
+            if (index !== 0) {
+                var value = check.is(':checked');
+                row.find("#checkedGenerate").prop('checked', value);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#createapp').click(function () {
+            var arr = [];
+
+            $('#myTable').find('tr').each(function (index) {
+                var row = $(this);
+
+                if (index !== 0) {
+                    // var obj = {
+                    //     nombre:  row.find("#nombre").val(),
+                    //     tipoAtributo: row.find("#tipoatributo").val(),
+                    //     pkCheckcbox: row.find("#pkcheckbox").is(':checked'),
+                    //     notNullCheckbox:  row.find("#notnullcheckbox").is(':checked') ,
+                    //     CheckBoxUnique:  row.find("#uniquecheckbox").is(':checked') ,
+                    //     // fkCheckbox: row.find("#fkcheckbox").is(':checked'),
+                    // }
+                    var generado = row.find("#generado").val() === 1;
+                    if (!generado) {
+                        if (row.find("#checkedGenerate").is(':checked')) {
+                            arr.push(row.find("#nombre").val());
+                        }
+                    }
+                }
+            });
+            // console.log(arr);
+            // const data = {
+            //     nombreTabla : tname,
+            //     filas : arr
+            // }
+            const jsonData = JSON.stringify(arr);
+
+            $.ajax({
+                type: "POST",
+                url: '/microservices/create/group',
+                contentType: 'application/json',
+                data: jsonData,
+                dataType: 'json'
+            }).done(function(data) {
+                console.log("Data sent successfully");
+                console.log(data);
+                window.location.reload();
+                // window.location.href="/microservice/db/table";
+                alert("Tables Imported!");
+            }).error(function (jqXhr, textStatus, errorMessage) {
+                console.log("Error sending data");
+                console.log(jqXhr);
+                console.log(errorMessage);
+                console.log(textStatus);
+            });
+        });
+    });
+
+
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

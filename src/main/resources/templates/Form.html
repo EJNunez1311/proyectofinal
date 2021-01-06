@@ -15,6 +15,20 @@
     #relationhidden{
         display: none;
     }
+    body {
+        /*background-image: url("https://i.pinimg.com/originals/99/f5/1f/99f51fca0099a6dd517460860321f9de.jpg");*/
+        /*background-image: url("https://i.ibb.co/G3JgSn5/cool-background.png");*/
+        /*background-image: url("https://i.postimg.cc/HkHPTmyM/photo5165728759888849133.jpg");*/
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+    #tname {
+        display: inline-block !important;
+        width: 200px;
+        max-width: 500px;
+        margin: 9px;
+    }
 </style>
 </head>
 <body>
@@ -25,7 +39,7 @@
             <div class="col-md-12 table-responsive">
                 <form>
                     <label for="tname">Table Name:</label><br>
-                    <input type="text" id="tname" name="tname"><br>
+                    <input class="form-control" type="text" id="tname" name="tname"><br>
                 </form>
             </div>
         </div>
@@ -33,7 +47,7 @@
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-12 table-responsive">
-                <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+                <table class="table table-bordered table-hover table-sortable table-light" id="tab_logic">
                     <thead>
                     <tr>
                         <th class="text-center">
@@ -124,6 +138,11 @@
         <a id="creados" class="btn btn-info float-right" href="/api/form/ver">Ver Creados</a>
         <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
     </div>
+    <select name="chequeartablas" hidden id="chequeartablas">
+        {#for tabla in tablasCreadas}
+        <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+        {/for}
+    </select>
 </body>
 </html>
 <script>
@@ -262,6 +281,21 @@
                 puedeGuardar = false;
                 return false
             }
+
+            var options = $('#chequeartablas option');
+
+            var values = $.map(options ,function(option) {
+                return option.value;
+            });
+
+            for (var item in values) {
+                if (values[item].toUpperCase() === tname.toUpperCase()) {
+                    window.alert('This Table already exist');
+                    puedeGuardar = false;
+                    return false;
+                }
+            }
+
             $('#tab_logic').find('tr').each(function (index) {
                 var row = $(this);
 

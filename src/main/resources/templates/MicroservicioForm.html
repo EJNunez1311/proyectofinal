@@ -119,7 +119,11 @@
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
 
-
+        <select name="chequeartablas" hidden id="chequeartablas">
+            {#for tabla in tablasCreadas}
+            <option value="{tabla.nombreTabla}">{tabla.nombreTabla}</option>
+            {/for}
+        </select>
         <a id="creados" class="btn btn-info float-right" href="/microservices/form/ver/{proyecto}">Ver Creados</a>
         <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
     </div>
@@ -262,6 +266,21 @@
                 puedeGuardar = false;
                 return false
             }
+
+            var options = $('#chequeartablas option');
+
+            var values = $.map(options ,function(option) {
+                return option.value;
+            });
+
+            for (var item in values) {
+                if (values[item].toUpperCase() === tname.toUpperCase()) {
+                    window.alert('This Table already exist');
+                    puedeGuardar = false;
+                    return false;
+                }
+            }
+
             $('#tab_logic').find('tr').each(function (index) {
                 var row = $(this);
 
@@ -284,13 +303,16 @@
                     }
 
                     if (obj.nombre === undefined || obj.nombre == null || obj.nombre === '') {
-                        window.alert('El nombre de la columna en la posición ('+ index +') no esta especificada');
+                        window.alert('The name of the column in the position ('+ index +') is not specified');
                         puedeGuardar = false;
                         return false;
                     }
                     arr.push(obj);
                 }
             });
+
+
+
 
             if (puedeGuardar) {
                 const data = {
@@ -309,6 +331,7 @@
                     console.log("Data sent successfully");
                     console.log(data);
                     window.location.reload();
+                    alert("Information Saved");
                 }).error(function (jqXhr, textStatus, errorMessage) {
                     console.log("Error sending data");
                     console.log(jqXhr);
@@ -318,4 +341,5 @@
             }
         });
     });
+
 </script>
