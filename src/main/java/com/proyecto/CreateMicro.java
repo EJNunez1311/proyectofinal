@@ -169,7 +169,7 @@ public class CreateMicro implements Runnable {
                     "quarkus.swagger-ui.path=/explorer\n" +
                     "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n" +
                     "quarkus.http.port=0\n" +
-                    "quarkus.application.name=department\n" +
+                    "quarkus.application.name=" + nombre + "\n" +
                     "quarkus.application.version=1.0\n" +
                     "quarkus.consul-config.enabled=true\n" +
                     "quarkus.consul-config.properties-value-keys=config/${quarkus.application.name}\n";
@@ -223,8 +223,220 @@ public class CreateMicro implements Runnable {
             e.printStackTrace();
         }
 
+        String clase_micro = "";
+
+        File theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/");
+        if (!theDir.exists()) theDir.mkdirs();
+
+        // carpeta cliente *****************************************
+
+        theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Client");
+        if (!theDir.exists()) theDir.mkdirs();
+
+        clase_micro = "package org.proyecto.MicroserviceConsul.Client;\n" +
+                "\n" +
+                "import java.net.URI;\n" +
+                "import java.util.List;\n" +
+                "import java.util.concurrent.atomic.AtomicInteger;\n" +
+                "\n" +
+                "import javax.ws.rs.client.ClientRequestContext;\n" +
+                "import javax.ws.rs.client.ClientRequestFilter;\n" +
+                "import javax.ws.rs.core.UriBuilder;\n" +
+                "\n" +
+                "import com.orbitz.consul.Consul;\n" +
+                "import com.orbitz.consul.HealthClient;\n" +
+                "import com.orbitz.consul.model.health.ServiceHealth;\n" +
+                "import org.slf4j.Logger;\n" +
+                "import org.slf4j.LoggerFactory;\n" +
+                "\n" +
+                "public class LoadBalancedFilter implements ClientRequestFilter {\n" +
+                "\n" +
+                "    private static final Logger LOGGER = LoggerFactory\n" +
+                "            .getLogger(LoadBalancedFilter.class);\n" +
+                "\n" +
+                "    private Consul consulClient;\n" +
+                "    private AtomicInteger counter = new AtomicInteger();\n" +
+                "\n" +
+                "    public LoadBalancedFilter(Consul consulClient) {\n" +
+                "        this.consulClient = consulClient;\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public void filter(ClientRequestContext ctx) {\n" +
+                "        URI uri = ctx.getUri();\n" +
+                "        HealthClient healthClient = consulClient.healthClient();\n" +
+                "        List<ServiceHealth> instances = healthClient\n" +
+                "                .getHealthyServiceInstances(uri.getHost()).getResponse();\n" +
+                "        instances.forEach(it ->\n" +
+                "                LOGGER.info(\"Instance: uri={}:{}\",\n" +
+                "                        it.getService().getAddress(),\n" +
+                "                        it.getService().getPort()));\n" +
+                "        ServiceHealth instance = instances.get(counter.getAndIncrement()%instances.size());\n" +
+                "        URI u = UriBuilder.fromUri(uri)\n" +
+                "                .host(instance.getService().getAddress())\n" +
+                "                .port(instance.getService().getPort())\n" +
+                "                .build();\n" +
+                "        ctx.setUri(u);\n" +
+                "    }\n" +
+                "\n" +
+                "}";
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Client/LoadBalancedFilter.java");
+            if (myObj.createNewFile()) {
+                // System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Client/LoadBalancedFilter.java");
+            myWriter.write(clase_micro);
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+        // carpeta config ***********************************
+
+        theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Config/");
+        if (!theDir.exists()) theDir.mkdirs();
+
+        clase_micro = "package org.proyecto.MicroserviceConsul.Config;\n" +
+                "\n" +
+                "\n" +
+                "import javax.enterprise.context.ApplicationScoped;\n" +
+                "import javax.enterprise.inject.Produces;\n" +
+                "\n" +
+                "import com.orbitz.consul.Consul;\n" +
+                "import org.proyecto.MicroserviceConsul.Client.LoadBalancedFilter;\n" +
+                "\n" +
+                "@ApplicationScoped\n" +
+                "public class " + nombre + "BeansProducer {\n" +
+                "\n" +
+                "\n" +
+                "    @Produces\n" +
+                "    Consul consulClient = Consul.builder().build();\n" +
+                "\n" +
+                "    @Produces\n" +
+                "    LoadBalancedFilter filter = new LoadBalancedFilter(consulClient);\n" +
+                "\n" +
+                "}\n";
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Config/" + nombre + "BeansProducer.java");
+            if (myObj.createNewFile()) {
+                // System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Config/" + nombre + "BeansProducer.java");
+            myWriter.write(clase_micro);
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+        // carpeta liceCycle ********************************
+        theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/LifeCycle/");
+        if (!theDir.exists()) theDir.mkdirs();
+
+        clase_micro = "package org.proyecto.MicroserviceConsul.LifeCycle;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "import java.util.concurrent.Executors;\n" +
+                "import java.util.concurrent.ScheduledExecutorService;\n" +
+                "import java.util.concurrent.TimeUnit;\n" +
+                "\n" +
+                "import javax.enterprise.context.ApplicationScoped;\n" +
+                "import javax.enterprise.event.Observes;\n" +
+                "import javax.inject.Inject;\n" +
+                "\n" +
+                "import com.orbitz.consul.Consul;\n" +
+                "import com.orbitz.consul.HealthClient;\n" +
+                "import com.orbitz.consul.model.agent.ImmutableRegistration;\n" +
+                "import com.orbitz.consul.model.health.ServiceHealth;\n" +
+                "import io.quarkus.runtime.ShutdownEvent;\n" +
+                "import io.quarkus.runtime.StartupEvent;\n" +
+                "import org.eclipse.microprofile.config.inject.ConfigProperty;\n" +
+                "import org.slf4j.Logger;\n" +
+                "import org.slf4j.LoggerFactory;\n" +
+                "\n" +
+                "@ApplicationScoped\n" +
+                "public class " + nombre + "LifeCycle {\n" +
+                "\n" +
+                "    private static final Logger LOGGER = LoggerFactory.getLogger(" + nombre + "Lifecycle.class);\n" +
+                "\n" +
+                "    private String instanceId;\n" +
+                "\n" +
+                "    @Inject\n" +
+                "    Consul consulClient;\n" +
+                "    @ConfigProperty(name = \"quarkus.application.name\")\n" +
+                "    String appName;\n" +
+                "    @ConfigProperty(name = \"quarkus.application.version\")\n" +
+                "    String appVersion;\n" +
+                "\n" +
+                "\n" +
+                "    void onStart(@Observes StartupEvent ev) {\n" +
+                "        ScheduledExecutorService executorService = Executors\n" +
+                "                .newSingleThreadScheduledExecutor();\n" +
+                "        executorService.schedule(() -> {\n" +
+                "            HealthClient healthClient = consulClient.healthClient();\n" +
+                "            List<ServiceHealth> instances = healthClient\n" +
+                "                    .getHealthyServiceInstances(appName).getResponse();\n" +
+                "            instanceId = appName + \"-\" + instances.size();\n" +
+                "            ImmutableRegistration registration = ImmutableRegistration.builder()\n" +
+                "                    .id(instanceId)\n" +
+                "                    .name(appName)\n" +
+                "                    .address(\"127.0.0.1\")\n" +
+                "                    .port(Integer.parseInt(System.getProperty(\"quarkus.http.port\")))\n" +
+                "                    .putMeta(\"version\", appVersion)\n" +
+                "                    .build();\n" +
+                "            consulClient.agentClient().register(registration);\n" +
+                "            LOGGER.info(\"Instance registered: id={}\", registration.getId());\n" +
+                "        }, 5000, TimeUnit.MILLISECONDS);\n" +
+                "    }\n" +
+                "\n" +
+                "    void onStop(@Observes ShutdownEvent ev) {\n" +
+                "        consulClient.agentClient().deregister(instanceId);\n" +
+                "        LOGGER.info(\"Instance de-registered: id={}\", instanceId);\n" +
+                "    }\n" +
+                "\n" +
+                "}\n";
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/LifeCycle/" + nombre + "LifeCycle.java");
+            if (myObj.createNewFile()) {
+                // System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/LifeCycle/" + nombre + "LifeCycle.java");
+            myWriter.write(clase_micro);
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+
         //////////////////////////////////////////////////////////
-        File theDir = new File(RutaCapertaMadre + "/" + nombre);
+        theDir = new File(RutaCapertaMadre + "/" + nombre);
         if (!theDir.exists()) theDir.mkdirs();
         File from = new File(path + "/" + nombre);
         File to = new File(RutaCapertaMadre + "/" + nombre);
