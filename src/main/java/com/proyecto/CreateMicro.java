@@ -1,7 +1,10 @@
 package com.proyecto;
 
 import Entities.FormValue;
+
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class CreateMicro implements Runnable {
 
@@ -11,14 +14,14 @@ public class CreateMicro implements Runnable {
     String appProperties = "";
     String RutaCapertaMadre;
 
-    public CreateMicro(String name,int seg, int serv, String rutaCapertaMadre){
+    public CreateMicro(String name, int seg, int serv, String rutaCapertaMadre) {
         nombre = name;
         seguridad = seg;
         microservicio = serv;
         RutaCapertaMadre = rutaCapertaMadre;
     }
 
-    public void CrearClase (FormValue clase){
+    public void CrearClase(FormValue clase) {
         clase.getFilas();
 
     }
@@ -29,6 +32,8 @@ public class CreateMicro implements Runnable {
         // Crear Aplicacion con Nombre e Importar toda las libs necesaria con los cmd de Mvn
         //////////////////////////////////////////////////////////
 
+        String path = System.getProperty("user.dir");
+        String userHome = System.getProperty("user.home");
         String comandos, archivo_comando;
         comandos =
                 "mvn io.quarkus:quarkus-maven-plugin:1.8.2.Final:create -DprojectGroupId=org.proyecto " +
@@ -43,7 +48,7 @@ public class CreateMicro implements Runnable {
 //        comando8="mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-resteasy-jsonb\"\n";
 
 
-        archivo_comando = "cd " + RutaCapertaMadre + "\\" + nombre + "\n" +
+        archivo_comando = "cd " + path + "\\" + nombre + "\n" +
                 "\n" +
                 "call mvn quarkus:add-extension -Dextensions=\"io.quarkus:quarkus-agroal\"\n" +
                 "\n" +
@@ -58,7 +63,7 @@ public class CreateMicro implements Runnable {
                 "call mvn quarkus:add-extension -Dextensions=\"org.apache.camel.quarkus:camel-quarkus-consul\"\n" +
                 "\n";
 
-        if(seguridad != 0){
+        if (seguridad != 0) {
             archivo_comando = archivo_comando + "call mvn quarkus:add-extension -Dextensions=\"oidc,keycloak-authorization\"\n";
         }
         //System.out.println(comandos);
@@ -96,7 +101,7 @@ public class CreateMicro implements Runnable {
         }
         ///////////////////////////////////////////////////////////////////////////////////////////
         try {
-            File myObj = new File(RutaCapertaMadre + "/comando_add.bat");
+            File myObj = new File(path + "/comando_add.bat");
             if (myObj.createNewFile()) {
 //                System.out.println("Archivo Creado: " + myObj.getName());
             } else {
@@ -108,7 +113,7 @@ public class CreateMicro implements Runnable {
         }
 
         try {
-            FileWriter myWriter = new FileWriter(RutaCapertaMadre + "/comando_add.bat");
+            FileWriter myWriter = new FileWriter(path + "/comando_add.bat");
             myWriter.write(archivo_comando);
             myWriter.close();
             //  System.out.println("Archivo bat creado.");
@@ -136,7 +141,7 @@ public class CreateMicro implements Runnable {
         }
 
         try {
-            File myObj = new File(RutaCapertaMadre + "/" + nombre + "/src/main/resources/application.properties");
+            File myObj = new File(path + "/" + nombre + "/src/main/resources/application.properties");
             if (myObj.createNewFile()) {
                 //  System.out.println("Archivo Creado: " + myObj.getName());
             } else {
@@ -149,7 +154,7 @@ public class CreateMicro implements Runnable {
 
         try {
 
-            FileWriter myWriter = new FileWriter(RutaCapertaMadre + "/" + nombre + "/src/main/resources/application.properties");
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/resources/application.properties");
             String apppropert = "#Datasource Config\n" +
                     "quarkus.datasource.db-kind=mysql\n" +
                     "quarkus.datasource.driver=com.mysql.cj.jdbc.Driver\n" +
@@ -169,7 +174,7 @@ public class CreateMicro implements Runnable {
                     "quarkus.consul-config.enabled=true\n" +
                     "quarkus.consul-config.properties-value-keys=config/${quarkus.application.name}\n";
             System.out.println(seguridad);
-            if(seguridad != 0){
+            if (seguridad != 0) {
                 apppropert = apppropert + "# Keycloak with 100 offset\n" +
                         "keycloak.url=http://localhost:8180\n" +
                         "\n" +
@@ -195,7 +200,7 @@ public class CreateMicro implements Runnable {
 
 
         try {
-            File myObj = new File(RutaCapertaMadre + "/" + nombre + "/JF-LINP.txt");
+            File myObj = new File(path + "/" + nombre + "/JF-LINP.txt");
             if (myObj.createNewFile()) {
                 //   System.out.println("File created: " + myObj.getName());
             } else {
@@ -207,7 +212,7 @@ public class CreateMicro implements Runnable {
         }
 
         try {
-            FileWriter myWriter = new FileWriter(RutaCapertaMadre + "/" + nombre + "/JF-LINP.txt");
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/JF-LINP.txt");
             myWriter.write("Txt Identifier, please do not delete if you still want to use the framework." +
                     "\n Created on : " + java.time.LocalTime.now()
             );
@@ -219,10 +224,20 @@ public class CreateMicro implements Runnable {
         }
 
         //////////////////////////////////////////////////////////
+        File theDir = new File(RutaCapertaMadre + "/" + nombre);
+        if (!theDir.exists()) theDir.mkdirs();
+        File from = new File(path + "/" + nombre);
+        File to = new File(RutaCapertaMadre + "/" + nombre);
+        try {
+            Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Aplicacion creada con exito en carpeta madre." + RutaCapertaMadre);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
 
-    public String getAppProperties(){
+    public String getAppProperties() {
         return appProperties;
     }
 }
