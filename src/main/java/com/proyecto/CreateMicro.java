@@ -236,7 +236,7 @@ public class CreateMicro implements Runnable {
         theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Client");
         if (!theDir.exists()) theDir.mkdirs();
 
-        clase_micro = "package org.proyecto.MicroserviceConsul.Client;\n" +
+        clase_micro = "package org.proyecto.MicroServiceConsul.Client;\n" +
                 "\n" +
                 "import java.net.URI;\n" +
                 "import java.util.List;\n" +
@@ -309,14 +309,14 @@ public class CreateMicro implements Runnable {
         theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/Config/");
         if (!theDir.exists()) theDir.mkdirs();
 
-        clase_micro = "package org.proyecto.MicroserviceConsul.Config;\n" +
+        clase_micro = "package org.proyecto.MicroServiceConsul.Config;\n" +
                 "\n" +
                 "\n" +
                 "import javax.enterprise.context.ApplicationScoped;\n" +
                 "import javax.enterprise.inject.Produces;\n" +
                 "\n" +
                 "import com.orbitz.consul.Consul;\n" +
-                "import org.proyecto.MicroserviceConsul.Client.LoadBalancedFilter;\n" +
+                "import org.proyecto.MicroServiceConsul.Client.LoadBalancedFilter;\n" +
                 "\n" +
                 "@ApplicationScoped\n" +
                 "public class " + nombre + "BeansProducer {\n" +
@@ -354,7 +354,7 @@ public class CreateMicro implements Runnable {
         theDir = new File(path + "/" + nombre + "/src/main/java/org/proyecto/MicroServiceConsul/LifeCycle/");
         if (!theDir.exists()) theDir.mkdirs();
 
-        clase_micro = "package org.proyecto.MicroserviceConsul.LifeCycle;\n" +
+        clase_micro = "package org.proyecto.MicroServiceConsul.LifeCycle;\n" +
                 "\n" +
                 "import java.util.List;\n" +
                 "import java.util.concurrent.Executors;\n" +
@@ -378,7 +378,7 @@ public class CreateMicro implements Runnable {
                 "@ApplicationScoped\n" +
                 "public class " + nombre + "LifeCycle {\n" +
                 "\n" +
-                "    private static final Logger LOGGER = LoggerFactory.getLogger(" + nombre + "Lifecycle.class);\n" +
+                "    private static final Logger LOGGER = LoggerFactory.getLogger(" + nombre + "LifeCycle.class);\n" +
                 "\n" +
                 "    private String instanceId;\n" +
                 "\n" +
