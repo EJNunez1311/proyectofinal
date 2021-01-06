@@ -45,6 +45,7 @@ public class FolderApp {
     @Path("/folder/app/ver/{nombreProyecto}")
     public TemplateInstance GetFolderAppTableView(@PathParam("nombreProyecto") String nombreProyecto) {
         // TODO: Find folder with pom.xml
+        proyectoActual = nombreProyecto;
         ArrayList<String> listaApi = new ArrayList<>();
         ArrayList<String> listaEntity = new ArrayList<>();
         if (!rutaFolder.isEmpty()) {
@@ -103,7 +104,7 @@ public class FolderApp {
                 .data("entities", listaEntity)
                 .data("apis", listaApi)
                 .data("nombreProyecto", nombreProyecto)
-                .data("listaNueva", aux);
+                .data("listaNueva", Data.tablasProyecto);
     }
 
 
@@ -111,20 +112,7 @@ public class FolderApp {
     @Path("/folder/form/{nombreProyecto}")
     public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
 
-//        int existe = 0;
-//        ProyectoValue aux = new ProyectoValue(nombreProyecto, null);
         proyectoActual = nombreProyecto;
-
-//        for (ProyectoValue v : proyectoValues) {
-//            if (v.getNombreProyecto().equals(nombreProyecto)) {
-//                existe = 1;
-//                break;
-//            }
-//        }
-//
-//        if (existe == 0) {
-//            proyectoValues.add(aux);
-//        }
 
         return FormProyecto
                 .data("title", "Table Creation")
@@ -144,20 +132,20 @@ public class FolderApp {
 //        crearClase(formValue);
 
 
-        int existe = 0;
-        ProyectoValue aux = new ProyectoValue(proyectoActual, null);
-
-        for (ProyectoValue v : proyectoValues) {
-            if (v.getNombreProyecto().equals(proyectoActual)) {
-                existe = 1;
-                v.tablas.add(formValue);
-                break;
-            }
-        }
-        if (existe == 0) {
-            aux.tablas.add(formValue);
-            proyectoValues.add(aux);
-        }
+//        int existe = 0;
+//        ProyectoValue aux = new ProyectoValue(proyectoActual, null);
+//
+//        for (ProyectoValue v : proyectoValues) {
+//            if (v.getNombreProyecto().equals(proyectoActual)) {
+//                existe = 1;
+//                v.tablas.add(formValue);
+//                break;
+//            }
+//        }
+//        if (existe == 0) {
+//            aux.tablas.add(formValue);
+//            proyectoValues.add(aux);
+//        }
 
 
         for (Form form : formValue.getFilas()) {
@@ -166,6 +154,9 @@ public class FolderApp {
                     + form.getFkTablaRelacionada() + " Tipo de relacion: " + form.getFkRelacion());
 //            + form.isFkCheckbox()
         }
+
+
+        crearClase(formValue,proyectoActual);
 
 //        Data.tablasProyecto.add(formValue);
 
@@ -287,6 +278,7 @@ public class FolderApp {
             }
         }
 
+
         for (String name : folder) {
             System.out.println(name);
         }
@@ -387,7 +379,7 @@ public class FolderApp {
         return false;
     }
 
-    public void crearClase(FormValue formValue, String nombre, int seguridad) {
+    public void crearClase(FormValue formValue, String nombre) {
 
         String nomb;
         String clase;
@@ -398,6 +390,8 @@ public class FolderApp {
         String entidad = "\n";
         String tipopk = "long";
         int haypk = 0;
+        //arreglando
+        int seguridad = 0;
 
 
         File theDir = new File(rutaFolder + nombre + "/src/main/java/org/proyecto/Entity/");
