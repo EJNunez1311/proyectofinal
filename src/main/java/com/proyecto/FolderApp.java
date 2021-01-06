@@ -35,9 +35,9 @@ public class FolderApp {
     private String rutaEntity = "";
     private String rutaApi = "";
     String rutaFolder = "";
+    String proyectoActual = "";
 
     ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
-
     ArrayList<ProyectoValue> proyectoValues = new ArrayList<>();
 
 
@@ -86,12 +86,24 @@ public class FolderApp {
         for (String item : listaTablas) {
             listaTablasCreadas.add(new FormValue(item, false, false, null));
         }
-        return TablasProyectoVer
+
+        //arreglando
+
+        ArrayList<FormValue> aux = new ArrayList<>();
+        for (ProyectoValue v : proyectoValues) {
+            if (v.getNombreProyecto().equals(nombreProyecto)) {
+                aux = v.getTablas();
+                break;
+            }
+        }
+
+
+            return TablasProyectoVer
                 .data("title", "Name of Application")
                 .data("entities", listaEntity)
                 .data("apis", listaApi)
                 .data("nombreProyecto", nombreProyecto)
-                .data("listaNueva", Data.tablasProyecto);
+                .data("listaNueva", aux);
     }
 
 
@@ -99,19 +111,20 @@ public class FolderApp {
     @Path("/folder/form/{nombreProyecto}")
     public TemplateInstance ProyectoTableCreation(@PathParam("nombreProyecto") String nombreProyecto) {
 
-        int existe = 0;
-        ProyectoValue aux = new ProyectoValue(nombreProyecto, null);
+//        int existe = 0;
+//        ProyectoValue aux = new ProyectoValue(nombreProyecto, null);
+        proyectoActual = nombreProyecto;
 
-        for (ProyectoValue v : proyectoValues) {
-            if (v.getNombreProyecto().equals(nombreProyecto)) {
-                existe = 1;
-                break;
-            }
-        }
-        
-        if (existe == 0) {
-            proyectoValues.add(aux);
-        }
+//        for (ProyectoValue v : proyectoValues) {
+//            if (v.getNombreProyecto().equals(nombreProyecto)) {
+//                existe = 1;
+//                break;
+//            }
+//        }
+//
+//        if (existe == 0) {
+//            proyectoValues.add(aux);
+//        }
 
         return FormProyecto
                 .data("title", "Table Creation")
@@ -131,6 +144,22 @@ public class FolderApp {
 //        crearClase(formValue);
 
 
+        int existe = 0;
+        ProyectoValue aux = new ProyectoValue(proyectoActual, null);
+
+        for (ProyectoValue v : proyectoValues) {
+            if (v.getNombreProyecto().equals(proyectoActual)) {
+                existe = 1;
+                v.tablas.add(formValue);
+                break;
+            }
+        }
+        if (existe == 0) {
+            aux.tablas.add(formValue);
+            proyectoValues.add(aux);
+        }
+
+
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
                     + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "
@@ -138,7 +167,7 @@ public class FolderApp {
 //            + form.isFkCheckbox()
         }
 
-        Data.tablasProyecto.add(formValue);
+//        Data.tablasProyecto.add(formValue);
 
         return true;
     }
