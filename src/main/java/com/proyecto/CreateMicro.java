@@ -32,6 +32,9 @@ public class CreateMicro implements Runnable {
         // Crear Aplicacion con Nombre e Importar toda las libs necesaria con los cmd de Mvn
         //////////////////////////////////////////////////////////
 
+        File dir = new File(RutaCapertaMadre + "/" + nombre);
+        if (!dir.exists()) dir.mkdirs();
+
         String path = System.getProperty("user.dir");
         String userHome = System.getProperty("user.home");
         String comandos, archivo_comando;
