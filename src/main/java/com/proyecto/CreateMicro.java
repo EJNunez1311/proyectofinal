@@ -3,7 +3,10 @@ package com.proyecto;
 import Entities.FormValue;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class CreateMicro implements Runnable {
@@ -439,6 +442,25 @@ public class CreateMicro implements Runnable {
 
 
         //////////////////////////////////////////////////////////
+
+        java.nio.file.Path path2 = Paths.get(path + "/" + nombre + "/pom.xml");
+        Charset charset = StandardCharsets.UTF_8;
+
+        String content = null;
+        try {
+            content = new String(Files.readAllBytes(path2), charset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        content = content.replaceAll("1.9.0.CR1", "1.8.2.Final");
+        try {
+            Files.write(path2, content.getBytes(charset));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //////////////////////////////////////////////////////////
+
         theDir = new File(RutaCapertaMadre + "/" + nombre);
         if (!theDir.exists()) theDir.mkdirs();
         File from = new File(path + "/" + nombre);
