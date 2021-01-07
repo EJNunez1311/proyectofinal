@@ -532,7 +532,7 @@ public class FolderApp {
                     , "<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
-                            "    </dependency>" +
+                            "    </dependency>\n" +
                             "   <dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-oidc</artifactId>\n" +
@@ -709,7 +709,7 @@ public class FolderApp {
                     , "<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
-                            "    </dependency>" +
+                            "    </dependency>\n" +
                             "   <dependency>\n" +
                             "      <groupId>org.apache.camel.quarkus</groupId>\n" +
                             "      <artifactId>camel-quarkus-consul</artifactId>\n" +
