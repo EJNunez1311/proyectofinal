@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,6 +64,7 @@ public class Microservicio {
     String proyecto_elegido;
     int importado;
     ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
+    List<String> RelacionFK = new ArrayList<String>();
 
     @GET
     @Path("/create")
@@ -756,10 +758,31 @@ public class Microservicio {
 
     //TODO: Terminar Todo con Base de Datos
 
+    public void llenarFK() {
+        String[] auxiliar;
+        String cad = "";
+        String fkAlrevez = "";
+
+        for (FormValue formValue : Data.tablasGeneradas) {
+            for (Form form : formValue.filas) {
+                if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
+//                    System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    auxiliar = form.getFkRelacion().split("To");
+                    fkAlrevez = (auxiliar[1] + "To" + auxiliar[0]);
+//                    System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
+
+                    RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                    RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez + " 2");
+
+                }
+            }
+        }
+    }
 
     @POST
     @Path("/finalizar")
     public boolean Finalizar() {
+
         for (ProyectoValue pv : Data.proyectosGenerados) {
             System.out.println("Proyecto Actual: " + pv.nombreProyecto);
             for (FormValue fv : pv.tablas) {
@@ -797,6 +820,7 @@ public class Microservicio {
         String entidad = "\n";
         String tipopk = "long";
         int haypk = 0;
+        String fk = "";
 
 
 
@@ -880,52 +904,52 @@ public class Microservicio {
                 ///////////////////////////////////
             }
 
-//            for (String cad : RelacionFK) {
-//                String[] test;
-//                test = cad.split(" ");
-//                //Employees emp_no Dept_manager ManyToOne 1
-//                if (test[0].equals(clase)) {
-//                    if (test[4].equals("2")) {
-//                        if (test[3].equals("OneToOne")) {
-//                            fk = fk + "    @OneToOne(mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
-//                                    "    @PrimaryKeyJoinColumn\n" +
-//                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
-//                        } else if (test[3].equals("OneToMany")) {
-//                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
-//                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
-//
-//                        } else if (test[3].equals("ManyToOne")) {
-//                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
-//                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
-//                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
-//                        } else if (test[3].equals("ManyToMany")) {
-//                            fk = fk + "    @ManyToMany\n" +
-//                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
-//                        }
-//                    } else if (test[4].equals("1")) {
-//                        if (test[3].equals("OneToOne")) {
-//                            fk = fk + "    @OneToOne\n" +
-//                                    "    @MapsId\n" +
-//                                    "    @JoinColumn(name = \"" + test[1] + "\")\n" +
-//                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
-//                        } else if (test[3].equals("OneToMany")) {
-//                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
-//                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
-//
-//                        } else if (test[3].equals("ManyToOne")) {
-//                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
-//                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
-//                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
-//                        } else if (test[3].equals("ManyToMany")) {
-//                            fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
-//                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
-//                        }
-//                    }
-//                }
-//                for (int i = 0; i < test.length; i++) {
-//                    System.out.println(test[i]);
-//                }
-//            }
+            for (String cad : RelacionFK) {
+                String[] test;
+                test = cad.split(" ");
+                //Employees emp_no Dept_manager ManyToOne 1
+                if (test[0].equals(clase)) {
+                    if (test[4].equals("2")) {
+                        if (test[3].equals("OneToOne")) {
+                            fk = fk + "    @OneToOne(mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    @PrimaryKeyJoinColumn\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
+                        } else if (test[3].equals("OneToMany")) {
+                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
+
+                        } else if (test[3].equals("ManyToOne")) {
+                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
+                        } else if (test[3].equals("ManyToMany")) {
+                            fk = fk + "    @ManyToMany\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
+                        }
+                    } else if (test[4].equals("1")) {
+                        if (test[3].equals("OneToOne")) {
+                            fk = fk + "    @OneToOne\n" +
+                                    "    @MapsId\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\")\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
+                        } else if (test[3].equals("OneToMany")) {
+                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
+
+                        } else if (test[3].equals("ManyToOne")) {
+                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
+                        } else if (test[3].equals("ManyToMany")) {
+                            fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
+                        }
+                    }
+                }
+                for (int i = 0; i < test.length; i++) {
+                    System.out.println(test[i]);
+                }
+            }
             //String path = System.getProperty("user.dir");
             String archivojava = "package org.proyecto.Entity;\n" +
                     "import io.quarkus.hibernate.orm.panache.PanacheEntity;\n" +
