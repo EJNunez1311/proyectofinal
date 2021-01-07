@@ -485,6 +485,65 @@ public class CreateMicro implements Runnable {
         }
 
 
+        String custApp =
+                "package org.proyecto;\n" +
+                        "\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.info.Contact;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.info.Info;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.info.License;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;\n" +
+                        "import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;" +
+                        "\n" +
+                        "import javax.ws.rs.core.Application;\n" +
+                        "\n" +
+                        "\n" +
+                        "@OpenAPIDefinition( \n" +
+                        "        info = @Info(\n" +
+                        "                title=\"Java Framework\",\n" +
+                        "                version = \"1.0.0 (Test)\",\n" +
+                        "                contact = @Contact(\n" +
+                        "                        name = \"API Explorer\",\n" +
+                        "                        url = \"http://pucmm.edu.do/\",\n" +
+                        "                        email = \"pucmmisc@example.com\"),\n" +
+                        "                license = @License(\n" +
+                        "                        name = \"Proyecto Final 1.0\",\n" +
+                        "                        url = \"http://www.apache.org/licenses/LICENSE-2.0.html\")))\n" +
+                        "@SecuritySchemes(value = {\n" +
+                        "        @SecurityScheme(securitySchemeName = \"apiKey\",\n" +
+                        "                type = SecuritySchemeType.HTTP,\n" +
+                        "                scheme = \"Bearer\")}\n" +
+                        ")" +
+                        "public class CustomApplication extends Application {\n" +
+                        "}";
+
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/CustomApplication.java");
+            if (myObj.createNewFile()) {
+                //   System.out.println("Archivo Creado: " + myObj.getName());
+            } else {
+                // System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/CustomApplication.java");
+            myWriter.write(custApp
+            );
+            myWriter.close();
+            //  System.out.println("ApiSwagger Inyectado");
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+
         //////////////////////////////////////////////////////////
 
         java.nio.file.Path path2 = Paths.get(path + "/" + nombre + "/pom.xml");
