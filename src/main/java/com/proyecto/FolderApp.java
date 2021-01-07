@@ -527,7 +527,7 @@ public class FolderApp {
             content = content.replaceAll("<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
-                            "    </dependency>"
+                            "    </dependency>\n"
 
                     , "<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
@@ -540,8 +540,7 @@ public class FolderApp {
                             "    <dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-keycloak-authorization</artifactId>\n" +
-                            "    </dependency>" +
-                            "   </dependencies>");
+                            "    </dependency>");
 
             try {
                 Files.write(path2, content.getBytes(charset));
@@ -705,17 +704,16 @@ public class FolderApp {
             content = content.replaceAll("<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
-                            "    </dependency>"
+                            "    </dependency>\n"
 
                     , "<dependency>\n" +
                             "      <groupId>io.quarkus</groupId>\n" +
                             "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
                             "    </dependency>" +
-                            "<      dependency>\n" +
+                            "   <dependency>\n" +
                             "      <groupId>org.apache.camel.quarkus</groupId>\n" +
                             "      <artifactId>camel-quarkus-consul</artifactId>\n" +
-                            "    </dependency>\n" +
-                            "   </dependencies>");
+                            "    </dependency>\n");
             try {
                 Files.write(path2, content.getBytes(charset));
             } catch (IOException e) {
