@@ -61,7 +61,7 @@
                 <div class="card-header">Api</div>
                 <div class="card-body">
                     <ul class="list-group">
-                        <li class="list-group-item active">Nombres de Tablas en Api</li>
+                        <li class="list-group-item active">Api Table Names</li>
                         {#if apis}
                             {#for nombreTabla in apis}
                                 <li class="list-group-item">{nombreTabla}</li>
@@ -71,19 +71,19 @@
                 </div>
             </div>
             <div class="card card-info mt-3">
-                <div class="card-header">Nuevas Tablas</div>
+                <div class="card-header">New Tables</div>
                 <div class="card-body">
                     <ul class="list-group">
-                        <li class="list-group-item active">Nombres De Nuevas Tablas</li>
+                        <li class="list-group-item active">New Table Names</li>
                         {#if listaNueva}
                             {#for item in listaNueva}
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     {item.nombreTabla}
                                     <span>
-                                         <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');"href="/proyecto/folder/form/eliminar/{nombreProyecto}/{count}" title="Eliminar tabla">
+                                         <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');"href="/proyecto/folder/form/eliminar/{nombreProyecto}/{count}" title="Delete table">
                                              <i class="fa fa-trash"></i>
                                          </a>
-                                         <a class="btn btn-warning" href="/proyecto/folder/form/actualizar/{nombreProyecto}/{count}" title="Actualizar tabla">
+                                         <a class="btn btn-warning" href="/proyecto/folder/form/actualizar/{nombreProyecto}/{count}" title="Update table">
                                              <i class="fa fa-edit"></i>
                                          </a>
                                     </span>
@@ -103,7 +103,7 @@
                 <div class="card-header">Entities</div>
                 <div class="card-body">
                     <ul class="list-group">
-                        <li class="list-group-item active">Nombres de Tablas en Entity</li>
+                        <li class="list-group-item active">Table Names in Entity</li>
                         {#if entities}
                             {#for nombreTabla in entities}
                             <li class="list-group-item">{nombreTabla}</li>

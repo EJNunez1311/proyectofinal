@@ -34,9 +34,6 @@
                     <input type="text" id="tname" name="tname" value="{tablaDetalle.nombreTabla}"><br>
                 </form>
                 <div>
-                    <div class="input-group">
-                        <a href="/api/db/table">Back to others tables</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -76,7 +73,7 @@
                         {#for item in tablaDetalle.filas}
                             <tr>
                                 <td data-name="nombre">
-                                    <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{item.nombre}" class="form-control"/>
+                                    <input type="text" id="nombre" name="nombre" placeholder="Name" value="{item.nombre}" class="form-control"/>
                                 </td>
                                 <td data-name="tipoatributo">
                                     <select name="tipoatributo" id="tipoatributo">
