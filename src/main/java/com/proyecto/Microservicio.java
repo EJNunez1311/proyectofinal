@@ -341,12 +341,319 @@ public class Microservicio {
     @Path("/form/ver/codigos/{nombre}/{proyecto}")
     public TemplateInstance FormCodigosVer(@PathParam("nombre") String tablename, @PathParam("proyecto") String proyecto) {
         System.out.println("Tabla para ver el codigo: " + tablename);
+
+        String apppropert = "#Datasource Config\n" +
+                "quarkus.datasource.db-kind=mysql\n" +
+                "quarkus.datasource.driver=com.mysql.cj.jdbc.Driver\n" +
+                "quarkus.datasource.username=root\n" +
+                "quarkus.datasource.password=12345678\n" +
+                "quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/prueba\n" +
+                "quarkus.hibernate-orm.log.sql=true\n" +
+                "# drop and create the database at startup (use `update` to only update the schema)\n" +
+                "quarkus.hibernate-orm.database.generation=update\n" +
+                "quarkus.smallrye-openapi.path=/swagger\n" +
+                "quarkus.swagger-ui.always-include=true\n" +
+                "quarkus.swagger-ui.path=/explorer\n" +
+                "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n" +
+                "quarkus.http.port=0\n" +
+                "quarkus.application.name=" + proyecto + "\n" +
+                "quarkus.application.version=1.0\n" +
+                "quarkus.consul-config.enabled=true\n" +
+                "quarkus.consul-config.properties-value-keys=config/${quarkus.application.name}\n";
+        System.out.println(seguridad);
+        if (seguridad != 0) {
+            apppropert = apppropert + "# Keycloak with 100 offset\n" +
+                    "keycloak.url=http://localhost:8180\n" +
+                    "\n" +
+                    "quarkus.oidc.enabled=true\n" +
+                    "quarkus.oidc.auth-server-url=${keycloak.url}/auth/realms/quarkus-realm\n" +
+                    "quarkus.oidc.client-id=quarkus-client\n" +
+                    "quarkus.oidc.credentials.secret=mysecret\n" +
+                    "quarkus.http.cors=true\n" +
+                    "quarkus.oidc.tls.verification=none\n" +
+                    "grant_type=password\n" +
+                    "urltoken_request=${keycloak.url}/auth/realms/quarkus-realm/protocol/openid-connect/token\n\n";
+
+        }
+
+        String aux1 = "";
+        String aux2 = "";
+        for (ProyectoValue pv : Data.proyectosGenerados) {
+            System.out.println("Proyecto Actual: " + pv.nombreProyecto);
+            if(pv.nombreProyecto.equals(proyecto)){
+                for (FormValue fv : pv.tablas) {
+                    if(fv.nombreTabla.equals(tablename))
+                    {
+                        aux1 = mostrarClase(fv,1);
+                        aux2 = mostrarClase(fv,2);
+                    }
+                }
+            }
+        }
+
         return MicroservicioCodigoVer
                 .data("title", "Codigos Generados")
                 .data("proyecto", proyecto)
-                .data("panel1", Data.panel1)
-                .data("panel2", Data.panel2)
-                .data("panel3", Data.panel3);
+                .data("panel1", aux1)
+                .data("panel2", aux2)
+                .data("panel3", apppropert);
+    }
+
+    public String mostrarClase(FormValue formValue, int Valor) {
+
+        String nomb;
+        String clase;
+        String atributo;
+        String tipo;
+        String modelos = "\n";
+        String getset = "\n";
+        String entidad = "\n";
+        String tipopk = "long";
+        String fk = "\n";
+        int haypk = 0;
+
+        if (formValue != null) {
+            //Entity Name
+            System.out.println(formValue.getNombreTabla());
+
+            nomb = formValue.getNombreTabla();
+            clase = nomb.substring(0, 1).toUpperCase() + nomb.substring(1).toLowerCase();
+            String claseminus = nomb.toLowerCase();
+
+
+            for (Form form : formValue.getFilas()) {
+
+                atributo = form.getNombre();
+                tipo = form.getTipoAtributo();
+
+                if (tipo.toLowerCase().contains("int")) {
+                    tipo = "int";
+                }
+                if (tipo.toLowerCase().contains("boolean")) {
+                    tipo = "boolean";
+                }
+                if (tipo.toLowerCase().contains("double")) {
+                    tipo = "double";
+                }
+
+                atributo = atributo.toLowerCase();
+                if (form.isPkCheckcbox()) {
+                    tipopk = form.getTipoAtributo();
+                    modelos = modelos +
+                            "    @Id \n";
+                    haypk = 1;
+                }
+                if (form.isNotNullCheckbox() && !form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(nullable = false) \n";
+                }
+                if (!form.isNotNullCheckbox() && form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(unique = true) \n";
+                }
+                if (form.isNotNullCheckbox() && form.isCheckBoxUnique()) {
+                    modelos = modelos +
+                            "    @Column(unique=true, nullable=false) \n";
+                }
+                modelos = modelos +
+                        "    public " + tipo + " " + atributo + ";\n" +
+                        "\n";
+
+                String aux;
+                aux = atributo.substring(0, 1).toUpperCase() + atributo.substring(1).toLowerCase();
+
+                getset = getset +
+                        "    public " + tipo + " get" + aux + "() {\n" +
+                        "        return " + atributo.toLowerCase() + ";\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public void set" + aux + "(" + tipo + " " + atributo.toLowerCase() + ") {\n" +
+                        "        this." + atributo.toLowerCase() + " = " + atributo.toLowerCase() + ";\n" +
+                        "    }\n";
+
+
+                entidad = entidad +
+                        "        entity.set" + aux + "(" + claseminus + ".get" + aux + "());\n";
+
+                ///////////////////////////////////
+            }
+
+            for (String cad : RelacionFK) {
+                String[] test;
+                test = cad.split(" ");
+                //Employees emp_no Dept_manager ManyToOne 1
+                if (test[0].equals(clase)) {
+                    if (test[4].equals("2")) {
+                        if (test[3].equals("OneToOne")) {
+                            fk = fk + "    @OneToOne(mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    @PrimaryKeyJoinColumn\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
+                        } else if (test[3].equals("OneToMany")) {
+                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
+
+                        } else if (test[3].equals("ManyToOne")) {
+                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
+                        } else if (test[3].equals("ManyToMany")) {
+                            fk = fk + "    @ManyToMany\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
+                        }
+                    } else if (test[4].equals("1")) {
+                        if (test[3].equals("OneToOne")) {
+                            fk = fk + "    @OneToOne\n" +
+                                    "    @MapsId\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\")\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";\n";
+                        } else if (test[3].equals("OneToMany")) {
+                            fk = fk + "    @OneToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";\n";
+
+                        } else if (test[3].equals("ManyToOne")) {
+                            fk = fk + "    @ManyToOne(fetch=FetchType.EAGER)\n" +
+                                    "    @JoinColumn(name = \"" + test[1] + "\", insertable = false, updatable = false)\n" +
+                                    "    public " + test[2] + " " + test[2].toLowerCase() + ";";
+                        } else if (test[3].equals("ManyToMany")) {
+                            fk = fk + "    @ManyToMany(fetch=FetchType.EAGER, mappedBy = \"" + nomb.toLowerCase() + "\")\n" +
+                                    "    public Set<" + test[2] + "> " + test[2].toLowerCase() + ";";
+                        }
+                    }
+                }
+                for (int i = 0; i < test.length; i++) {
+                    System.out.println(test[i]);
+                }
+            }
+            //String path = System.getProperty("user.dir");
+            String archivojava = "package org.proyecto.Entity;\n" +
+                    "import io.quarkus.hibernate.orm.panache.PanacheEntity;\n" +
+                    "import io.quarkus.hibernate.orm.panache.PanacheEntityBase;\n" +
+                    "import javax.persistence.*;\n" +
+                    "import java.sql.Date;\n" +
+                    "import java.io.Serializable;\n" +
+                    "import java.util.Set;\n";
+
+            if (haypk == 1) {
+                //String path = System.getProperty("user.dir");
+                archivojava = archivojava +
+                        "@Entity\n" +
+                        "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
+
+                        fk
+
+                        +
+
+                        modelos
+
+                        +
+
+                        getset
+
+                        +
+                        "}"
+                ;
+            } else {
+                archivojava = archivojava +
+                        "@Entity\n" +
+                        "public class " + clase + " extends PanacheEntity {\n" +
+
+                        fk
+
+                        +
+
+                        modelos
+
+                        +
+
+                        getset
+
+                        +
+                        "}";
+            }
+
+            String archivoapi =
+                    "package org.proyecto.Api;\n" +
+                            "\n" +
+                            "import org.proyecto.Entity.*;\n" +
+                            "import javax.inject.Inject;\n" +
+                            "import javax.persistence.EntityManager;\n" +
+                            "import javax.transaction.Transactional;\n" +
+                            "import javax.ws.rs.*;\n" +
+                            "import javax.ws.rs.core.MediaType;\n" +
+                            "import java.util.List;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
+                            "import io.quarkus.security.Authenticated;\n" +
+                            "import io.quarkus.security.identity.SecurityIdentity;\n" +
+                            "import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;\n" +
+                            "import javax.annotation.security.RolesAllowed;" +
+                            "\n" +
+                            "@Path(\"/api/" + nomb + "\")\n" +
+                            "@Produces(MediaType.APPLICATION_JSON)\n" +
+                            "@Consumes(MediaType.APPLICATION_JSON)\n" +
+                            "@Tag(name = \"" + clase + "\" ,description = \"Here is all the information about " + clase + ". \")\n";
+            if (seguridad == 1) {
+                archivoapi = archivoapi + "@Authenticated\n" +
+                        "@SecurityRequirement(name = \"apiKey\")\n";
+            }
+            archivoapi = archivoapi +
+                    "public class " + clase + "Api {\n" +
+                    "\n" +
+                    "    @Inject\n" +
+                    "    EntityManager entityManager;\n" +
+                    "\n" +
+                    "\n" +
+                    "    @POST\n" +
+                    "    @Transactional\n" +
+                    "    public void add(" + clase + " " + claseminus + ") {\n" +
+                    "        " + clase + ".persist(" + claseminus + ");\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @GET\n" +
+                    "    public List<" + clase + "> get" + clase + "(){\n" +
+                    "        return " + clase + ".listAll();\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @PUT\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public " + clase + " update(@PathParam(\"id\") " + tipopk + " id, " + clase + " " + claseminus + "){\n" + "        if (" + claseminus + ".findById(id) == null) {\n" +
+                    "            throw new WebApplicationException(\"Id no fue enviado en la peticion.\", 422);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "        " + clase + " entity = entityManager.find(" + clase + ".class,id);\n" +
+                    "\n" +
+                    "        if (entity == null) {\n" +
+                    "            throw new WebApplicationException(\" " + clase + " con el id: \" + id + \" no existe.\", 404);\n" +
+                    "        }\n" +
+                    "\n" +
+                    "\n" +
+                    entidad +
+                    "        return entity;\n" +
+                    "    }\n" +
+                    "\n" +
+                    "    @DELETE\n" +
+                    "    @Transactional\n" +
+                    "    @Path(\"/{id}\")\n" +
+                    "    public void delete" + clase + "(@PathParam(\"id\") " + tipopk + " id){\n" +
+                    "        " + clase + ".deleteById(id);\n" +
+                    "    }\n" +
+                    "}";
+
+            if (seguridad == 1) {
+                archivoapi = archivoapi.replaceAll("@POST", "@POST\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@GET", "@GET\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@PUT", "@PUT\n    @RolesAllowed(\"user\")");
+                archivoapi = archivoapi.replaceAll("@DELETE", "@DELETE\n    @RolesAllowed(\"user\")");
+
+            }
+
+            if(Valor == 1)
+                return archivojava;
+            if(Valor == 2)
+                return archivoapi;
+
+        }
+        return "Error En La Generacion de Clase";
     }
 
     //TODO: Controladores con Base datos
