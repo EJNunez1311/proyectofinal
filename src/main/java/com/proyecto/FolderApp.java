@@ -375,6 +375,12 @@ public class FolderApp {
             System.out.println("Security -> " + appFolder.seguridadCheckbox);
         }
 
+        // AGREGA DEPENDENCIAS NECESARIAS
+        for (AppFolder appFolder : appFolders)
+        {
+            agregarDependencias(appFolder.nombreFolder);
+        }
+        // AGREGA CLASES CREADAS
         for (ProyectoValue pv : Data.tablasProyecto) {
             System.out.println("Proyecto Actual: " + pv.nombreProyecto);
             for (FormValue fv : pv.tablas) {
