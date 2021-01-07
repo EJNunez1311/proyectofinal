@@ -763,6 +763,7 @@ public class Microservicio {
             for (FormValue fv : pv.tablas) {
                 System.out.println("Tabla: " + fv.nombreTabla);
                 //TODO arreglando
+                crearClase(fv, pv.nombreProyecto);
                 for (Form form : fv.filas) {
                     System.out.println("columna: " + form.nombre);
                 }
