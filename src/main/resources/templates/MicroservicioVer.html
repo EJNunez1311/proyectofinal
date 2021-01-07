@@ -55,7 +55,7 @@
     {/include}
     <div class="container">
 
-        <h2>MicroService Project Created</h2>
+        <h2>Microservice Project Created</h2>
         <div class="table-responsive">
             <table id="myTable">
                 <tr class="header">
@@ -70,8 +70,8 @@
             <!--                    <button type="button" class="btn btn-primary" title="Ver informacion tabla" data-toggle="modal" data-target="#myModal{count}">-->
             <!--                        <i class="fa fa-eye"></i>-->
             <!--                    </button>-->
-                                <a class="btn btn-info" href="/microservices/form/ver/{proyecto.nombreProyecto}" title="Agregar Tabla"><i class="fa fa-file"></i></a>
-                                <a class="btn btn-info" href="/microservices/importar/tablas/{proyecto.nombreProyecto}" title="Importar Tablas desde Base de Datos"><i class="fas fa-database"></i></a>
+                                <a class="btn btn-info" href="/microservices/form/ver/{proyecto.nombreProyecto}" title="Add Table"><i class="fa fa-file"></i></a>
+                                <a class="btn btn-info" href="/microservices/importar/tablas/{proyecto.nombreProyecto}" title="Import Tables from Database"><i class="fas fa-database"></i></a>
                             </td>
                         </tr>
                     {/for}
@@ -82,9 +82,9 @@
         <div class="row">
             <div class="col-md-12 mt-2 text-right">
                 {#if proyectosGenerados}
-                    <a id="finalizar" class="btn btn-primary float-right">Finalizar</a>
+                    <a id="finalizar" class="btn btn-primary float-right">Close</a>
                 {/if}
-                <a id="crearMicroservicio" class="btn btn-success float-right mr-2" href="/microservices/crear/proyecto">Agregar Proyecto</a>
+                <a id="crearMicroservicio" class="btn btn-success float-right mr-2" href="/microservices/crear/proyecto">Add Project</a>
             </div>
         </div>
     </div>

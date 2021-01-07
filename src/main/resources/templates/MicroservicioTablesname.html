@@ -77,10 +77,10 @@
                 <tr>
                     <td scope="row">{count}</td>
                     <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
-                    <td class="text-center"><a href="/microservices/form/update/{tabla.nombreTabla}">Ver</a></td>
+                    <td class="text-center"><a href="/microservices/form/update/{tabla.nombreTabla}">View</a></td>
                     <td class="text-center">
                         {#if tabla.tieneRelacionFk == true}
-                        <a href="/microservices/fk/{tabla.nombreTabla}" title="Ver Relaciones (FK)"><i class="fa fa-eye"></i></a>
+                        <a href="/microservices/fk/{tabla.nombreTabla}" title="View Relations (FK)"><i class="fa fa-eye"></i></a>
                         {/if}
                     </td>
 
