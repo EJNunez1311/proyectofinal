@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Data {
     public static ArrayList<FormValue> tablas = new ArrayList<>();
-    public static ArrayList<FormValue> tablasProyecto = new ArrayList<>();
+    public static ArrayList<ProyectoValue> tablasProyecto = new ArrayList<>();
     public static ArrayList<FormValue> tablasGeneradas = new ArrayList<>();
     public static ArrayList<ProyectoValue> proyectosGenerados = new ArrayList<>();
 
