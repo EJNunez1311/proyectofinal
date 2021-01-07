@@ -150,7 +150,7 @@ public class homepage {
                 "quarkus.swagger-ui.always-include=true\n" +
                 "quarkus.swagger-ui.path=/explorer\n" +
                 "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n";
-        if(seguridad != 0){
+        if (seguridad != 0) {
             appProperties = appProperties + "# Keycloak with 100 offset\n" +
                     "keycloak.url=http://localhost:8180\n" +
                     "\n" +
@@ -225,7 +225,7 @@ public class homepage {
         try {
 //            Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://"+dburl+"/information_schema", dbUserAdmin, dbUserPassword);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://" + dburl + "/information_schema", dbUserAdmin, dbUserPassword);
 
             //Create a Statement
             Statement dictoStatement = myconnection.createStatement();
@@ -271,7 +271,7 @@ public class homepage {
         try {
 //          Get Connection to DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection myconnection = DriverManager.getConnection("jdbc:mysql://"+url+"/information_schema", username, password);
+            Connection myconnection = DriverManager.getConnection("jdbc:mysql://" + url + "/information_schema", username, password);
             if (!myconnection.isClosed() || myconnection != null) {
                 dburl = url;
                 dbUserAdmin = username;
@@ -340,7 +340,7 @@ public class homepage {
         for (FormValue formValue : Data.tablas) {
             String clase = formValue.getNombreTabla().substring(0, 1).toUpperCase() + formValue.getNombreTabla().substring(1).toLowerCase();
             File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Entity/" + clase + ".java");
-            if (myObj.exists()){
+            if (myObj.exists()) {
                 formValue.creado = true;
             }
         }
@@ -417,16 +417,16 @@ public class homepage {
         FormValue tabla = null;
         for (FormValue formValue : Data.tablasGeneradas) {
             for (Form form : formValue.filas) {
-                if (formValue.nombreTabla.equals(nombre) ) {
-                    tabla=formValue;
+                if (formValue.nombreTabla.equals(nombre)) {
+                    tabla = formValue;
                     break;
                 }
             }
         }
         return CodigoVer.data("title", "Generated Code")
-                .data("panel1","\n" + mostrarClase(tabla, 1))
-                .data("panel2","\n" + mostrarClase(tabla, 2))
-                .data("panel3","\n" + appProperties);
+                .data("panel1", "\n" + mostrarClase(tabla, 1))
+                .data("panel2", "\n" + mostrarClase(tabla, 2))
+                .data("panel3", "\n" + appProperties);
     }
 
 
@@ -520,7 +520,7 @@ public class homepage {
 //            }
 //        }
 
-        return FormUpdate.data("tablaDetalle", detalle).data("tipoAtributos", Data.obtenerAtributos()).data("title", "Table " +name);
+        return FormUpdate.data("tablaDetalle", detalle).data("tipoAtributos", Data.obtenerAtributos()).data("title", "Table " + name);
 //        return FormUpdate.data("tablaDetalle", tabla).data("tipoAtributos", Data.obtenerAtributos());
     }
 
@@ -734,10 +734,10 @@ public class homepage {
 
                 if (haypk >= 1) {
                     //String path = System.getProperty("user.dir");
-                    archivojava = archivojava + "@Entity(name=\""+ nomb +"\")\n" + "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" + modelos + getset + "}"
+                    archivojava = archivojava + "@Entity(name=\"" + nomb + "\")\n" + "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" + modelos + getset + "}"
                     ;
                 } else {
-                    archivojava = archivojava + "@Entity(name=\""+ nomb +"\")\n" + "public class " + clase + " extends PanacheEntity {\n" + modelos + getset + "}";
+                    archivojava = archivojava + "@Entity(name=\"" + nomb + "\")\n" + "public class " + clase + " extends PanacheEntity {\n" + modelos + getset + "}";
                 }
 
 
@@ -911,9 +911,9 @@ public class homepage {
                 "    @ConfigProperty(name = \"quarkus.oidc.client-id\")\n" +
                 "    private String client_id;\n" +
                 "    @ConfigProperty(name = \"quarkus.oidc.credentials.secret\")\n" +
-                "    private String client_secret;\n"+
+                "    private String client_secret;\n" +
                 "    @ConfigProperty(name=\"urltoken_request\")\n" +
-                "    private String request;\n"+
+                "    private String request;\n" +
                 "\n" +
                 "\n" +
                 "    @POST\n" +
@@ -1510,7 +1510,7 @@ public class homepage {
             content = content.replaceAll("root", dbUserAdmin);
             Files.write(path2, content.getBytes(charset));
             content = new String(Files.readAllBytes(path2), charset);
-            content = content.replaceAll("12345678",dbUserPassword );
+            content = content.replaceAll("12345678", dbUserPassword);
             Files.write(path2, content.getBytes(charset));
         }
 
@@ -1792,9 +1792,9 @@ public class homepage {
 
             }
 
-            if(Valor == 1)
+            if (Valor == 1)
                 return archivojava;
-            if(Valor == 2)
+            if (Valor == 2)
                 return archivoapi;
 
         }
@@ -1954,7 +1954,7 @@ public class homepage {
             if (haypk == 1) {
                 //String path = System.getProperty("user.dir");
                 archivojava = archivojava +
-                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
+                        "@Entity(name=\"" + nomb.toLowerCase() + "\")\n" +
                         "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
 
                         fk
@@ -1972,7 +1972,7 @@ public class homepage {
                 ;
             } else {
                 archivojava = archivojava +
-                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
+                        "@Entity(name=\"" + nomb.toLowerCase() + "\")\n" +
                         "public class " + clase + " extends PanacheEntity {\n" +
 
                         fk

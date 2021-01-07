@@ -213,8 +213,7 @@ public class CreateMicro implements Runnable {
                 "    environment:\n" +
                 "      - CONSUL_BIND_INTERFACE=eth0";
 
-        if(seguridad == 1)
-        {
+        if (seguridad == 1) {
             dockerCompose = dockerCompose + "\n  keycloak:\n" +
                     "    image: quay.io/keycloak/keycloak:7.0.1\n" +
                     "    ports:\n" +
@@ -543,6 +542,109 @@ public class CreateMicro implements Runnable {
             e.printStackTrace();
         }
 
+        if (seguridad == 1) {
+            String UserApi = "package org.proyecto.Api;\n" +
+                    "\n" +
+                    "import org.eclipse.microprofile.config.inject.ConfigProperty;\n" +
+                    "import org.eclipse.microprofile.openapi.annotations.tags.Tag;\n" +
+                    "\n" +
+                    "import javax.ws.rs.*;\n" +
+                    "import javax.ws.rs.core.MediaType;\n" +
+                    "import java.io.BufferedReader;\n" +
+                    "import java.io.DataOutputStream;\n" +
+                    "import java.io.IOException;\n" +
+                    "import java.io.InputStreamReader;\n" +
+                    "import java.net.HttpURLConnection;\n" +
+                    "import java.net.MalformedURLException;\n" +
+                    "import java.net.ProtocolException;\n" +
+                    "import java.net.URL;\n" +
+                    "import java.nio.charset.StandardCharsets;\n" +
+                    "\n" +
+                    "\n" +
+                    "@Path(\"/UserToken\")\n" +
+                    "@Tag(name = \"UserToken\", description = \"Here is all the information about User and Access Token.\")\n" +
+                    "public class UserToken {\n" +
+                    "\n" +
+                    "    @ConfigProperty(name = \"grant_type\")\n" +
+                    "    private String grant_type;\n" +
+                    "    @ConfigProperty(name = \"quarkus.oidc.client-id\")\n" +
+                    "    private String client_id;\n" +
+                    "    @ConfigProperty(name = \"quarkus.oidc.credentials.secret\")\n" +
+                    "    private String client_secret;\n" +
+                    "    @ConfigProperty(name=\"urltoken_request\")\n" +
+                    "    private String request;\n" +
+                    "\n" +
+                    "\n" +
+                    "    @POST\n" +
+                    "    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)\n" +
+                    "    @Produces(MediaType.APPLICATION_JSON)\n" +
+                    "    public String ReturnToken(@FormParam(\"username\") String username, @FormParam(\"password\") String password) {\n" +
+                    "\n" +
+                    "        String urlParameters = \"username=\" + username + \"&password=\" + password + \"&grant_type=\" + grant_type + \"&client_id=\" + client_id + \"&client_secret=\" + client_secret;\n" +
+                    "\n" +
+                    "        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);\n" +
+                    "        int postDataLength = postData.length;\n" +
+                    "        URL url = null;\n" +
+                    "        try {\n" +
+                    "            url = new URL(request);\n" +
+                    "            HttpURLConnection conn = (HttpURLConnection) url.openConnection();\n" +
+                    "            conn.setDoOutput(true);\n" +
+                    "            conn.setInstanceFollowRedirects(false);\n" +
+                    "            conn.setRequestMethod(\"POST\");\n" +
+                    "            conn.setRequestProperty(\"Content-Type\", \"application/x-www-form-urlencoded\");\n" +
+                    "            conn.setRequestProperty(\"charset\", \"utf-8\");\n" +
+                    "            conn.setRequestProperty(\"Content-Length\", Integer.toString(postDataLength));\n" +
+                    "            conn.setUseCaches(false);\n" +
+                    "            try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {\n" +
+                    "                wr.write(postData);\n" +
+                    "            }\n" +
+                    "            BufferedReader in = new BufferedReader(\n" +
+                    "                    new InputStreamReader(\n" +
+                    "                            conn.getInputStream()));\n" +
+                    "\n" +
+                    "            StringBuilder response = new StringBuilder();\n" +
+                    "            String currentLine;\n" +
+                    "\n" +
+                    "            while ((currentLine = in.readLine()) != null)\n" +
+                    "                response.append(currentLine);\n" +
+                    "\n" +
+                    "            in.close();\n" +
+                    "            return response.toString();\n" +
+                    "        } catch (MalformedURLException e) {\n" +
+                    "            e.printStackTrace();\n" +
+                    "        } catch (ProtocolException e) {\n" +
+                    "            e.printStackTrace();\n" +
+                    "        } catch (IOException e) {\n" +
+                    "            e.printStackTrace();\n" +
+                    "        }\n" +
+                    "        return \"\";\n" +
+                    "    }\n" +
+                    "\n" +
+                    "\n" +
+                    "}\n";
+
+            try {
+                File myObj = new File(path + "/" + nombre + "/src/main/java/org/proyecto/Api/UserToken.java");
+                if (myObj.createNewFile()) {
+                    // System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            try {
+                FileWriter myWriter = new FileWriter(path + "/" + nombre + "/src/main/java/org/proyecto/Api/UserToken.java");
+                myWriter.write(UserApi);
+                myWriter.close();
+                //   System.out.println("Clase api generado");
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+        }
 
         //////////////////////////////////////////////////////////
 

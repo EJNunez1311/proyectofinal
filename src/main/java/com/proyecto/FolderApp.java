@@ -40,6 +40,8 @@ public class FolderApp {
     ArrayList<FormValue> listaTablasCreadas = new ArrayList<>();
     ArrayList<ProyectoValue> proyectoValues = new ArrayList<>();
 
+    int seguridad;
+    int microservicio;
 
     @GET
     @Path("/folder/app/ver/{nombreProyecto}")
@@ -359,15 +361,23 @@ public class FolderApp {
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean FolderAppSeleccion(ArrayList<AppFolder> appFolders) {
         //TODO: validar username y password
+        ArrayList<String[]> aux = new ArrayList<String[]>();
         for (AppFolder appFolder : appFolders) {
+
+            seguridad = ((appFolder.seguridadCheckbox) ? 1 : 0);
+            microservicio = ((appFolder.microservicioCheckbox) ? 1 : 0);
+
+            aux.add(new String[]{appFolder.nombreFolder, String.valueOf(seguridad), String.valueOf(microservicio)});
             System.out.println("Nombre -> " + appFolder.nombreFolder);
             System.out.println("Microservicio -> " + appFolder.microservicioCheckbox);
             System.out.println("Security -> " + appFolder.seguridadCheckbox);
         }
+
         for (ProyectoValue pv : Data.tablasProyecto) {
             System.out.println("Proyecto Actual: " + pv.nombreProyecto);
             for (FormValue fv : pv.tablas) {
                 System.out.println("Tabla: " + fv.nombreTabla);
+                crearClase(fv, pv.nombreProyecto);
                 for (Form form : fv.filas) {
                     System.out.println("columna: " + form.nombre);
                 }
@@ -452,7 +462,6 @@ public class FolderApp {
         String tipopk = "long";
         int haypk = 0;
         //arreglando
-        int seguridad = 0;
 
 
         File theDir = new File(rutaFolder + "/" + nombre + "/src/main/java/org/proyecto/Entity/");

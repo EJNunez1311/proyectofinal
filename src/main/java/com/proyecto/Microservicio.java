@@ -210,7 +210,6 @@ public class Microservicio {
         // crearClase(formValue);
 
 
-
         for (Form form : formValue.getFilas()) {
             System.out.println("nombre " + form.getNombre() + " -- tipo " + form.getTipoAtributo() + " -- pkchekbox " + form.isPkCheckcbox()
                     + " -- not null " + form.isNotNullCheckbox() + " -- Unique" + form.isCheckBoxUnique() + "---Tabla FK: "
@@ -380,12 +379,11 @@ public class Microservicio {
         String aux2 = "";
         for (ProyectoValue pv : Data.proyectosGenerados) {
             System.out.println("Proyecto Actual: " + pv.nombreProyecto);
-            if(pv.nombreProyecto.equals(proyecto)){
+            if (pv.nombreProyecto.equals(proyecto)) {
                 for (FormValue fv : pv.tablas) {
-                    if(fv.nombreTabla.equals(tablename))
-                    {
-                        aux1 = mostrarClase(fv,1);
-                        aux2 = mostrarClase(fv,2);
+                    if (fv.nombreTabla.equals(tablename)) {
+                        aux1 = mostrarClase(fv, 1);
+                        aux2 = mostrarClase(fv, 2);
                     }
                 }
             }
@@ -647,9 +645,9 @@ public class Microservicio {
 
             }
 
-            if(Valor == 1)
+            if (Valor == 1)
                 return archivojava;
-            if(Valor == 2)
+            if (Valor == 2)
                 return archivoapi;
 
         }
@@ -1085,7 +1083,7 @@ public class Microservicio {
                 }
             }
         }
-        
+
     }
 
     @POST
@@ -1108,7 +1106,7 @@ public class Microservicio {
         String userHome = System.getProperty("user.home");
         File theDir = new File(userHome + "/Downloads/" + nombre_carpeta_madre);
         if (!theDir.exists()) theDir.mkdirs();
-        File from = new File(rutaCarpetaMadre + "/" );
+        File from = new File(rutaCarpetaMadre + "/");
         File to = new File(userHome + "/Downloads/" + nombre_carpeta_madre);
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -1131,7 +1129,6 @@ public class Microservicio {
         String tipopk = "long";
         int haypk = 0;
         String fk = "";
-
 
 
         String path = rutaCarpetaMadre;
@@ -1272,7 +1269,7 @@ public class Microservicio {
             if (haypk == 1) {
                 //String path = System.getProperty("user.dir");
                 archivojava = archivojava +
-                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
+                        "@Entity(name=\"" + nomb.toLowerCase() + "\")\n" +
 
                         "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
 
@@ -1291,7 +1288,7 @@ public class Microservicio {
                 ;
             } else {
                 archivojava = archivojava +
-                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
+                        "@Entity(name=\"" + nomb.toLowerCase() + "\")\n" +
                         "public class " + clase + " extends PanacheEntity {\n" +
 
                         fk
