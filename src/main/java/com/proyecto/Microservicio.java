@@ -117,7 +117,7 @@ public class Microservicio {
 
         //TODO: Usar campo de security y microservice
 
-        Runnable r = new CreateMicro(name, seguridad,1, rutaCarpetaMadre);
+        Runnable r = new CreateMicro(name, seguridad, 1, rutaCarpetaMadre);
         new Thread(r).start();
 
 //        ProyectoValue proyectoValue = new ProyectoValue(name, new ArrayList<FormValue>());
@@ -336,8 +336,9 @@ public class Microservicio {
 
 
     @GET
-    @Path("/form/ver/codigos/{proyecto}")
-    public TemplateInstance FormCodigosVer(@PathParam("proyecto") String proyecto) {
+    @Path("/form/ver/codigos/{nombre}/{proyecto}")
+    public TemplateInstance FormCodigosVer(@PathParam("nombre") String tablename, @PathParam("proyecto") String proyecto) {
+        System.out.println("Tabla para ver el codigo: " + tablename);
         return MicroservicioCodigoVer
                 .data("title", "Codigos Generados")
                 .data("proyecto", proyecto)
@@ -1108,7 +1109,7 @@ public class Microservicio {
 
         for (File file : files) {
             if (file.isFile()) {
-                if (file.getName().equals("pom.xml") || file.getName().equals("build.gradle")) {
+                if (file.getName().equals("JF-LINP.txt")) {
                     return true;
                 }
             } else if (file.isDirectory()) {

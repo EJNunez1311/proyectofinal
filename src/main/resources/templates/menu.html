@@ -1,9 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <script
             src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -12,105 +24,45 @@
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
             integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
             crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-        }
 
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        .navbar a {
-            float: left;
-            font-size: 16px;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .subnav {
-            float: left;
-            overflow: hidden;
-        }
-
-        .subnav .subnavbtn {
-            font-size: 16px;
-            border: none;
-            outline: none;
-            color: white;
-            padding: 14px 16px;
-            background-color: inherit;
-            font-family: inherit;
-            margin: 0;
-        }
-
-        .navbar a:hover, .subnav:hover .subnavbtn {
-            background-color: #61f31a;
-        }
-
-        .subnav-content {
-            display: none;
-            position: absolute;
-            left: 0;
-            background-color: #756969;
-            width: 100%;
-            z-index: 1;
-        }
-
-        .subnav-content a {
-            float: left;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        .subnav-content a:hover {
-            background-color: #eee;
-            color: black;
-        }
-
-        .subnav:hover .subnav-content {
-            display: block;
-        }
-        </style>
 </head>
 <body>
-<div class="navbar">
-    <a href="/api"><i class="fas fa-home">Home</i></a>
-    <div class="subnav">
-        <button class="subnavbtn">About <i class="fa fa-caret-down"></i></button>
-        <div class="subnav-content">
-            <a href="#company">Company</a>
-            <a href="#team">Team</a>
-            <a href="#careers">Careers</a>
-        </div>
+<!-- Bootstrap NavBar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/api">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="http://eict.pucmm.edu.do/">Information<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-laptop-code"></i> Create APP
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','EmptyServer','1')">Empty Server</a>
+                    <a class="dropdown-item" href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','Database','1')"><i class="fas fa-database"></i> Import Database</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/microservices/create"onClick="deleteCookie();SetCookie('OptionCookie','MicroServices','1')"><i class="fas fa-server"></i>  Microservices</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-edit"></i> Edit APP
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/proyecto/app/folder"><i class="fas fa-folder-plus"></i> Folder App</a>
+                </div>
+            </li>
+        </ul>
     </div>
-    <div class="subnav">
-        <button class="subnavbtn"><i class="fas fa-server"></i>Create APP <i class="fa fa-caret-down"></i></button>
-        <div class="subnav-content">
-            <a href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','EmptyServer','1')">Empty Server</a>
-            <a href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','Database','1')"><i class="fas fa-database"></i>Import Database</a>
-            <a href="/microservices/create"onClick="deleteCookie();SetCookie('OptionCookie','MicroServices','1')"><i class="fas fa-database"></i>MicroServices</a>
-        </div>
-    </div>
-    <div class="subnav">
-        <button class="subnavbtn"><i class="far fa-edit"></i>Edit APP <i class="fa fa-caret-down"></i></button>
-        <div class="subnav-content">
-            <a href="/proyecto/app/folder">Folder App</a>
-            <a href="#link2">Link 2</a>
-            <a href="#link3">Link 3</a>
-            <a href="#link4"onclick="Prueba()">Link 4</a>
-        </div>
-    </div>
-    <a href="#contact">Contact</a>
-</div>
+</nav>
 </body>
 </html>
-
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 
 <script>
     function deleteCookie() {

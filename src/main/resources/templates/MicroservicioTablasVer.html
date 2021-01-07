@@ -66,7 +66,7 @@
                     <tr>
                         <td>{tabla.nombreTabla}<input type="hidden" id="nombre" value="{tabla.nombreTabla}"></td>
                         <td>
-                            <a class="btn btn-info" href="/microservices/form/ver/codigos/{proyecto}" title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-info" href="/microservices/form/ver/codigos/{tabla.nombreTabla}/{proyecto}" title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');" href="/microservices/form/eliminar/{proyecto}/{count}" title="Eliminar tabla"><i class="fa fa-trash"></i></a>
                             <a class="btn btn-warning" href="/microservices/form/actualizar/{proyecto}/{count}" title="Actualizar tabla"><i class="fa fa-edit"></i></a>
                         </td>

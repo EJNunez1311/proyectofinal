@@ -1,0 +1,26 @@
+version: "3"
+services:
+  javaframework:
+    image: ejnunez1311/javaframework:proyectofinal
+    ports:
+    - 8080:8080
+    restart: on-failure
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:7.0.1
+    ports:
+    - 8180:8180
+    environment:
+      - KEYCLOAK_IMPORT=/tmp/quarkus-realm.json
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    command: ["-Djboss.http.port=8180", "-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    volumes:
+    - ./quarkus-realm.json:/tmp/quarkus-realm.json
+
+  consul:
+    image: consul:latest
+    ports:
+    - 8500:8500
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0

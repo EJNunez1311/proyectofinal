@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .subnav {
+            float: left;
+            overflow: hidden;
+        }
+
+        .subnav .subnavbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .navbar a:hover, .subnav:hover .subnavbtn {
+            background-color: #61f31a;
+        }
+
+        .subnav-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            background-color: #756969;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .subnav-content a {
+            float: left;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .subnav-content a:hover {
+            background-color: #eee;
+            color: black;
+        }
+
+        .subnav:hover .subnav-content {
+            display: block;
+        }
+        </style>
+</head>
+<body>
+<div class="navbar">
+    <a href="/api"><i class="fas fa-home">Home</i></a>
+    <div class="subnav">
+        <button class="subnavbtn">About <i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <a href="#company">Company</a>
+            <a href="#team">Team</a>
+            <a href="#careers">Careers</a>
+        </div>
+    </div>
+    <div class="subnav">
+        <button class="subnavbtn"><i class="fas fa-server"></i>Create APP <i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <a href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','EmptyServer','1')">Empty Server</a>
+            <a href="/api/create"onClick="deleteCookie();SetCookie('OptionCookie','Database','1')"><i class="fas fa-database"></i>Import Database</a>
+            <a href="/microservices/create"onClick="deleteCookie();SetCookie('OptionCookie','MicroServices','1')"><i class="fas fa-database"></i>MicroServices</a>
+        </div>
+    </div>
+    <div class="subnav">
+        <button class="subnavbtn"><i class="far fa-edit"></i>Edit APP <i class="fa fa-caret-down"></i></button>
+        <div class="subnav-content">
+            <a href="/proyecto/app/folder">Folder App</a>
+            <a href="#link2">Link 2</a>
+            <a href="#link3">Link 3</a>
+            <a href="#link4"onclick="Prueba()">Link 4</a>
+        </div>
+    </div>
+    <a href="#contact">Contact</a>
+</div>
+</body>
+</html>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+<script>
+    function deleteCookie() {
+        document.cookie = "OptionCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "OptionCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/api;";
+    }
+    // path=/api;
+    // deleteCookie()
+    function SetCookie(c_name,value,expiredays)
+    {
+        deleteCookie()
+        var exdate=new Date()
+        exdate.setDate(exdate.getDate()+expiredays)
+        document.cookie=c_name+ "=" +escape(value)+
+            ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+    }
+</script>
