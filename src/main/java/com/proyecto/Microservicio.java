@@ -1071,20 +1071,21 @@ public class Microservicio {
         String cad = "";
         String fkAlrevez = "";
 
-        for (FormValue formValue : Data.tablasGeneradas) {
-            for (Form form : formValue.filas) {
-                if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
+        for (ProyectoValue pv : Data.proyectosGenerados) {
+            for (FormValue fv : pv.tablas) {
+                for (Form form : fv.filas) {
+                    if (!form.getFkTablaRelacionada().equals("") && !form.getFkRelacion().equals("")) {
 //                    System.out.println(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
-                    auxiliar = form.getFkRelacion().split("To");
-                    fkAlrevez = (auxiliar[1] + "To" + auxiliar[0]);
+                        auxiliar = form.getFkRelacion().split("To");
+                        fkAlrevez = (auxiliar[1] + "To" + auxiliar[0]);
 //                    System.out.println(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez +" 2");
-
-                    RelacionFK.add(formValue.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
-                    RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + formValue.nombreTabla + " " + fkAlrevez + " 2");
-
+                        RelacionFK.add(fv.nombreTabla + " " + form.getNombre() + " " + form.getFkTablaRelacionada() + " " + form.getFkRelacion() + " 1");
+                        RelacionFK.add(form.getFkTablaRelacionada() + " " + form.getNombre() + " " + fv.nombreTabla + " " + fkAlrevez + " 2");
+                    }
                 }
             }
         }
+        
     }
 
     @POST
@@ -1271,7 +1272,8 @@ public class Microservicio {
             if (haypk == 1) {
                 //String path = System.getProperty("user.dir");
                 archivojava = archivojava +
-                        "@Entity\n" +
+                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
+
                         "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
 
                         fk
@@ -1289,7 +1291,7 @@ public class Microservicio {
                 ;
             } else {
                 archivojava = archivojava +
-                        "@Entity\n" +
+                        "@Entity(name=\""+ nomb.toLowerCase() +"\")\n" +
                         "public class " + clase + " extends PanacheEntity {\n" +
 
                         fk
