@@ -1091,6 +1091,7 @@ public class Microservicio {
     @Path("/finalizar")
     public boolean Finalizar() {
 
+        llenarFK();
         for (ProyectoValue pv : Data.proyectosGenerados) {
             System.out.println("Proyecto Actual: " + pv.nombreProyecto);
             for (FormValue fv : pv.tablas) {
