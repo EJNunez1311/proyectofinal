@@ -204,6 +204,50 @@ public class CreateMicro implements Runnable {
             e.printStackTrace();
         }
 
+        String dockerCompose = "version: \"3\"\n" +
+                "services:\n" +
+                "  consul:\n" +
+                "    image: consul:latest\n" +
+                "    ports:\n" +
+                "    - 8500:8500\n" +
+                "    environment:\n" +
+                "      - CONSUL_BIND_INTERFACE=eth0";
+
+        if(seguridad == 1)
+        {
+            dockerCompose = dockerCompose + "\n  keycloak:\n" +
+                    "    image: quay.io/keycloak/keycloak:7.0.1\n" +
+                    "    ports:\n" +
+                    "    - 8180:8180\n" +
+                    "    environment:\n" +
+                    "      - KEYCLOAK_IMPORT=/tmp/quarkus-realm.json\n" +
+                    "      - KEYCLOAK_USER=admin\n" +
+                    "      - KEYCLOAK_PASSWORD=admin\n" +
+                    "    command: [\"-Djboss.http.port=8180\", \"-Dkeycloak.profile.feature.upload_scripts=enabled\"]\n" +
+                    "    volumes:\n" +
+                    "    - ./quarkus-realm.json:/tmp/quarkus-realm.json";
+        }
+
+        try {
+            File myObj = new File(path + "/" + nombre + "/docker-compose.yml");
+            if (myObj.createNewFile()) {
+                //   System.out.println("File created: " + myObj.getName());
+            } else {
+                //  System.out.println("Archivo ya existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter myWriter = new FileWriter(path + "/" + nombre + "/docker-compose.yml");
+            myWriter.write(dockerCompose);
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("Se produjo un error.");
+            e.printStackTrace();
+        }
 
         try {
             File myObj = new File(path + "/" + nombre + "/JF-LINP.txt");
