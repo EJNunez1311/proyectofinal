@@ -935,46 +935,48 @@ public class FolderApp {
         }
 
 
-        try {
-            File myObj = new File(path + "/" + proyecto + "//src/main/resources/application.properties");
-            if (myObj.createNewFile()) {
-                //   System.out.println("File created: " + myObj.getName());
-            } else {
-                //  System.out.println("Archivo ya existe.");
+        if(seguridad == 1 || microservicio == 1){
+            try {
+                File myObj = new File(path + "/" + proyecto + "//src/main/resources/application.properties");
+                if (myObj.createNewFile()) {
+                    //   System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.out.println("Se produjo un error.");
-            e.printStackTrace();
-        }
 
-        try {
-            FileWriter myWriter = new FileWriter(path + "/" + proyecto + "/src/main/resources/application.properties");
-            myWriter.write(appProp);
-            myWriter.close();
-        } catch (IOException e) {
-            System.out.println("Se produjo un error.");
-            e.printStackTrace();
-        }
-
-        try {
-            File myObj = new File(path + "/" + proyecto + "/docker-compose.yml");
-            if (myObj.createNewFile()) {
-                //   System.out.println("File created: " + myObj.getName());
-            } else {
-                //  System.out.println("Archivo ya existe.");
+            try {
+                FileWriter myWriter = new FileWriter(path + "/" + proyecto + "/src/main/resources/application.properties");
+                myWriter.write(appProp);
+                myWriter.close();
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.out.println("Se produjo un error.");
-            e.printStackTrace();
-        }
 
-        try {
-            FileWriter myWriter = new FileWriter(path + "/" + proyecto + "/docker-compose.yml");
-            myWriter.write(dockerCompose);
-            myWriter.close();
-        } catch (IOException e) {
-            System.out.println("Se produjo un error.");
-            e.printStackTrace();
+            try {
+                File myObj = new File(path + "/" + proyecto + "/docker-compose.yml");
+                if (myObj.createNewFile()) {
+                    //   System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            try {
+                FileWriter myWriter = new FileWriter(path + "/" + proyecto + "/docker-compose.yml");
+                myWriter.write(dockerCompose);
+                myWriter.close();
+            } catch (IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
         }
 
     }
