@@ -477,7 +477,7 @@ public class FolderApp {
                 "quarkus.smallrye-openapi.path=/swagger\n" +
                 "quarkus.swagger-ui.always-include=true\n" +
                 "quarkus.swagger-ui.path=/explorer\n" +
-                "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD";
+                "mp.openapi.extensions.smallrye.operationIdStrategy=METHOD\n\n";
 
         for (String[] a : proyects) {
             if (a[0].equals(proyecto)) {
@@ -524,15 +524,25 @@ public class FolderApp {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            content = content.replaceAll("</dependencies>", "      <dependency>\n" +
-                    "      <groupId>io.quarkus</groupId>\n" +
-                    "      <artifactId>quarkus-oidc</artifactId>\n" +
-                    "    </dependency>\n" +
-                    "    <dependency>\n" +
-                    "      <groupId>io.quarkus</groupId>\n" +
-                    "      <artifactId>quarkus-keycloak-authorization</artifactId>\n" +
-                    "    </dependency>" +
-                    "   </dependencies>");
+            content = content.replaceAll("<dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
+                            "    </dependency>"
+
+                    , "<dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
+                            "    </dependency>" +
+                            "   <dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-oidc</artifactId>\n" +
+                            "    </dependency>\n" +
+                            "    <dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-keycloak-authorization</artifactId>\n" +
+                            "    </dependency>" +
+                            "   </dependencies>");
+
             try {
                 Files.write(path2, content.getBytes(charset));
             } catch (IOException e) {
@@ -641,6 +651,32 @@ public class FolderApp {
                 e.printStackTrace();
             }
 
+            try {
+                File myObj = new File(path + "/" + proyecto + "/quarkus-realm.json");
+                if (myObj.createNewFile()) {
+                    // System.out.println("File created: " + myObj.getName());
+                } else {
+                    //  System.out.println("Archivo ya existe.");
+                }
+            } catch (
+                    IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
+            try {
+                FileWriter myWriter = new FileWriter(path + "/" + proyecto + "/quarkus-realm.json");
+                JSONWriter aux = new JSONWriter();
+                String config = aux.getConfig();
+                myWriter.write(config);
+                myWriter.close();
+                //   System.out.println("Clase api generado");
+            } catch (
+                    IOException e) {
+                System.out.println("Se produjo un error.");
+                e.printStackTrace();
+            }
+
         }
 
         if (microservicio == 1) {
@@ -666,11 +702,20 @@ public class FolderApp {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            content = content.replaceAll("</dependencies>", "<      dependency>\n" +
-                    "      <groupId>org.apache.camel.quarkus</groupId>\n" +
-                    "      <artifactId>camel-quarkus-consul</artifactId>\n" +
-                    "    </dependency>\n" +
-                    "   </dependencies>");
+            content = content.replaceAll("<dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
+                            "    </dependency>"
+
+                    , "<dependency>\n" +
+                            "      <groupId>io.quarkus</groupId>\n" +
+                            "      <artifactId>quarkus-resteasy-jsonb</artifactId>\n" +
+                            "    </dependency>" +
+                            "<      dependency>\n" +
+                            "      <groupId>org.apache.camel.quarkus</groupId>\n" +
+                            "      <artifactId>camel-quarkus-consul</artifactId>\n" +
+                            "    </dependency>\n" +
+                            "   </dependencies>");
             try {
                 Files.write(path2, content.getBytes(charset));
             } catch (IOException e) {
