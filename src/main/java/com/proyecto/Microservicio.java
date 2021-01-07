@@ -966,9 +966,9 @@ public class Microservicio {
                         "@Entity\n" +
                         "public class " + clase + " extends PanacheEntityBase implements Serializable{\n" +
 
-//                        fk
-//
-//                        +
+                        fk
+
+                        +
 
                         modelos
 
@@ -984,9 +984,9 @@ public class Microservicio {
                         "@Entity\n" +
                         "public class " + clase + " extends PanacheEntity {\n" +
 
-//                        fk
-//
-//                        +
+                        fk
+
+                        +
 
                         modelos
 
