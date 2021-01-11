@@ -142,8 +142,8 @@
             </div>
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
-        <a id="creados" class="btn btn-info float-right" href="/api/form/ver">Ver Creados</a>
-        <a id="enviardatos" class="btn btn-primary float-right mr-2">Actualizar Tabla</a>
+        <a id="creados" class="btn btn-info float-right" href="/api/form/ver">View Created</a>
+        <a id="enviardatos" class="btn btn-primary float-right mr-2">Update Table</a>
     </div>
 </body>
 </html>
@@ -330,6 +330,7 @@
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);
+                alert("Table Updated");
                 window.location.href = "/api/form/ver";
             }).error(function (jqXhr, textStatus, errorMessage) {
                 console.log("Error sending data");

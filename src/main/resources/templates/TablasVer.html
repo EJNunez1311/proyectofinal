@@ -72,10 +72,10 @@
                     <!--                        <i class="fa fa-eye"></i>-->
                     <!--                    </button>-->
                     <a class="btn btn-info" href="/api/form/ver/codigos/{tabla.nombreTabla}"
-                       title="Ver Codigos Generados"><i class="fa fa-eye"></i></a>
-                    <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');" href="/api/form/eliminar/{count}" title="Eliminar tabla"><i
+                       title="View Generated Codes"><i class="fa fa-eye"></i></a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');" href="/api/form/eliminar/{count}" title="Delete Table"><i
                             class="fa fa-trash"></i></a>
-                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Actualizar tabla"><i
+                    <a class="btn btn-warning" href="/api/form/actualizar/{count}" title="Update Table"><i
                             class="fa fa-edit"></i></a>
                     <div class="modal" id="myModal{count}">
                         <div class="modal-dialog modal-lg">
@@ -158,7 +158,7 @@
     <div class="row mt-3">
         <div class="col-md-12 float-right">
             {#if tablasGeneradas}
-            <a id="createapp" class="btn btn-primary float-right" href="/api/createapp">Create APP</a>
+            <a id="createapp" onclick="clickAlert()" class="btn btn-primary float-right" href="/api/createapp">Create APP</a>
             {/if}
             <a id="volver" class="btn btn-success float-right mr-2" href="/api/form">Add Table</a>
         </div>
@@ -176,3 +176,8 @@
 
 </body>
 </html>
+<script>
+    function clickAlert() {
+        alert("Application created on Downloads");
+    }
+</script>

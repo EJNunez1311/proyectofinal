@@ -105,8 +105,8 @@
     <!--        <a id="enviardatos" class="btn btn-primary float-right">Create Another Table</a>-->
 
 
-    <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">Ver Creados</a>
-    <a id="enviardatos" class="btn btn-primary float-right mr-2">Guardar Tabla</a>
+    <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">View Created</a>
+    <a id="enviardatos" class="btn btn-primary float-right mr-2">Save Table</a>
 </div>
 <select name="chequeartablas" hidden id="chequeartablas">
     {#for tabla in tablasCreadas}
@@ -314,6 +314,7 @@
                     console.log("Data sent successfully");
                     console.log(data);
                     window.location.reload();
+                    alert("Information Saved.");
                 }).error(function (jqXhr, textStatus, errorMessage) {
                     console.log("Error sending data");
                     console.log(jqXhr);

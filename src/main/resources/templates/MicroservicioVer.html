@@ -100,7 +100,8 @@
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);
-                window.location.href = "";
+                alert("Applications successfully created in Downloads");
+                window.location.href = "/api";
             }).error(function (jqXhr, textStatus, errorMessage) {
                 console.log("Error sending data");
                 console.log(jqXhr);

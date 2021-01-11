@@ -73,7 +73,7 @@
                         {#for item in tablaDetalle.filas}
                             <tr>
                                 <td data-name="nombre">
-                                    <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{item.nombre}" class="form-control"/>
+                                    <input type="text" id="nombre" name="nombre" placeholder="Name" value="{item.nombre}" class="form-control"/>
                                 </td>
                                 <td data-name="tipoatributo">
                                     <select name="tipoatributo" id="tipoatributo">
@@ -114,8 +114,8 @@
             </div>
             <a id="add_row" class="btn btn-primary float-right">Add Row</a>
         </div>
-        <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">Ver Creados</a>
-        <a id="enviardatos" class="btn btn-primary float-right mr-2">Actualizar Tabla</a>
+        <a id="creados" class="btn btn-info float-right" href="/proyecto/folder/app/ver/{nombreProyecto}">View Created</a>
+        <a id="enviardatos" class="btn btn-primary float-right mr-2">Update Table</a>
     </div>
 </body>
 </html>
@@ -302,6 +302,7 @@
             }).done(function(data) {
                 console.log("Data sent successfully");
                 console.log(data);
+                alert("Information Saved.");
                 window.location.href = "/proyecto/folder/app/ver/{nombreProyecto}";
             }).error(function (jqXhr, textStatus, errorMessage) {
                 console.log("Error sending data");
